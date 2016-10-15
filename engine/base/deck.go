@@ -1,7 +1,7 @@
 package base
 
 type Deck interface {
-	Ramain() int
+	Remain() int
 
 	Shuffle()
 	Draw() (card Card, fatigue int)
