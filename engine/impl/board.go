@@ -21,11 +21,7 @@ func newBoard() base.Board {
 func (b *board) Handle(ev base.Event) {
 	switch ev.Verb() {
 	case base.Destroy:
-		if minion, ok := ev.Subject().(base.Minion); ok {
-			if i := b.Find(minion); i >= 0 {
-				b.minions = append(b.minions[:i], b.minions[i+1:]...)
-			}
-		}
+		b.remove(ev.Subject())
 	}
 }
 
@@ -70,6 +66,27 @@ func (b *board) Put(minion base.Minion, toRight base.Minion) base.Minion {
 		}
 	}
 	return nil
+}
+
+func (b *board) remove(subject interface{}) int {
+	if subjects, ok := subject.([]interface{}); ok {
+		removed := 0
+		for _, sub := range subjects {
+			removed += b.removeSingle(sub)
+		}
+		return removed
+	}
+	return b.removeSingle(subject)
+}
+
+func (b *board) removeSingle(subject interface{}) int {
+	if minion, ok := subject.(base.Minion); ok {
+		if i := b.Find(minion); i >= 0 {
+			b.minions = append(b.minions[:i], b.minions[i+1:]...)
+			return 1
+		}
+	}
+	return 0
 }
 
 func (b *board) String() string {

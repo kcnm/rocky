@@ -1,19 +1,19 @@
 package base
 
-type Verb int
+type Verb string
 
 const (
-	StartTurn Verb = iota
-	EndTurn
-	Draw
-	TakeCard
-	PlayCard
-	Summon
-	Hit
-	Damage
-	Dying
-	Destroy
-	GameOver
+	StartTurn Verb = "StartTurn"
+	EndTurn   Verb = "EndTurn"
+	Draw      Verb = "Draw"
+	TakeCard  Verb = "TakeCard"
+	PlayCard  Verb = "PlayCard"
+	Summon    Verb = "Summon"
+	Hit       Verb = "Hit"
+	Damage    Verb = "Damage"
+	Dying     Verb = "Dying"
+	Destroy   Verb = "Destroy"
+	GameOver  Verb = "GameOver"
 )
 
 func (v Verb) Subject() interface{} {

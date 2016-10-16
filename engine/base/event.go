@@ -1,9 +1,5 @@
 package base
 
-import (
-	"sort"
-)
-
 type Event interface {
 	Subject() interface{}
 	Verb() Verb
@@ -11,73 +7,52 @@ type Event interface {
 	Trigger()
 }
 
-type ListenerID int
+type CombinedEvent interface {
+	Event
 
-type Listener interface {
-	Handle(ev Event)
+	HasEvent(ev Event) bool
 }
 
-type EventBus struct {
-	events    []Event
-	listeners map[ListenerID]Listener
-	idGen     ListenerID
+type combined struct {
+	events []Event
 }
 
-func NewEventBus() *EventBus {
-	return &EventBus{
-		make([]Event, 0),
-		make(map[ListenerID]Listener),
-		0, // idGen
+func Combined(events ...Event) CombinedEvent {
+	if len(events) <= 0 {
+		panic("0 combined events")
 	}
-}
-
-func (bus *EventBus) AddListener(listener Listener) ListenerID {
-	id := bus.nextListenerID()
-	bus.listeners[id] = listener
-	return id
-}
-
-func (bus *EventBus) RemoveListener(id ListenerID) bool {
-	_, present := bus.listeners[id]
-	delete(bus.listeners, id)
-	return present
-}
-
-func (bus *EventBus) Post(ev Event) {
-	if ev.Verb() == GameOver {
-		bus.drain()
-	} else {
-		bus.events = append(bus.events, ev)
+	v := events[0].Verb()
+	for _, ev := range events {
+		if ev.Verb() != v {
+			panic("inconsistent verb")
+		}
 	}
+	return &combined{events}
 }
 
-func (bus *EventBus) PostAndTrigger(ev Event) {
-	if len(bus.events) > 0 {
-		panic("event bus is not empty")
+func (c *combined) Subject() interface{} {
+	subjects := make([]interface{}, len(c.events))
+	for i, ev := range c.events {
+		subjects[i] = ev.Subject()
 	}
-	bus.Post(ev)
-	for len(bus.events) > 0 {
-		ev, bus.events = bus.events[0], bus.events[1:]
+	return subjects
+}
+
+func (c *combined) Verb() Verb {
+	return c.events[0].Verb()
+}
+
+func (c *combined) Trigger() {
+	for _, ev := range c.events {
 		ev.Trigger()
-		ids := make([]int, 0, len(bus.listeners))
-		for id := range bus.listeners {
-			ids = append(ids, int(id))
-		}
-		sort.Ints(ids)
-		for _, id := range ids {
-			if listener, present := bus.listeners[ListenerID(id)]; present {
-				listener.Handle(ev)
-			}
-		}
 	}
 }
 
-func (bus *EventBus) drain() {
-	bus.events = make([]Event, 0)
-	bus.listeners = make(map[ListenerID]Listener)
-}
-
-func (bus *EventBus) nextListenerID() ListenerID {
-	bus.idGen++
-	return bus.idGen
+func (c *combined) HasEvent(ev Event) bool {
+	for _, e := range c.events {
+		if e == ev {
+			return true
+		}
+	}
+	return false
 }

@@ -45,25 +45,9 @@ func NewGame(player1, player2 base.Player) base.Game {
 func (g *game) Handle(ev base.Event) {
 	switch ev.Verb() {
 	case base.StartTurn:
-		g.turn++
-		player := g.CurrentPlayer()
-		g.Post(event.Draw(g, player))
-		if !player.HasMaxCrystal() {
-			player.GainCrystal(1)
-		}
-		player.Refresh()
+		g.handleStartTurn(ev)
 	case base.Destroy:
-		if ev.Subject() == g.players[0] {
-			g.over = true
-			g.winner = g.players[1]
-		}
-		if ev.Subject() == g.players[1] {
-			g.over = true
-			g.winner = g.players[0]
-		}
-		if g.over {
-			g.Post(base.GameOver)
-		}
+		g.handleDestroy(ev)
 	}
 }
 
@@ -93,6 +77,43 @@ func (g *game) Summon(
 func (g *game) nextCharacterID() base.CharacterID {
 	g.idGen++
 	return g.idGen
+}
+
+func (g *game) handleStartTurn(ev base.Event) {
+	g.turn++
+	player := g.CurrentPlayer()
+	g.Post(event.Draw(g, player), ev)
+	if !player.HasMaxCrystal() {
+		player.GainCrystal(1)
+	}
+	player.Refresh()
+}
+
+func (g *game) handleDestroy(ev base.Event) {
+	p0, p1 := false, false
+	subject := ev.Subject()
+	if subjects, ok := subject.([]interface{}); ok {
+		for _, sub := range subjects {
+			if sub == g.players[0] {
+				p0 = true
+			} else if sub == g.players[1] {
+				p1 = true
+			}
+		}
+	} else if subject == g.players[0] {
+		p0 = true
+	} else if subject == g.players[1] {
+		p1 = true
+	}
+	if p0 || p1 {
+		g.over = true
+		if !p0 && p1 {
+			g.winner = g.players[0]
+		} else if p0 && !p1 {
+			g.winner = g.players[1]
+		}
+		g.Post(base.GameOver, ev)
+	}
 }
 
 func (g *game) String() string {

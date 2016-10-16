@@ -27,10 +27,11 @@ func (ev *hit) Verb() base.Verb {
 
 func (ev *hit) Trigger() {
 	ev.attacker.LoseStamina()
-	ev.game.Events().Post(
-		Damage(ev.game, ev.defender, ev.attacker, ev.attacker.Attack()))
+	active := Damage(ev.game, ev.defender, ev.attacker, ev.attacker.Attack())
+	passive := Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack())
 	if ev.defender.Attack() > 0 {
-		ev.game.Events().Post(
-			Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack()))
+		ev.game.Events().Post(base.Combined(active, passive), ev)
+	} else {
+		ev.game.Events().Post(active, ev)
 	}
 }

@@ -32,6 +32,6 @@ func (ev *damage) Trigger() {
 	ev.dmg = actual
 	if fatal {
 		ev.game.Events().Post(
-			Dying(ev.game, ev.char))
+			Dying(ev.game, ev.char), ev)
 	}
 }

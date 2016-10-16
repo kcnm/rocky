@@ -25,12 +25,12 @@ func (ev *draw) Trigger() {
 	card, fatigue := ev.player.Deck().Draw()
 	if fatigue > 0 {
 		ev.game.Events().Post(
-			Damage(ev.game, ev.player, nil, fatigue))
+			Damage(ev.game, ev.player, nil, fatigue), ev)
 		return
 	}
 	if ev.player.HandIsFull() {
 		return
 	}
 	ev.game.Events().Post(
-		TakeCard(ev.player, card))
+		TakeCard(ev.player, card), ev)
 }

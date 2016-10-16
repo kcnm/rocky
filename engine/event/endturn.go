@@ -21,5 +21,5 @@ func (ev *endTurn) Verb() base.Verb {
 }
 
 func (ev *endTurn) Trigger() {
-	ev.game.Events().Post(base.StartTurn)
+	ev.game.Events().Post(base.StartTurn, ev)
 }
