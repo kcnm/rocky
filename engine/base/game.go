@@ -7,6 +7,5 @@ type Game interface {
 	CurrentPlayer() Player
 	IsOver() (over bool, winner Player)
 
-	EndTurn()
 	Summon(card MinionCard, board Board, toRight Minion) Minion
 }
