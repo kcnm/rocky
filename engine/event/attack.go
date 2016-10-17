@@ -29,9 +29,16 @@ func (ev *attack) Trigger() {
 	ev.attacker.LoseStamina()
 	active := Damage(ev.game, ev.defender, ev.attacker, ev.attacker.Attack())
 	passive := Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack())
-	if ev.defender.Attack() > 0 {
+	_, isPlayer := ev.defender.(base.Player)
+	if !isPlayer && ev.defender.Attack() > 0 {
 		ev.game.Events().Post(base.Combined(active, passive), ev)
 	} else {
 		ev.game.Events().Post(active, ev)
+	}
+	if player, isPlayer := ev.attacker.(base.Player); isPlayer {
+		player.Weapon().LoseDurability()
+		if player.Weapon().Durability() == 0 {
+			ev.game.Events().Post(DestroyWeapon(ev.game, player), ev)
+		}
 	}
 }

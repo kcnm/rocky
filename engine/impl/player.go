@@ -16,6 +16,7 @@ type player struct {
 	armor   int
 	mana    int
 	crystal int
+	weapon  base.Weapon
 	hand    []base.Card
 	deck    base.Deck
 	board   base.Board
@@ -32,18 +33,31 @@ func NewPlayer(
 	}
 	return &player{
 		newCharacter(
-			0, // id, assigned by game
-			0, // attack
-			health,
-			0, // stamina
+			0,      // id, assigned by game
+			0,      // attack
+			health, // health
+			0,      // stamina
 		).(*character),
-		armor,
-		0, // mana
-		crystal,
+		armor,   // armor
+		0,       // mana
+		crystal, // crystal
+		nil,     // weapon
 		make([]base.Card, 0, *maxHand),
 		deck,
 		board,
 	}
+}
+
+func (p *player) Attack() int {
+	attack := p.character.Attack()
+	if p.weapon != nil {
+		attack += p.weapon.Attack()
+	}
+	return attack
+}
+
+func (p *player) Active() bool {
+	return p.Attack() > 0 && p.Stamina() > 0
 }
 
 func (p *player) Refresh() {
@@ -76,6 +90,10 @@ func (p *player) Crystal() int {
 
 func (p *player) HasMaxCrystal() bool {
 	return p.crystal >= *maxCrystal
+}
+
+func (p *player) Weapon() base.Weapon {
+	return p.weapon
 }
 
 func (p *player) Board() base.Board {
@@ -142,6 +160,17 @@ func (p *player) Play(cardIndex int) base.Card {
 	return card
 }
 
+func (p *player) Equip(card base.WeaponCard) {
+	p.weapon = newWeapon(card)
+}
+
+func (p *player) DestroyWeapon() {
+	if p.weapon == nil {
+		panic("player does not have a weapon equiped")
+	}
+	p.weapon = nil
+}
+
 func (p *player) String() string {
 	armor := ""
 	if p.armor > 0 {
@@ -149,11 +178,15 @@ func (p *player) String() string {
 	}
 	mana := fmt.Sprintf("Mana: %d/%d", p.mana, p.crystal)
 	deck := fmt.Sprintf("Deck: %d", p.deck.Remain())
+	weapon := ""
+	if p.Weapon() != nil {
+		weapon = fmt.Sprintf("Weapon: %v", p.Weapon())
+	}
 	cards := make([]string, len(p.hand))
 	for i, c := range p.hand {
 		cards[i] = fmt.Sprintf("%v", c)
 	}
 	hand := fmt.Sprintf("Hand: %s", strings.Join(cards, ", "))
-	return fmt.Sprintf("Player%d(%d%s) %s %s\n%s\n%v",
-		p.id, p.health, armor, mana, deck, hand, p.board)
+	return fmt.Sprintf("Player%d(%d%s) %s %s %s\n%s\n%v",
+		p.id, p.health, armor, mana, deck, weapon, hand, p.board)
 }

@@ -68,6 +68,13 @@ func PlayCard(
 	case base.SpellCard:
 		game.Events().PostAndTrigger(
 			event.Cast(game, player, card, tgt))
+	case base.WeaponCard:
+		if player.Weapon() != nil {
+			game.Events().PostAndTrigger(
+				event.DestroyWeapon(game, player))
+		}
+		game.Events().PostAndTrigger(
+			event.Equip(game, player, card))
 	}
 }
 

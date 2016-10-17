@@ -34,10 +34,10 @@ func (c minion) String() string {
 
 var minions = map[minion]*minionSpec{
 	SilverHandRecruit: &minionSpec{
-		"Silver Hand Recruit", // name
-		base.Neutral,          // class
-		1,                     // mana
-		1,                     // attack
-		1,                     // health
+		name:   "Silver Hand Recruit",
+		class:  base.Neutral,
+		mana:   1,
+		attack: 1,
+		health: 1,
 	},
 }

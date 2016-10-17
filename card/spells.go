@@ -46,13 +46,13 @@ func (c spell) String() string {
 
 var spells = map[spell]*spellSpec{
 	Fireball: &spellSpec{
-		"Fireball",       // name
-		base.Mage,        // class
-		4,                // mana
-		target.Manual,    // assign
-		target.Any,       // side
-		target.Character, // role
-		[]base.Effect{
+		name:   "Fireball",
+		class:  base.Mage,
+		mana:   4,
+		assign: target.Manual,
+		side:   target.Any,
+		role:   target.Character,
+		effects: []base.Effect{
 			effect.DealDamage(6),
 		},
 	},

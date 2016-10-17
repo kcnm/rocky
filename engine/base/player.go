@@ -6,6 +6,7 @@ type Player interface {
 	Mana() int
 	Crystal() int
 	HasMaxCrystal() bool
+	Weapon() Weapon
 	Board() Board
 	Deck() Deck
 	Hand() []Card
@@ -16,4 +17,6 @@ type Player interface {
 	GainCrystal(crystal int)
 	Take(card Card) bool
 	Play(cardIndex int) Card
+	Equip(card WeaponCard)
+	DestroyWeapon()
 }

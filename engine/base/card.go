@@ -22,3 +22,10 @@ type SpellCard interface {
 
 	Effects() []Effect
 }
+
+type WeaponCard interface {
+	Card
+
+	Attack() int
+	Durability() int
+}
