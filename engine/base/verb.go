@@ -10,7 +10,7 @@ const (
 	PlayCard  Verb = "PlayCard"
 	Summon    Verb = "Summon"
 	Cast      Verb = "Cast"
-	Hit       Verb = "Hit"
+	Attack    Verb = "Attack"
 	Damage    Verb = "Damage"
 	Dying     Verb = "Dying"
 	Destroy   Verb = "Destroy"

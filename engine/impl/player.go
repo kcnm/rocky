@@ -154,6 +154,6 @@ func (p *player) String() string {
 		cards[i] = fmt.Sprintf("%v", c)
 	}
 	hand := fmt.Sprintf("Hand: %s", strings.Join(cards, ", "))
-	return fmt.Sprintf("Player%d(%d%s) %s %s %s\n%v",
+	return fmt.Sprintf("Player%d(%d%s) %s %s\n%s\n%v",
 		p.id, p.health, armor, mana, deck, hand, p.board)
 }

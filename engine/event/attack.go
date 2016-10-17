@@ -4,28 +4,28 @@ import (
 	"github.com/kcnm/rocky/engine/base"
 )
 
-type hit struct {
+type attack struct {
 	game     base.Game
 	attacker base.Character
 	defender base.Character
 }
 
-func Hit(
+func Attack(
 	game base.Game,
 	attacker base.Character,
 	defender base.Character) base.Event {
-	return &hit{game, attacker, defender}
+	return &attack{game, attacker, defender}
 }
 
-func (ev *hit) Subject() interface{} {
+func (ev *attack) Subject() interface{} {
 	return ev.attacker
 }
 
-func (ev *hit) Verb() base.Verb {
-	return base.Hit
+func (ev *attack) Verb() base.Verb {
+	return base.Attack
 }
 
-func (ev *hit) Trigger() {
+func (ev *attack) Trigger() {
 	ev.attacker.LoseStamina()
 	active := Damage(ev.game, ev.defender, ev.attacker, ev.attacker.Attack())
 	passive := Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack())

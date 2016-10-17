@@ -7,7 +7,7 @@ import (
 	"github.com/kcnm/rocky/engine/event"
 )
 
-func CanHit(
+func CanAttack(
 	game base.Game,
 	attacker base.Character,
 	defender base.Character) (bool, error) {
@@ -35,13 +35,13 @@ func CanHit(
 	return true, nil
 }
 
-func Hit(
+func Attack(
 	game base.Game,
 	attacker base.Character,
 	defender base.Character) {
-	if ok, err := CanHit(game, attacker, defender); !ok {
+	if ok, err := CanAttack(game, attacker, defender); !ok {
 		panic(err)
 	}
 	game.Events().PostAndTrigger(
-		event.Hit(game, attacker, defender))
+		event.Attack(game, attacker, defender))
 }
