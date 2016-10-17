@@ -49,23 +49,14 @@ func (b *board) Get(pos int) base.Minion {
 	return b.minions[pos]
 }
 
-func (b *board) Put(minion base.Minion, toRight base.Minion) base.Minion {
+func (b *board) Put(minion base.Minion, position int) base.Minion {
 	if b.IsFull() {
 		return nil
 	}
-	if toRight == nil {
-		b.minions = append([]base.Minion{minion}, b.minions...)
-		return minion
-	}
-	for i, m := range b.minions {
-		if m == toRight {
-			b.minions = append(
-				b.minions[:i+1],
-				append([]base.Minion{minion}, b.minions[i+1:]...)...)
-			return minion
-		}
-	}
-	return nil
+	b.minions = append(
+		b.minions[:position],
+		append([]base.Minion{minion}, b.minions[position:]...)...)
+	return minion
 }
 
 func (b *board) remove(subject interface{}) int {

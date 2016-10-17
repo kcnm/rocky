@@ -8,5 +8,5 @@ type Board interface {
 	Find(minion Minion) (index int)
 	Get(pos int) Minion
 
-	Put(minion Minion, toRight Minion) Minion
+	Put(minion Minion, position int) Minion
 }

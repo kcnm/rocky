@@ -9,7 +9,7 @@ type summon struct {
 	summoner base.Character
 	card     base.MinionCard
 	board    base.Board
-	toRight  base.Minion
+	position int
 }
 
 func Summon(
@@ -17,8 +17,8 @@ func Summon(
 	summoner base.Character,
 	card base.MinionCard,
 	board base.Board,
-	toRight base.Minion) base.Event {
-	return &summon{game, summoner, card, board, toRight}
+	position int) base.Event {
+	return &summon{game, summoner, card, board, position}
 }
 
 func (ev *summon) Subject() interface{} {
@@ -30,5 +30,5 @@ func (ev *summon) Verb() base.Verb {
 }
 
 func (ev *summon) Trigger() {
-	ev.game.Summon(ev.card, ev.board, ev.toRight)
+	ev.game.Summon(ev.card, ev.board, ev.position)
 }

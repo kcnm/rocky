@@ -76,12 +76,12 @@ func (g *game) IsOver() (over bool, winner base.Player) {
 func (g *game) Summon(
 	card base.MinionCard,
 	board base.Board,
-	toRight base.Minion) base.Minion {
+	position int) base.Minion {
 	if board.IsFull() {
 		return nil
 	}
 	minion := newMinion(g.nextCharacterID(), card)
-	return board.Put(minion, toRight)
+	return board.Put(minion, position)
 }
 
 func (g *game) nextCharacterID() base.CharacterID {

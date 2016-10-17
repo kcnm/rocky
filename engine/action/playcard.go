@@ -12,6 +12,7 @@ func CanPlayCard(
 	game base.Game,
 	player base.Player,
 	cardIndex int,
+	position int,
 	tgt base.Character) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
@@ -37,32 +38,12 @@ func CanPlayCard(
 
 	switch card := c.(type) {
 	case base.MinionCard:
-		if player.Board().IsFull() {
-			return false, fmt.Errorf("board is full")
-		}
-		if tgt == nil {
-			break
-		}
-		if m, ok := tgt.(base.Minion); !ok || !player.IsControlling(m) {
-			return false, fmt.Errorf("invalid minion drop location")
+		if ok, err := canPlayMinion(player, position); !ok {
+			return false, err
 		}
 	case base.SpellCard:
-		if card.Assign() == target.Manual {
-			opponent := game.Opponent(player)
-			if card.Side() == target.Friend && !player.IsControlling(tgt) {
-				return false, fmt.Errorf("target is not friend")
-			}
-			if card.Side() == target.Enemy && !opponent.IsControlling(tgt) {
-				return false, fmt.Errorf("target is not enemy")
-			}
-			if _, ok := tgt.(base.Minion); card.Role() == target.Minion && !ok {
-				return false, fmt.Errorf("target is not minion")
-			}
-			if _, ok := tgt.(base.Player); card.Role() == target.Player && !ok {
-				return false, fmt.Errorf("target is not player")
-			}
-		} else if tgt != nil {
-			return false, fmt.Errorf("unexpected target")
+		if ok, err := canPlaySpell(game, player, card, tgt); !ok {
+			return false, err
 		}
 	}
 	return true, nil
@@ -72,24 +53,55 @@ func PlayCard(
 	game base.Game,
 	player base.Player,
 	cardIndex int,
+	position int,
 	tgt base.Character) {
-	if ok, err := CanPlayCard(game, player, cardIndex, tgt); !ok {
+	if ok, err := CanPlayCard(game, player, cardIndex, position, tgt); !ok {
 		panic(err)
 	}
-	switch card := player.Hand()[cardIndex].(type) {
+	c := player.Hand()[cardIndex]
+	game.Events().PostAndTrigger(
+		event.PlayCard(player, cardIndex))
+	switch card := c.(type) {
 	case base.MinionCard:
-		toRight := (base.Minion)(nil)
-		if tgt != nil {
-			toRight = tgt.(base.Minion)
-		}
 		game.Events().PostAndTrigger(
-			event.PlayCard(player, cardIndex))
-		game.Events().PostAndTrigger(
-			event.Summon(game, player, card, player.Board(), toRight))
+			event.Summon(game, player, card, player.Board(), position))
 	case base.SpellCard:
-		game.Events().PostAndTrigger(
-			event.PlayCard(player, cardIndex))
 		game.Events().PostAndTrigger(
 			event.Cast(game, player, card, tgt))
 	}
+}
+
+func canPlayMinion(player base.Player, position int) (bool, error) {
+	if player.Board().IsFull() {
+		return false, fmt.Errorf("board is full")
+	}
+	if position < 0 || len(player.Board().Minions()) < position {
+		return false, fmt.Errorf("invalid minion drop location")
+	}
+	return true, nil
+}
+
+func canPlaySpell(
+	game base.Game,
+	player base.Player,
+	card base.SpellCard,
+	tgt base.Character) (bool, error) {
+	if card.Assign() == target.Manual {
+		opponent := game.Opponent(player)
+		if card.Side() == target.Friend && !player.IsControlling(tgt) {
+			return false, fmt.Errorf("target is not friend")
+		}
+		if card.Side() == target.Enemy && !opponent.IsControlling(tgt) {
+			return false, fmt.Errorf("target is not enemy")
+		}
+		if _, ok := tgt.(base.Minion); card.Role() == target.Minion && !ok {
+			return false, fmt.Errorf("target is not minion")
+		}
+		if _, ok := tgt.(base.Player); card.Role() == target.Player && !ok {
+			return false, fmt.Errorf("target is not player")
+		}
+	} else if tgt != nil {
+		return false, fmt.Errorf("unexpected target")
+	}
+	return true, nil
 }
