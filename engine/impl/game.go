@@ -59,6 +59,16 @@ func (g *game) CurrentPlayer() base.Player {
 	return g.players[g.turn%2]
 }
 
+func (g *game) Opponent(player base.Player) base.Player {
+	if player == g.players[0] {
+		return g.players[1]
+	}
+	if player == g.players[1] {
+		return g.players[0]
+	}
+	panic("player is not in the game")
+}
+
 func (g *game) IsOver() (over bool, winner base.Player) {
 	return g.over, g.winner
 }

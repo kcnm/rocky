@@ -15,8 +15,8 @@ func newMinion(id base.CharacterID, card base.MinionCard) base.Minion {
 	return &minion{
 		newCharacter(
 			id,
-			card.InitialAttack(),
-			card.InitialHealth(),
+			card.Attack(),
+			card.Health(),
 			0, // stamina
 		).(*character),
 		card,

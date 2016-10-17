@@ -9,6 +9,7 @@ const (
 	TakeCard  Verb = "TakeCard"
 	PlayCard  Verb = "PlayCard"
 	Summon    Verb = "Summon"
+	Cast      Verb = "Cast"
 	Hit       Verb = "Hit"
 	Damage    Verb = "Damage"
 	Dying     Verb = "Dying"

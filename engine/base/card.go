@@ -1,5 +1,9 @@
 package base
 
+import (
+	"github.com/kcnm/rocky/engine/base/target"
+)
+
 type Card interface {
 	Class() Class
 	Mana() int
@@ -8,10 +12,13 @@ type Card interface {
 type MinionCard interface {
 	Card
 
-	InitialAttack() int
-	InitialHealth() int
+	Attack() int
+	Health() int
 }
 
 type SpellCard interface {
 	Card
+	target.Spec
+
+	Effects() []Effect
 }

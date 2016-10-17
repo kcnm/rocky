@@ -1,0 +1,31 @@
+package target
+
+type Assign string
+
+const (
+	All    Assign = "All"
+	Random Assign = "Random"
+	Manual Assign = "Manual"
+)
+
+type Side string
+
+const (
+	Any    Side = "Any"
+	Friend Side = "Friend"
+	Enemy  Side = "Enemy"
+)
+
+type Role string
+
+const (
+	Minion    Role = "Minion"
+	Player    Role = "Player"
+	Character Role = "Character"
+)
+
+type Spec interface {
+	Assign() Assign
+	Side() Side
+	Role() Role
+}
