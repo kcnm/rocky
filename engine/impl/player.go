@@ -3,6 +3,7 @@ package impl
 import (
 	"flag"
 	"fmt"
+	"strings"
 
 	"github.com/kcnm/rocky/engine/base"
 )
@@ -147,8 +148,12 @@ func (p *player) String() string {
 		armor = fmt.Sprintf("+%d", p.armor)
 	}
 	mana := fmt.Sprintf("Mana: %d/%d", p.mana, p.crystal)
-	hand := fmt.Sprintf("Hand: %d", len(p.hand))
 	deck := fmt.Sprintf("Deck: %d", p.deck.Remain())
+	cards := make([]string, len(p.hand))
+	for i, c := range p.hand {
+		cards[i] = fmt.Sprintf("%v", c)
+	}
+	hand := fmt.Sprintf("Hand: %s", strings.Join(cards, ", "))
 	return fmt.Sprintf("Player%d(%d%s) %s %s %s\n%v",
-		p.id, p.health, armor, mana, hand, deck, p.board)
+		p.id, p.health, armor, mana, deck, hand, p.board)
 }
