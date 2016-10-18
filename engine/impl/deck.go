@@ -11,7 +11,7 @@ type deck struct {
 	fatigueCtr int
 }
 
-func NewDeck(cards []base.Card) base.Deck {
+func NewDeck(cards ...base.Card) base.Deck {
 	if cards == nil {
 		panic("nil cards")
 	}

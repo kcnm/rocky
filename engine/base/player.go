@@ -3,6 +3,7 @@ package base
 type Player interface {
 	Character
 
+	Armor() int
 	Mana() int
 	Crystal() int
 	HasMaxCrystal() bool

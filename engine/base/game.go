@@ -4,6 +4,7 @@ type Game interface {
 	Listener
 
 	Events() *EventBus
+	Turn() int
 	CurrentPlayer() Player
 	Opponent(player Player) Player
 	IsOver() (over bool, winner Player)

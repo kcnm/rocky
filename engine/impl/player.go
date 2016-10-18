@@ -80,6 +80,10 @@ func (p *player) TakeDamage(damage int) (actual int, fatal bool) {
 	return damage, p.health <= 0
 }
 
+func (p *player) Armor() int {
+	return p.armor
+}
+
 func (p *player) Mana() int {
 	return p.mana
 }

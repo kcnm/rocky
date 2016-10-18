@@ -55,6 +55,10 @@ func (g *game) Events() *base.EventBus {
 	return g.EventBus
 }
 
+func (g *game) Turn() int {
+	return g.turn
+}
+
 func (g *game) CurrentPlayer() base.Player {
 	return g.players[g.turn%2]
 }
