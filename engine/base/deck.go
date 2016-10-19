@@ -1,8 +1,12 @@
 package base
 
+import (
+	"math/rand"
+)
+
 type Deck interface {
 	Remain() int
 
-	Shuffle()
+	Shuffle(rng *rand.Rand)
 	Draw() (card Card, fatigue int)
 }

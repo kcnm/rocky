@@ -34,7 +34,7 @@ func TestBasicGame(t *testing.T) {
 		),
 		nil, // board
 	)
-	game := impl.NewGame(player1, player2)
+	game := impl.NewGame(player1, player2, nil /* rng */)
 
 	for _, turn := range []struct {
 		current base.Player

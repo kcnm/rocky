@@ -22,9 +22,9 @@ func (d *deck) Remain() int {
 	return len(d.cards)
 }
 
-func (d *deck) Shuffle() {
+func (d *deck) Shuffle(rng *rand.Rand) {
 	shuffled := make([]base.Card, len(d.cards))
-	for i, p := range rand.Perm(len(d.cards)) {
+	for i, p := range rng.Perm(len(d.cards)) {
 		shuffled[p] = d.cards[i]
 	}
 	d.cards = shuffled

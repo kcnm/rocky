@@ -2,6 +2,8 @@ package impl
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/kcnm/rocky/engine/base"
 	"github.com/kcnm/rocky/engine/event"
@@ -16,30 +18,70 @@ type game struct {
 	idGen   base.CharacterID
 }
 
-func NewGame(player1, player2 base.Player) base.Game {
+func NewGame(player1, player2 base.Player, rng *rand.Rand) base.Game {
 	if player1 == nil {
 		panic("nil player1")
 	}
 	if player2 == nil {
 		panic("nil player2")
 	}
-	g := &game{
-		base.NewEventBus(),
-		[]base.Player{player2, player1},
-		0,     // turn
-		false, // over
-		nil,   // winner
-		0,     // idGen
+	if rng == nil {
+		rng = rand.New(rand.NewSource(time.Now().Unix()))
 	}
-	player1.Assign(g.nextCharacterID())
-	player2.Assign(g.nextCharacterID())
-	player1.Deck().Shuffle()
-	player2.Deck().Shuffle()
+	player1.Assign(1)
+	player2.Assign(2)
+	g := ResumeGame(player1, player2, 0, rng).(*game)
+	player1.Deck().Shuffle(rng)
+	player2.Deck().Shuffle(rng)
 	g.AddListener(g)
 	g.AddListener(player1.Board())
 	g.AddListener(player2.Board())
 	g.PostAndTrigger(base.StartTurn)
 	return g
+}
+
+func ResumeGame(
+	player1 base.Player,
+	player2 base.Player,
+	turn int,
+	rng *rand.Rand) base.Game {
+	if player1 == nil {
+		panic("nil player1")
+	}
+	if player2 == nil {
+		panic("nil player2")
+	}
+	if player1.ID() != 1 {
+		panic(fmt.Errorf("invalid player1 ID %d", player1.ID()))
+	}
+	if player2.ID() != 2 {
+		panic(fmt.Errorf("invalid player2 ID %d", player2.ID()))
+	}
+	if rng == nil {
+		rng = rand.New(rand.NewSource(time.Now().Unix()))
+	}
+	// Validates character IDs, and initialize ID generator.
+	ids, idGen := make(map[base.CharacterID]bool), base.CharacterID(2)
+	for _, p := range []base.Player{player1, player2} {
+		ids[p.ID()] = true
+		for _, m := range p.Board().Minions() {
+			if ids[m.ID()] {
+				panic(fmt.Errorf("duplicated character ID %d", m.ID()))
+			}
+			ids[m.ID()] = true
+			if m.ID() > idGen {
+				idGen = m.ID()
+			}
+		}
+	}
+	return &game{
+		base.NewEventBus(),
+		[]base.Player{player2, player1},
+		turn,
+		false, // over
+		nil,   // winner
+		idGen,
+	}
 }
 
 func (g *game) Handle(ev base.Event) {
