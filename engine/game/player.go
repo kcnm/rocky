@@ -1,11 +1,11 @@
-package impl
+package game
 
 import (
 	"flag"
 	"fmt"
 	"strings"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 var maxCrystal = flag.Int("max_crystal", 10, "maximum number of crystals")
@@ -16,18 +16,18 @@ type player struct {
 	armor   int
 	mana    int
 	crystal int
-	weapon  base.Weapon
-	hand    []base.Card
-	deck    base.Deck
-	board   base.Board
+	weapon  engine.Weapon
+	hand    []engine.Card
+	deck    engine.Deck
+	board   engine.Board
 }
 
 func NewPlayer(
 	health int,
 	armor int,
 	crystal int,
-	deck base.Deck,
-	hand ...base.Card) base.Player {
+	deck engine.Deck,
+	hand ...engine.Card) engine.Player {
 	if len(hand) > *maxHand {
 		panic("too many cards in hand")
 	}
@@ -96,19 +96,19 @@ func (p *player) HasMaxCrystal() bool {
 	return p.crystal >= *maxCrystal
 }
 
-func (p *player) Weapon() base.Weapon {
+func (p *player) Weapon() engine.Weapon {
 	return p.weapon
 }
 
-func (p *player) Board() base.Board {
+func (p *player) Board() engine.Board {
 	return p.board
 }
 
-func (p *player) Deck() base.Deck {
+func (p *player) Deck() engine.Deck {
 	return p.deck
 }
 
-func (p *player) Hand() []base.Card {
+func (p *player) Hand() []engine.Card {
 	return p.hand
 }
 
@@ -116,11 +116,11 @@ func (p *player) HandIsFull() bool {
 	return len(p.hand) >= *maxHand
 }
 
-func (p *player) IsControlling(char base.Character) bool {
+func (p *player) IsControlling(char engine.Character) bool {
 	if p == char {
 		return true
 	}
-	if minion, ok := char.(base.Minion); ok {
+	if minion, ok := char.(engine.Minion); ok {
 		return p.board.Find(minion) >= 0
 	}
 	return false
@@ -149,7 +149,7 @@ func (p *player) GainCrystal(crystal int) {
 	}
 }
 
-func (p *player) Take(card base.Card) bool {
+func (p *player) Take(card engine.Card) bool {
 	if p.HandIsFull() {
 		return false
 	}
@@ -157,14 +157,14 @@ func (p *player) Take(card base.Card) bool {
 	return true
 }
 
-func (p *player) Play(cardIndex int) base.Card {
+func (p *player) Play(cardIndex int) engine.Card {
 	card := p.hand[cardIndex]
 	p.GainMana(-card.Mana())
 	p.hand = append(p.hand[:cardIndex], p.hand[cardIndex+1:]...)
 	return card
 }
 
-func (p *player) Equip(card base.WeaponCard) {
+func (p *player) Equip(card engine.WeaponCard) {
 	p.weapon = newWeapon(card)
 }
 

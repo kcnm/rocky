@@ -1,7 +1,7 @@
-package base
+package engine
 
 import (
-	"github.com/kcnm/rocky/engine/base/target"
+	"github.com/kcnm/rocky/engine/target"
 )
 
 type Card interface {

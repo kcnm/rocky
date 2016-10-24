@@ -1,18 +1,18 @@
 package card
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type minionSpec struct {
 	name   string
-	class  base.Class
+	class  engine.Class
 	mana   int
 	attack int
 	health int
 }
 
-func (c minion) Class() base.Class {
+func (c minion) Class() engine.Class {
 	return minions[c].class
 }
 
@@ -35,14 +35,14 @@ func (c minion) String() string {
 var minions = map[minion]*minionSpec{
 	SilverHandRecruit: &minionSpec{
 		name:   "Silver Hand Recruit",
-		class:  base.Neutral,
+		class:  engine.Neutral,
 		mana:   1,
 		attack: 1,
 		health: 1,
 	},
 	ChillwindYeti: &minionSpec{
 		name:   "Chillwind Yeti",
-		class:  base.Neutral,
+		class:  engine.Neutral,
 		mana:   4,
 		attack: 4,
 		health: 5,

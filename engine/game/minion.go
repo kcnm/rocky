@@ -1,17 +1,17 @@
-package impl
+package game
 
 import (
 	"fmt"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type minion struct {
 	*character
-	card base.MinionCard
+	card engine.MinionCard
 }
 
-func newMinion(id base.CharacterID, card base.MinionCard) base.Minion {
+func newMinion(id engine.CharacterID, card engine.MinionCard) engine.Minion {
 	return &minion{
 		newCharacter(
 			id,
@@ -23,7 +23,7 @@ func newMinion(id base.CharacterID, card base.MinionCard) base.Minion {
 	}
 }
 
-func (m *minion) Card() base.MinionCard {
+func (m *minion) Card() engine.MinionCard {
 	return m.card
 }
 

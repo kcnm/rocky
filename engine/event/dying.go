@@ -1,15 +1,15 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type dying struct {
-	game base.Game
-	char base.Character
+	game engine.Game
+	char engine.Character
 }
 
-func Dying(game base.Game, char base.Character) base.Event {
+func Dying(game engine.Game, char engine.Character) engine.Event {
 	return &dying{game, char}
 }
 
@@ -17,8 +17,8 @@ func (ev *dying) Subject() interface{} {
 	return ev.char
 }
 
-func (ev *dying) Verb() base.Verb {
-	return base.Dying
+func (ev *dying) Verb() engine.Verb {
+	return engine.Dying
 }
 
 func (ev *dying) Trigger() {

@@ -1,15 +1,15 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type draw struct {
-	game   base.Game
-	player base.Player
+	game   engine.Game
+	player engine.Player
 }
 
-func Draw(game base.Game, player base.Player) base.Event {
+func Draw(game engine.Game, player engine.Player) engine.Event {
 	return &draw{game, player}
 }
 
@@ -17,8 +17,8 @@ func (ev *draw) Subject() interface{} {
 	return ev.player
 }
 
-func (ev *draw) Verb() base.Verb {
-	return base.Draw
+func (ev *draw) Verb() engine.Verb {
+	return engine.Draw
 }
 
 func (ev *draw) Trigger() {

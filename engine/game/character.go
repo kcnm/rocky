@@ -1,27 +1,27 @@
-package impl
+package game
 
 import (
 	"fmt"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type character struct {
-	id      base.CharacterID
+	id      engine.CharacterID
 	attack  int
 	health  int
 	stamina int
 }
 
 func newCharacter(
-	id base.CharacterID,
+	id engine.CharacterID,
 	attack int,
 	health int,
-	stamina int) base.Character {
+	stamina int) engine.Character {
 	return &character{id, attack, health, stamina}
 }
 
-func (char *character) ID() base.CharacterID {
+func (char *character) ID() engine.CharacterID {
 	return char.id
 }
 
@@ -41,7 +41,7 @@ func (char *character) Active() bool {
 	return char.Attack() > 0 && char.Stamina() > 0
 }
 
-func (char *character) Assign(id base.CharacterID) {
+func (char *character) Assign(id engine.CharacterID) {
 	char.id = id
 }
 

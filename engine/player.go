@@ -1,4 +1,4 @@
-package base
+package engine
 
 type Player interface {
 	Character

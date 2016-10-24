@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type playerStatus struct {
@@ -20,7 +20,7 @@ type playerStatus struct {
 
 func assertPlayerStatus(
 	t *testing.T,
-	player base.Player,
+	player engine.Player,
 	status playerStatus) {
 	if player.Health() != status.health {
 		t.Errorf("Player%d has health %d, expected %d",
@@ -67,12 +67,12 @@ type minionStatus struct {
 	attack int
 	health int
 	active bool
-	card   base.Card
+	card   engine.Card
 }
 
 func assertMinionStatus(
 	t *testing.T,
-	minion base.Minion,
+	minion engine.Minion,
 	status minionStatus) {
 	if minion.Health() != status.health {
 		t.Errorf("Minion %d has health %d, expected %d",

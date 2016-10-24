@@ -1,14 +1,14 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type endTurn struct {
-	game base.Game
+	game engine.Game
 }
 
-func EndTurn(game base.Game) base.Event {
+func EndTurn(game engine.Game) engine.Event {
 	return &endTurn{game}
 }
 
@@ -16,10 +16,10 @@ func (ev *endTurn) Subject() interface{} {
 	return ev.game.CurrentPlayer()
 }
 
-func (ev *endTurn) Verb() base.Verb {
-	return base.EndTurn
+func (ev *endTurn) Verb() engine.Verb {
+	return engine.EndTurn
 }
 
 func (ev *endTurn) Trigger() {
-	ev.game.Events().Post(base.StartTurn, ev)
+	ev.game.Events().Post(engine.StartTurn, ev)
 }

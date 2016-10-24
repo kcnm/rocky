@@ -3,14 +3,14 @@ package action
 import (
 	"fmt"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/event"
 )
 
 func CanAttack(
-	game base.Game,
-	attacker base.Character,
-	defender base.Character) (bool, error) {
+	game engine.Game,
+	attacker engine.Character,
+	defender engine.Character) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
 	}
@@ -36,9 +36,9 @@ func CanAttack(
 }
 
 func Attack(
-	game base.Game,
-	attacker base.Character,
-	defender base.Character) {
+	game engine.Game,
+	attacker engine.Character,
+	defender engine.Character) {
 	if ok, err := CanAttack(game, attacker, defender); !ok {
 		panic(err)
 	}

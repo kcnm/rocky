@@ -1,22 +1,22 @@
-package impl
+package game
 
 import (
 	"fmt"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type weapon struct {
-	card       base.WeaponCard
+	card       engine.WeaponCard
 	attack     int
 	durability int
 }
 
-func newWeapon(card base.WeaponCard) base.Weapon {
+func newWeapon(card engine.WeaponCard) engine.Weapon {
 	return &weapon{card, card.Attack(), card.Durability()}
 }
 
-func (w *weapon) Card() base.WeaponCard {
+func (w *weapon) Card() engine.WeaponCard {
 	return w.card
 }
 

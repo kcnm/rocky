@@ -1,15 +1,15 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type destroy struct {
-	game base.Game
-	char base.Character
+	game engine.Game
+	char engine.Character
 }
 
-func Destroy(game base.Game, char base.Character) base.Event {
+func Destroy(game engine.Game, char engine.Character) engine.Event {
 	return &destroy{game, char}
 }
 
@@ -17,8 +17,8 @@ func (ev *destroy) Subject() interface{} {
 	return ev.char
 }
 
-func (ev *destroy) Verb() base.Verb {
-	return base.Destroy
+func (ev *destroy) Verb() engine.Verb {
+	return engine.Destroy
 }
 
 func (ev *destroy) Trigger() {

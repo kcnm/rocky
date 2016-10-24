@@ -1,24 +1,24 @@
-package impl
+package game
 
 import (
 	"fmt"
 	"math/rand"
 	"time"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/event"
 )
 
 type game struct {
-	*base.EventBus
-	players []base.Player
+	*engine.EventBus
+	players []engine.Player
 	turn    int
 	over    bool
-	winner  base.Player
-	idGen   base.CharacterID
+	winner  engine.Player
+	idGen   engine.CharacterID
 }
 
-func NewGame(player1, player2 base.Player, rng *rand.Rand) base.Game {
+func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
 	if player1 == nil {
 		panic("nil player1")
 	}
@@ -30,21 +30,21 @@ func NewGame(player1, player2 base.Player, rng *rand.Rand) base.Game {
 	}
 	player1.Assign(1)
 	player2.Assign(2)
-	g := ResumeGame(player1, player2, 0, rng).(*game)
+	g := Resume(player1, player2, 0, rng).(*game)
 	player1.Deck().Shuffle(rng)
 	player2.Deck().Shuffle(rng)
 	g.AddListener(g)
 	g.AddListener(player1.Board())
 	g.AddListener(player2.Board())
-	g.PostAndTrigger(base.StartTurn)
+	g.PostAndTrigger(engine.StartTurn)
 	return g
 }
 
-func ResumeGame(
-	player1 base.Player,
-	player2 base.Player,
+func Resume(
+	player1 engine.Player,
+	player2 engine.Player,
 	turn int,
-	rng *rand.Rand) base.Game {
+	rng *rand.Rand) engine.Game {
 	if player1 == nil {
 		panic("nil player1")
 	}
@@ -61,8 +61,8 @@ func ResumeGame(
 		rng = rand.New(rand.NewSource(time.Now().Unix()))
 	}
 	// Validates character IDs, and initialize ID generator.
-	ids, idGen := make(map[base.CharacterID]bool), base.CharacterID(2)
-	for _, p := range []base.Player{player1, player2} {
+	ids, idGen := make(map[engine.CharacterID]bool), engine.CharacterID(2)
+	for _, p := range []engine.Player{player1, player2} {
 		ids[p.ID()] = true
 		for _, m := range p.Board().Minions() {
 			if ids[m.ID()] {
@@ -75,8 +75,8 @@ func ResumeGame(
 		}
 	}
 	return &game{
-		base.NewEventBus(),
-		[]base.Player{player2, player1},
+		engine.NewEventBus(),
+		[]engine.Player{player2, player1},
 		turn,
 		false, // over
 		nil,   // winner
@@ -84,16 +84,16 @@ func ResumeGame(
 	}
 }
 
-func (g *game) Handle(ev base.Event) {
+func (g *game) Handle(ev engine.Event) {
 	switch ev.Verb() {
-	case base.StartTurn:
+	case engine.StartTurn:
 		g.handleStartTurn(ev)
-	case base.Destroy:
+	case engine.Destroy:
 		g.handleDestroy(ev)
 	}
 }
 
-func (g *game) Events() *base.EventBus {
+func (g *game) Events() *engine.EventBus {
 	return g.EventBus
 }
 
@@ -101,11 +101,11 @@ func (g *game) Turn() int {
 	return g.turn
 }
 
-func (g *game) CurrentPlayer() base.Player {
+func (g *game) CurrentPlayer() engine.Player {
 	return g.players[g.turn%2]
 }
 
-func (g *game) Opponent(player base.Player) base.Player {
+func (g *game) Opponent(player engine.Player) engine.Player {
 	if player == g.players[0] {
 		return g.players[1]
 	}
@@ -115,14 +115,14 @@ func (g *game) Opponent(player base.Player) base.Player {
 	panic("player is not in the game")
 }
 
-func (g *game) IsOver() (over bool, winner base.Player) {
+func (g *game) IsOver() (over bool, winner engine.Player) {
 	return g.over, g.winner
 }
 
 func (g *game) Summon(
-	card base.MinionCard,
-	board base.Board,
-	position int) base.Minion {
+	card engine.MinionCard,
+	board engine.Board,
+	position int) engine.Minion {
 	if board.IsFull() {
 		return nil
 	}
@@ -130,12 +130,12 @@ func (g *game) Summon(
 	return board.Put(minion, position)
 }
 
-func (g *game) nextCharacterID() base.CharacterID {
+func (g *game) nextCharacterID() engine.CharacterID {
 	g.idGen++
 	return g.idGen
 }
 
-func (g *game) handleStartTurn(ev base.Event) {
+func (g *game) handleStartTurn(ev engine.Event) {
 	g.turn++
 	player := g.CurrentPlayer()
 	g.Post(event.Draw(g, player), ev)
@@ -145,7 +145,7 @@ func (g *game) handleStartTurn(ev base.Event) {
 	player.Refresh()
 }
 
-func (g *game) handleDestroy(ev base.Event) {
+func (g *game) handleDestroy(ev engine.Event) {
 	p0, p1 := false, false
 	subject := ev.Subject()
 	if subjects, ok := subject.([]interface{}); ok {
@@ -168,7 +168,7 @@ func (g *game) handleDestroy(ev base.Event) {
 		} else if p0 && !p1 {
 			g.winner = g.players[1]
 		}
-		g.Post(base.GameOver, ev)
+		g.Post(engine.GameOver, ev)
 	}
 }
 

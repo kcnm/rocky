@@ -1,4 +1,4 @@
-package base
+package engine
 
 type Weapon interface {
 	Card() WeaponCard

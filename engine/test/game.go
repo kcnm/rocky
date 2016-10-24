@@ -3,15 +3,15 @@ package test
 import (
 	"testing"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 func assertGameStatus(
 	t *testing.T,
-	game base.Game,
-	current base.Player,
+	game engine.Game,
+	current engine.Player,
 	over bool,
-	winner base.Player) {
+	winner engine.Player) {
 	assertCurrentPlayer(t, game, current)
 	if over {
 		assertGameOver(t, game, winner)
@@ -22,8 +22,8 @@ func assertGameStatus(
 
 func assertCurrentPlayer(
 	t *testing.T,
-	game base.Game,
-	player base.Player) {
+	game engine.Game,
+	player engine.Player) {
 	if game.CurrentPlayer() != player {
 		t.Errorf("Current player is player%d, expected player%d",
 			game.CurrentPlayer().ID(), player.ID())
@@ -32,7 +32,7 @@ func assertCurrentPlayer(
 
 func assertGameNotOver(
 	t *testing.T,
-	game base.Game) {
+	game engine.Game) {
 	if over, _ := game.IsOver(); over {
 		t.Errorf("Game is over, expected not")
 	}
@@ -40,8 +40,8 @@ func assertGameNotOver(
 
 func assertGameOver(
 	t *testing.T,
-	game base.Game,
-	winner base.Player) {
+	game engine.Game,
+	winner engine.Player) {
 	o, w := game.IsOver()
 	if !o {
 		t.Errorf("Game is not over, expected over")

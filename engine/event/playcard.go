@@ -1,15 +1,15 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type playCard struct {
-	player    base.Player
+	player    engine.Player
 	cardIndex int
 }
 
-func PlayCard(player base.Player, cardIndex int) base.Event {
+func PlayCard(player engine.Player, cardIndex int) engine.Event {
 	return &playCard{player, cardIndex}
 }
 
@@ -17,8 +17,8 @@ func (ev *playCard) Subject() interface{} {
 	return ev.player
 }
 
-func (ev *playCard) Verb() base.Verb {
-	return base.PlayCard
+func (ev *playCard) Verb() engine.Verb {
+	return engine.PlayCard
 }
 
 func (ev *playCard) Trigger() {

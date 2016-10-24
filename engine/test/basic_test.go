@@ -4,40 +4,40 @@ import (
 	"testing"
 
 	"github.com/kcnm/rocky/card"
+	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/action"
-	"github.com/kcnm/rocky/engine/base"
-	"github.com/kcnm/rocky/engine/impl"
+	"github.com/kcnm/rocky/engine/game"
 )
 
 func TestBasicGame(t *testing.T) {
-	player1 := impl.NewPlayer(
+	player1 := game.NewPlayer(
 		30, // health
 		0,  // armor
 		0,  // crystal
-		impl.NewDeck(
+		game.NewDeck(
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
 		),
 	)
-	player2 := impl.NewPlayer(
+	player2 := game.NewPlayer(
 		30, // health
 		0,  // armor
 		0,  // crystal
-		impl.NewDeck(
+		game.NewDeck(
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
 		),
 	)
-	game := impl.NewGame(player1, player2, nil /* rng */)
+	g := game.New(player1, player2, nil /* rng */)
 
 	for _, turn := range []struct {
-		current base.Player
+		current engine.Player
 		over    bool
-		winner  base.Player
+		winner  engine.Player
 		players []playerStatus
 	}{
 		{
@@ -225,21 +225,21 @@ func TestBasicGame(t *testing.T) {
 			},
 		},
 	} {
-		t.Logf("Turn %d", game.Turn())
-		assertGameStatus(t, game, turn.current, turn.over, turn.winner)
+		t.Logf("Turn %d", g.Turn())
+		assertGameStatus(t, g, turn.current, turn.over, turn.winner)
 		assertPlayerStatus(t, player1, turn.players[0])
 		assertPlayerStatus(t, player2, turn.players[1])
-		p := game.CurrentPlayer()
-		if over, _ := game.IsOver(); !over {
-			if ok, _ := action.CanEndTurn(game, game.Opponent(p)); ok {
+		p := g.CurrentPlayer()
+		if over, _ := g.IsOver(); !over {
+			if ok, _ := action.CanEndTurn(g, g.Opponent(p)); ok {
 				t.Errorf("Opponent can end turn, expected not")
 			}
-			action.EndTurn(game, p)
+			action.EndTurn(g, p)
 		} else {
-			if ok, _ := action.CanEndTurn(game, p); ok {
+			if ok, _ := action.CanEndTurn(g, p); ok {
 				t.Errorf("Player can end turn after game over, expected not")
 			}
-			if ok, _ := action.CanEndTurn(game, game.Opponent(p)); ok {
+			if ok, _ := action.CanEndTurn(g, g.Opponent(p)); ok {
 				t.Errorf("Opponent can end turn after game over, expected not")
 			}
 		}
@@ -247,34 +247,34 @@ func TestBasicGame(t *testing.T) {
 }
 
 func TestPlayMinion(t *testing.T) {
-	player1 := impl.NewPlayer(30, 0, 10, impl.NewDeck(),
+	player1 := game.NewPlayer(30, 0, 10, game.NewDeck(),
 		card.ChillwindYeti, card.SilverHandRecruit, card.ChillwindYeti)
-	player2 := impl.NewPlayer(30, 0, 10, impl.NewDeck())
-	game := impl.NewGame(player1, player2, nil /* rng */)
+	player2 := game.NewPlayer(30, 0, 10, game.NewDeck())
+	g := game.New(player1, player2, nil /* rng */)
 	// turn 1
 	assertPlayerStatus(t, player1, playerStatus{
 		29, 0, 0, false, 10, 10, 3, 0, 0})
-	action.PlayCard(game, player1, 0, 0, nil)
+	action.PlayCard(g, player1, 0, 0, nil)
 	assertPlayerStatus(t, player1, playerStatus{
 		29, 0, 0, false, 6, 10, 2, 0, 1})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
 		4, 5, false, card.ChillwindYeti})
-	action.EndTurn(game, player1)
+	action.EndTurn(g, player1)
 	// turn 2
-	action.EndTurn(game, player2)
+	action.EndTurn(g, player2)
 	// turn 3
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 10, 10, 2, 0, 1})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
 		4, 5, true, card.ChillwindYeti})
-	action.PlayCard(game, player1, 1, 0, nil)
+	action.PlayCard(g, player1, 1, 0, nil)
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 6, 10, 1, 0, 2})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
 		4, 5, false, card.ChillwindYeti})
 	assertMinionStatus(t, player1.Board().Get(1), minionStatus{
 		4, 5, true, card.ChillwindYeti})
-	action.PlayCard(game, player1, 0, 2, nil)
+	action.PlayCard(g, player1, 0, 2, nil)
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 5, 10, 0, 0, 3})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{

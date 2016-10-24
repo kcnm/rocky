@@ -1,18 +1,18 @@
 package card
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type weaponSpec struct {
 	name       string
-	class      base.Class
+	class      engine.Class
 	mana       int
 	attack     int
 	durability int
 }
 
-func (c weapon) Class() base.Class {
+func (c weapon) Class() engine.Class {
 	return weapons[c].class
 }
 
@@ -35,7 +35,7 @@ func (c weapon) String() string {
 var weapons = map[weapon]*weaponSpec{
 	FieryWarAxe: &weaponSpec{
 		name:       "Fiery War Axe",
-		class:      base.Warrior,
+		class:      engine.Warrior,
 		mana:       2,
 		attack:     3,
 		durability: 2,

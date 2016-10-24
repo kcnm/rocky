@@ -1,23 +1,23 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type summon struct {
-	game     base.Game
-	summoner base.Character
-	card     base.MinionCard
-	board    base.Board
+	game     engine.Game
+	summoner engine.Character
+	card     engine.MinionCard
+	board    engine.Board
 	position int
 }
 
 func Summon(
-	game base.Game,
-	summoner base.Character,
-	card base.MinionCard,
-	board base.Board,
-	position int) base.Event {
+	game engine.Game,
+	summoner engine.Character,
+	card engine.MinionCard,
+	board engine.Board,
+	position int) engine.Event {
 	return &summon{game, summoner, card, board, position}
 }
 
@@ -25,8 +25,8 @@ func (ev *summon) Subject() interface{} {
 	return ev.summoner
 }
 
-func (ev *summon) Verb() base.Verb {
-	return base.Summon
+func (ev *summon) Verb() engine.Verb {
+	return engine.Summon
 }
 
 func (ev *summon) Trigger() {

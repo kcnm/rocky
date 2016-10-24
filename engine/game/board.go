@@ -1,31 +1,31 @@
-package impl
+package game
 
 import (
 	"flag"
 	"fmt"
 	"strings"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 var maxBoard = flag.Int("max_board", 7, "maximum width of board")
 
 type board struct {
-	minions []base.Minion
+	minions []engine.Minion
 }
 
-func newBoard() base.Board {
-	return &board{make([]base.Minion, 0, *maxBoard)}
+func newBoard() engine.Board {
+	return &board{make([]engine.Minion, 0, *maxBoard)}
 }
 
-func (b *board) Handle(ev base.Event) {
+func (b *board) Handle(ev engine.Event) {
 	switch ev.Verb() {
-	case base.Destroy:
+	case engine.Destroy:
 		b.remove(ev.Subject())
 	}
 }
 
-func (b *board) Minions() []base.Minion {
+func (b *board) Minions() []engine.Minion {
 	return b.minions
 }
 
@@ -33,7 +33,7 @@ func (b *board) IsFull() bool {
 	return len(b.minions) >= *maxBoard
 }
 
-func (b *board) Find(minion base.Minion) int {
+func (b *board) Find(minion engine.Minion) int {
 	for i, m := range b.minions {
 		if m == minion {
 			return i
@@ -42,20 +42,20 @@ func (b *board) Find(minion base.Minion) int {
 	return -1
 }
 
-func (b *board) Get(pos int) base.Minion {
+func (b *board) Get(pos int) engine.Minion {
 	if pos < 0 || len(b.minions) <= pos {
 		return nil
 	}
 	return b.minions[pos]
 }
 
-func (b *board) Put(minion base.Minion, position int) base.Minion {
+func (b *board) Put(minion engine.Minion, position int) engine.Minion {
 	if b.IsFull() {
 		return nil
 	}
 	b.minions = append(
 		b.minions[:position],
-		append([]base.Minion{minion}, b.minions[position:]...)...)
+		append([]engine.Minion{minion}, b.minions[position:]...)...)
 	return minion
 }
 
@@ -71,7 +71,7 @@ func (b *board) remove(subject interface{}) int {
 }
 
 func (b *board) removeSingle(subject interface{}) int {
-	if minion, ok := subject.(base.Minion); ok {
+	if minion, ok := subject.(engine.Minion); ok {
 		if i := b.Find(minion); i >= 0 {
 			b.minions = append(b.minions[:i], b.minions[i+1:]...)
 			return 1

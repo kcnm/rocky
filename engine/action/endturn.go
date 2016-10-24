@@ -3,11 +3,11 @@ package action
 import (
 	"fmt"
 
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/event"
 )
 
-func CanEndTurn(game base.Game, player base.Player) (bool, error) {
+func CanEndTurn(game engine.Game, player engine.Player) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
 	}
@@ -23,7 +23,7 @@ func CanEndTurn(game base.Game, player base.Player) (bool, error) {
 	return true, nil
 }
 
-func EndTurn(game base.Game, player base.Player) {
+func EndTurn(game engine.Game, player engine.Player) {
 	if ok, err := CanEndTurn(game, player); !ok {
 		panic(err)
 	}

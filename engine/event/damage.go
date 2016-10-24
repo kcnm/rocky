@@ -1,21 +1,21 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type damage struct {
-	game base.Game
-	char base.Character
-	src  base.Character
+	game engine.Game
+	char engine.Character
+	src  engine.Character
 	dmg  int
 }
 
 func Damage(
-	game base.Game,
-	char base.Character,
-	src base.Character,
-	dmg int) base.Event {
+	game engine.Game,
+	char engine.Character,
+	src engine.Character,
+	dmg int) engine.Event {
 	return &damage{game, char, src, dmg}
 }
 
@@ -23,8 +23,8 @@ func (ev *damage) Subject() interface{} {
 	return ev.char
 }
 
-func (ev *damage) Verb() base.Verb {
-	return base.Damage
+func (ev *damage) Verb() engine.Verb {
+	return engine.Damage
 }
 
 func (ev *damage) Trigger() {

@@ -1,19 +1,19 @@
 package event
 
 import (
-	"github.com/kcnm/rocky/engine/base"
+	"github.com/kcnm/rocky/engine"
 )
 
 type attack struct {
-	game     base.Game
-	attacker base.Character
-	defender base.Character
+	game     engine.Game
+	attacker engine.Character
+	defender engine.Character
 }
 
 func Attack(
-	game base.Game,
-	attacker base.Character,
-	defender base.Character) base.Event {
+	game engine.Game,
+	attacker engine.Character,
+	defender engine.Character) engine.Event {
 	return &attack{game, attacker, defender}
 }
 
@@ -21,21 +21,21 @@ func (ev *attack) Subject() interface{} {
 	return ev.attacker
 }
 
-func (ev *attack) Verb() base.Verb {
-	return base.Attack
+func (ev *attack) Verb() engine.Verb {
+	return engine.Attack
 }
 
 func (ev *attack) Trigger() {
 	ev.attacker.LoseStamina()
 	active := Damage(ev.game, ev.defender, ev.attacker, ev.attacker.Attack())
 	passive := Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack())
-	_, isPlayer := ev.defender.(base.Player)
+	_, isPlayer := ev.defender.(engine.Player)
 	if !isPlayer && ev.defender.Attack() > 0 {
-		ev.game.Events().Post(base.Combined(active, passive), ev)
+		ev.game.Events().Post(engine.Combined(active, passive), ev)
 	} else {
 		ev.game.Events().Post(active, ev)
 	}
-	if player, isPlayer := ev.attacker.(base.Player); isPlayer {
+	if player, isPlayer := ev.attacker.(engine.Player); isPlayer {
 		player.Weapon().LoseDurability()
 		if player.Weapon().Durability() == 0 {
 			ev.game.Events().Post(DestroyWeapon(ev.game, player), ev)

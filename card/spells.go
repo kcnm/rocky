@@ -1,22 +1,22 @@
 package card
 
 import (
-	"github.com/kcnm/rocky/engine/base"
-	"github.com/kcnm/rocky/engine/base/target"
+	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/effect"
+	"github.com/kcnm/rocky/engine/target"
 )
 
 type spellSpec struct {
 	name    string
-	class   base.Class
+	class   engine.Class
 	mana    int
 	assign  target.Assign
 	side    target.Side
 	role    target.Role
-	effects []base.Effect
+	effects []engine.Effect
 }
 
-func (c spell) Class() base.Class {
+func (c spell) Class() engine.Class {
 	return spells[c].class
 }
 
@@ -36,7 +36,7 @@ func (c spell) Role() target.Role {
 	return spells[c].role
 }
 
-func (c spell) Effects() []base.Effect {
+func (c spell) Effects() []engine.Effect {
 	return spells[c].effects
 }
 
@@ -47,12 +47,12 @@ func (c spell) String() string {
 var spells = map[spell]*spellSpec{
 	Fireball: &spellSpec{
 		name:   "Fireball",
-		class:  base.Mage,
+		class:  engine.Mage,
 		mana:   4,
 		assign: target.Manual,
 		side:   target.Any,
 		role:   target.Character,
-		effects: []base.Effect{
+		effects: []engine.Effect{
 			effect.DealDamage(6),
 		},
 	},
