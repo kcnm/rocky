@@ -64,33 +64,35 @@ func assertPlayerStatus(
 }
 
 type minionStatus struct {
+	card   engine.Card
 	attack int
 	health int
 	active bool
-	card   engine.Card
 }
 
 func assertMinionStatus(
 	t *testing.T,
 	minion engine.Minion,
 	status minionStatus) {
+	if minion.Card() != status.card {
+		t.Errorf("Minion of ID %d is '%v', expected '%v'",
+			minion.ID(), minion.Card(), status.card)
+	}
 	if minion.Health() != status.health {
-		t.Errorf("Minion %d has health %d, expected %d",
-			minion.ID(), minion.Health(), status.health)
+		t.Errorf("Minion '%v'(%d) has health %d, expected %d",
+			minion.Card(), minion.ID(), minion.Health(), status.health)
 	}
 	if minion.Attack() != status.attack {
-		t.Errorf("Minion %d has attack %d, expected %d",
-			minion.ID(), minion.Attack(), status.attack)
+		t.Errorf("Minion '%v'(%d) has attack %d, expected %d",
+			minion.Card(), minion.ID(), minion.Attack(), status.attack)
 	}
 	if minion.Active() != status.active {
 		if status.active {
-			t.Errorf("Minion %d is inactive, expected active", minion.ID())
+			t.Errorf("Minion '%v'(%d) is inactive, expected active",
+				minion.Card(), minion.ID())
 		} else {
-			t.Errorf("Minion %d is active, expected inactive", minion.ID())
+			t.Errorf("Minion '%v'(%d) is active, expected inactive",
+				minion.Card(), minion.ID())
 		}
-	}
-	if minion.Card() != status.card {
-		t.Errorf("Minion %d is of card %v, expected %v",
-			minion.ID(), minion.Card(), status.card)
 	}
 }

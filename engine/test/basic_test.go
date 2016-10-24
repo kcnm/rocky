@@ -247,8 +247,8 @@ func TestBasicGame(t *testing.T) {
 }
 
 func TestPlayMinion(t *testing.T) {
-	player1 := game.NewPlayer(1, 30, 0, game.NewDeck(),
-		card.ChillwindYeti, card.SilverHandRecruit, card.ChillwindYeti)
+	ccy, cshr := card.ChillwindYeti, card.SilverHandRecruit
+	player1 := game.NewPlayer(1, 30, 0, game.NewDeck(), ccy, cshr, ccy)
 	player1.GainCrystal(10)
 	player1.GainMana(10)
 	player2 := game.NewPlayer(2, 30, 0, game.NewDeck())
@@ -257,12 +257,12 @@ func TestPlayMinion(t *testing.T) {
 	// turn 1
 	assertPlayerStatus(t, player1, playerStatus{
 		29, 0, 0, false, 10, 10, 3, 0, 0})
-	// play the first Chillwind Yeti
+	// Plays the first Chillwind Yeti
 	action.PlayCard(g, player1, 0, 0, nil)
 	assertPlayerStatus(t, player1, playerStatus{
-		29, 0, 0, false, 6, 10, 2, 0, 1})
+		29, 0, 0, false, 10 - ccy.Mana(), 10, 2, 0, 1})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
-		4, 5, false, card.ChillwindYeti})
+		ccy, ccy.Attack(), ccy.Health(), false})
 	action.EndTurn(g, player1)
 
 	// turn 2
@@ -272,23 +272,42 @@ func TestPlayMinion(t *testing.T) {
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 10, 10, 2, 0, 1})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
-		4, 5, true, card.ChillwindYeti})
-	// play the second Chillwind Yeti at position 0
+		ccy, ccy.Attack(), ccy.Health(), true})
+	// Plays the second Chillwind Yeti at position 0
 	action.PlayCard(g, player1, 1, 0, nil)
 	assertPlayerStatus(t, player1, playerStatus{
-		27, 0, 0, false, 6, 10, 1, 0, 2})
+		27, 0, 0, false, 10 - ccy.Mana(), 10, 1, 0, 2})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
-		4, 5, false, card.ChillwindYeti})
+		ccy, ccy.Attack(), ccy.Health(), false})
 	assertMinionStatus(t, player1.Board().Get(1), minionStatus{
-		4, 5, true, card.ChillwindYeti})
-	// play the Silver Hand Recruit at position 2
+		ccy, ccy.Attack(), ccy.Health(), true})
+	// Plays the Silver Hand Recruit at position 2
 	action.PlayCard(g, player1, 0, 2, nil)
 	assertPlayerStatus(t, player1, playerStatus{
-		27, 0, 0, false, 5, 10, 0, 0, 3})
+		27, 0, 0, false, 10 - ccy.Mana() - cshr.Mana(), 10, 0, 0, 3})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
-		4, 5, false, card.ChillwindYeti})
+		ccy, ccy.Attack(), ccy.Health(), false})
 	assertMinionStatus(t, player1.Board().Get(1), minionStatus{
-		4, 5, true, card.ChillwindYeti})
+		ccy, ccy.Attack(), ccy.Health(), true})
 	assertMinionStatus(t, player1.Board().Get(2), minionStatus{
-		1, 1, false, card.SilverHandRecruit})
+		cshr, cshr.Attack(), cshr.Health(), false})
+}
+
+func TestCastSpell(t *testing.T) {
+	cfb := card.Fireball
+	player1 := game.NewPlayer(1, 30, 0, game.NewDeck(), cfb)
+	player1.GainCrystal(10)
+	player1.GainMana(10)
+	player2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	g := game.New(player1, player2, nil /* rng */)
+
+	assertPlayerStatus(t, player1, playerStatus{
+		29, 0, 0, false, 10, 10, 1, 0, 0})
+	assertPlayerStatus(t, player2, playerStatus{
+		30, 0, 0, false, 0, 0, 0, 0, 0})
+	action.PlayCard(g, player1, 0, 0, player2)
+	assertPlayerStatus(t, player1, playerStatus{
+		29, 0, 0, false, 10 - cfb.Mana(), 10, 0, 0, 0})
+	assertPlayerStatus(t, player2, playerStatus{
+		24, 0, 0, false, 0, 0, 0, 0, 0}) // hardcoded Fireball damage here
 }
