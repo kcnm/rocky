@@ -15,27 +15,14 @@ type game struct {
 	turn    int
 	over    bool
 	winner  engine.Player
-	idGen   engine.CharacterID
+	idGen   engine.CharID
+	rng     *rand.Rand
 }
 
 func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
-	if player1 == nil {
-		panic("nil player1")
-	}
-	if player2 == nil {
-		panic("nil player2")
-	}
-	if rng == nil {
-		rng = rand.New(rand.NewSource(time.Now().Unix()))
-	}
-	player1.Assign(1)
-	player2.Assign(2)
 	g := Resume(player1, player2, 0, rng).(*game)
-	player1.Deck().Shuffle(rng)
-	player2.Deck().Shuffle(rng)
-	g.AddListener(g)
-	g.AddListener(player1.Board())
-	g.AddListener(player2.Board())
+	player1.Deck().Shuffle(g.rng)
+	player2.Deck().Shuffle(g.rng)
 	g.PostAndTrigger(engine.StartTurn)
 	return g
 }
@@ -57,11 +44,17 @@ func Resume(
 	if player2.ID() != 2 {
 		panic(fmt.Errorf("invalid player2 ID %d", player2.ID()))
 	}
+	if player1.Health() <= 0 {
+		panic(fmt.Errorf("non-positive player1 health %d", player1.Health()))
+	}
+	if player2.Health() <= 0 {
+		panic(fmt.Errorf("non-positive player2 health %d", player2.Health()))
+	}
 	if rng == nil {
 		rng = rand.New(rand.NewSource(time.Now().Unix()))
 	}
 	// Validates character IDs, and initialize ID generator.
-	ids, idGen := make(map[engine.CharacterID]bool), engine.CharacterID(2)
+	ids, idGen := make(map[engine.CharID]bool), engine.CharID(2)
 	for _, p := range []engine.Player{player1, player2} {
 		ids[p.ID()] = true
 		for _, m := range p.Board().Minions() {
@@ -74,14 +67,19 @@ func Resume(
 			}
 		}
 	}
-	return &game{
+	g := &game{
 		engine.NewEventBus(),
 		[]engine.Player{player2, player1},
 		turn,
 		false, // over
 		nil,   // winner
 		idGen,
+		rng,
 	}
+	g.AddListener(g)
+	g.AddListener(player1.Board())
+	g.AddListener(player2.Board())
+	return g
 }
 
 func (g *game) Handle(ev engine.Event) {
@@ -126,11 +124,11 @@ func (g *game) Summon(
 	if board.IsFull() {
 		return nil
 	}
-	minion := newMinion(g.nextCharacterID(), card)
+	minion := newMinion(g.nextCharID(), card)
 	return board.Put(minion, position)
 }
 
-func (g *game) nextCharacterID() engine.CharacterID {
+func (g *game) nextCharID() engine.CharID {
 	g.idGen++
 	return g.idGen
 }

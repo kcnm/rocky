@@ -13,7 +13,7 @@ func CanPlayCard(
 	player engine.Player,
 	cardIndex int,
 	position int,
-	tgt engine.Character) (bool, error) {
+	tgt engine.Char) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
 	}
@@ -54,7 +54,7 @@ func PlayCard(
 	player engine.Player,
 	cardIndex int,
 	position int,
-	tgt engine.Character) {
+	tgt engine.Char) {
 	if ok, err := CanPlayCard(game, player, cardIndex, position, tgt); !ok {
 		panic(err)
 	}
@@ -92,7 +92,7 @@ func canPlaySpell(
 	game engine.Game,
 	player engine.Player,
 	card engine.SpellCard,
-	tgt engine.Character) (bool, error) {
+	tgt engine.Char) (bool, error) {
 	if card.Assign() == target.Manual {
 		opponent := game.Opponent(player)
 		if card.Side() == target.Friend && !player.IsControlling(tgt) {

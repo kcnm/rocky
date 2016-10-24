@@ -16,7 +16,7 @@ func DealDamage(dmg int) engine.Effect {
 func (e *dealDamage) Happen(
 	game engine.Game,
 	cause engine.Event,
-	targets []engine.Character) {
+	targets []engine.Char) {
 	if len(targets) == 0 {
 		panic("deal damage to 0 targets")
 	}

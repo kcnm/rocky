@@ -51,7 +51,7 @@ var spells = map[spell]*spellSpec{
 		mana:   4,
 		assign: target.Manual,
 		side:   target.Any,
-		role:   target.Character,
+		role:   target.Char,
 		effects: []engine.Effect{
 			effect.DealDamage(6),
 		},

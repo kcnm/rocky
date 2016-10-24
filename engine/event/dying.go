@@ -6,10 +6,10 @@ import (
 
 type dying struct {
 	game engine.Game
-	char engine.Character
+	char engine.Char
 }
 
-func Dying(game engine.Game, char engine.Character) engine.Event {
+func Dying(game engine.Game, char engine.Char) engine.Event {
 	return &dying{game, char}
 }
 

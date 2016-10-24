@@ -12,7 +12,7 @@ var maxCrystal = flag.Int("max_crystal", 10, "maximum number of crystals")
 var maxHand = flag.Int("max_hand", 10, "maximum number of cards in hand")
 
 type player struct {
-	*character
+	*char
 	armor   int
 	mana    int
 	crystal int
@@ -23,25 +23,25 @@ type player struct {
 }
 
 func NewPlayer(
+	id engine.CharID,
 	health int,
 	armor int,
-	crystal int,
 	deck engine.Deck,
 	hand ...engine.Card) engine.Player {
 	if len(hand) > *maxHand {
 		panic("too many cards in hand")
 	}
 	return &player{
-		newCharacter(
-			0,      // id, assigned by game
+		newChar(
+			id,     // id
 			0,      // attack
 			health, // health
 			0,      // stamina
-		).(*character),
-		armor,   // armor
-		0,       // mana
-		crystal, // crystal
-		nil,     // weapon
+		).(*char),
+		armor, // armor
+		0,     // mana
+		0,     // crystal
+		nil,   // weapon
 		hand,
 		deck,
 		newBoard(),
@@ -49,7 +49,7 @@ func NewPlayer(
 }
 
 func (p *player) Attack() int {
-	attack := p.character.Attack()
+	attack := p.char.Attack()
 	if p.weapon != nil {
 		attack += p.weapon.Attack()
 	}
@@ -61,7 +61,7 @@ func (p *player) Active() bool {
 }
 
 func (p *player) Refresh() {
-	p.character.Refresh()
+	p.char.Refresh()
 	p.mana = p.crystal
 	for _, minion := range p.board.Minions() {
 		minion.Refresh()
@@ -116,7 +116,7 @@ func (p *player) HandIsFull() bool {
 	return len(p.hand) >= *maxHand
 }
 
-func (p *player) IsControlling(char engine.Character) bool {
+func (p *player) IsControlling(char engine.Char) bool {
 	if p == char {
 		return true
 	}

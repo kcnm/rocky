@@ -6,15 +6,15 @@ import (
 
 type damage struct {
 	game engine.Game
-	char engine.Character
-	src  engine.Character
+	char engine.Char
+	src  engine.Char
 	dmg  int
 }
 
 func Damage(
 	game engine.Game,
-	char engine.Character,
-	src engine.Character,
+	char engine.Char,
+	src engine.Char,
 	dmg int) engine.Event {
 	return &damage{game, char, src, dmg}
 }

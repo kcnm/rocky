@@ -1,7 +1,7 @@
 package engine
 
 type Minion interface {
-	Character
+	Char
 
 	Card() MinionCard
 }

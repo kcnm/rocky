@@ -19,9 +19,9 @@ const (
 type Role string
 
 const (
-	Minion    Role = "Minion"
-	Player    Role = "Player"
-	Character Role = "Character"
+	Minion Role = "Minion"
+	Player Role = "Player"
+	Char   Role = "Char"
 )
 
 type Spec interface {

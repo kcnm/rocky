@@ -6,14 +6,14 @@ import (
 
 type attack struct {
 	game     engine.Game
-	attacker engine.Character
-	defender engine.Character
+	attacker engine.Char
+	defender engine.Char
 }
 
 func Attack(
 	game engine.Game,
-	attacker engine.Character,
-	defender engine.Character) engine.Event {
+	attacker engine.Char,
+	defender engine.Char) engine.Event {
 	return &attack{game, attacker, defender}
 }
 

@@ -7,18 +7,18 @@ import (
 )
 
 type minion struct {
-	*character
+	*char
 	card engine.MinionCard
 }
 
-func newMinion(id engine.CharacterID, card engine.MinionCard) engine.Minion {
+func newMinion(id engine.CharID, card engine.MinionCard) engine.Minion {
 	return &minion{
-		newCharacter(
+		newChar(
 			id,
 			card.Attack(),
 			card.Health(),
 			0, // stamina
-		).(*character),
+		).(*char),
 		card,
 	}
 }

@@ -6,7 +6,7 @@ import (
 
 type summon struct {
 	game     engine.Game
-	summoner engine.Character
+	summoner engine.Char
 	card     engine.MinionCard
 	board    engine.Board
 	position int
@@ -14,7 +14,7 @@ type summon struct {
 
 func Summon(
 	game engine.Game,
-	summoner engine.Character,
+	summoner engine.Char,
 	card engine.MinionCard,
 	board engine.Board,
 	position int) engine.Event {

@@ -6,10 +6,10 @@ import (
 
 type destroy struct {
 	game engine.Game
-	char engine.Character
+	char engine.Char
 }
 
-func Destroy(game engine.Game, char engine.Character) engine.Event {
+func Destroy(game engine.Game, char engine.Char) engine.Event {
 	return &destroy{game, char}
 }
 

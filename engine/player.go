@@ -1,7 +1,7 @@
 package engine
 
 type Player interface {
-	Character
+	Char
 
 	Armor() int
 	Mana() int
@@ -12,7 +12,7 @@ type Player interface {
 	Deck() Deck
 	Hand() []Card
 	HandIsFull() bool
-	IsControlling(char Character) bool
+	IsControlling(char Char) bool
 
 	GainMana(mana int)
 	GainCrystal(crystal int)

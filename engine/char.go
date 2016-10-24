@@ -1,15 +1,14 @@
 package engine
 
-type CharacterID int
+type CharID int
 
-type Character interface {
-	ID() CharacterID
+type Char interface {
+	ID() CharID
 	Attack() int
 	Health() int
 	Stamina() int
 	Active() bool
 
-	Assign(id CharacterID)
 	Refresh()
 	TakeDamage(damage int) (actual int, fatal bool)
 	LoseStamina()

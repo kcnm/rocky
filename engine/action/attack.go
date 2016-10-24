@@ -9,8 +9,8 @@ import (
 
 func CanAttack(
 	game engine.Game,
-	attacker engine.Character,
-	defender engine.Character) (bool, error) {
+	attacker engine.Char,
+	defender engine.Char) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
 	}
@@ -37,8 +37,8 @@ func CanAttack(
 
 func Attack(
 	game engine.Game,
-	attacker engine.Character,
-	defender engine.Character) {
+	attacker engine.Char,
+	defender engine.Char) {
 	if ok, err := CanAttack(game, attacker, defender); !ok {
 		panic(err)
 	}

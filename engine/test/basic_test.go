@@ -11,9 +11,9 @@ import (
 
 func TestBasicGame(t *testing.T) {
 	player1 := game.NewPlayer(
+		1,  // id
 		30, // health
 		0,  // armor
-		0,  // crystal
 		game.NewDeck(
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
@@ -22,9 +22,9 @@ func TestBasicGame(t *testing.T) {
 		),
 	)
 	player2 := game.NewPlayer(
+		2,  // id
 		30, // health
 		0,  // armor
-		0,  // crystal
 		game.NewDeck(
 			card.SilverHandRecruit,
 			card.SilverHandRecruit,
@@ -247,26 +247,33 @@ func TestBasicGame(t *testing.T) {
 }
 
 func TestPlayMinion(t *testing.T) {
-	player1 := game.NewPlayer(30, 0, 10, game.NewDeck(),
+	player1 := game.NewPlayer(1, 30, 0, game.NewDeck(),
 		card.ChillwindYeti, card.SilverHandRecruit, card.ChillwindYeti)
-	player2 := game.NewPlayer(30, 0, 10, game.NewDeck())
+	player1.GainCrystal(10)
+	player1.GainMana(10)
+	player2 := game.NewPlayer(2, 30, 0, game.NewDeck())
 	g := game.New(player1, player2, nil /* rng */)
+
 	// turn 1
 	assertPlayerStatus(t, player1, playerStatus{
 		29, 0, 0, false, 10, 10, 3, 0, 0})
+	// play the first Chillwind Yeti
 	action.PlayCard(g, player1, 0, 0, nil)
 	assertPlayerStatus(t, player1, playerStatus{
 		29, 0, 0, false, 6, 10, 2, 0, 1})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
 		4, 5, false, card.ChillwindYeti})
 	action.EndTurn(g, player1)
+
 	// turn 2
 	action.EndTurn(g, player2)
+
 	// turn 3
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 10, 10, 2, 0, 1})
 	assertMinionStatus(t, player1.Board().Get(0), minionStatus{
 		4, 5, true, card.ChillwindYeti})
+	// play the second Chillwind Yeti at position 0
 	action.PlayCard(g, player1, 1, 0, nil)
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 6, 10, 1, 0, 2})
@@ -274,6 +281,7 @@ func TestPlayMinion(t *testing.T) {
 		4, 5, false, card.ChillwindYeti})
 	assertMinionStatus(t, player1.Board().Get(1), minionStatus{
 		4, 5, true, card.ChillwindYeti})
+	// play the Silver Hand Recruit at position 2
 	action.PlayCard(g, player1, 0, 2, nil)
 	assertPlayerStatus(t, player1, playerStatus{
 		27, 0, 0, false, 5, 10, 0, 0, 3})
