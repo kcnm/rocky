@@ -27,9 +27,9 @@ func NewPlayer(
 	armor int,
 	crystal int,
 	deck base.Deck,
-	board base.Board) base.Player {
-	if board == nil {
-		board = newBoard()
+	hand ...base.Card) base.Player {
+	if len(hand) > *maxHand {
+		panic("too many cards in hand")
 	}
 	return &player{
 		newCharacter(
@@ -42,9 +42,9 @@ func NewPlayer(
 		0,       // mana
 		crystal, // crystal
 		nil,     // weapon
-		make([]base.Card, 0, *maxHand),
+		hand,
 		deck,
-		board,
+		newBoard(),
 	}
 }
 

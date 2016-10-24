@@ -40,4 +40,11 @@ var minions = map[minion]*minionSpec{
 		attack: 1,
 		health: 1,
 	},
+	ChillwindYeti: &minionSpec{
+		name:   "Chillwind Yeti",
+		class:  base.Neutral,
+		mana:   4,
+		attack: 4,
+		health: 5,
+	},
 }

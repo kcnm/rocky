@@ -5,7 +5,8 @@ type spell int
 type weapon int
 
 const (
-	SilverHandRecruit minion = iota
-	Fireball          spell  = iota
+	ChillwindYeti     minion = iota
 	FieryWarAxe       weapon = iota
+	Fireball          spell  = iota
+	SilverHandRecruit minion = iota
 )

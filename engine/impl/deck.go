@@ -13,7 +13,7 @@ type deck struct {
 
 func NewDeck(cards ...base.Card) base.Deck {
 	if cards == nil {
-		panic("nil cards")
+		cards = make([]base.Card, 0)
 	}
 	return &deck{cards, 0}
 }
