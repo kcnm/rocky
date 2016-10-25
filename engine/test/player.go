@@ -96,3 +96,31 @@ func assertMinionStatus(
 		}
 	}
 }
+
+type weaponStatus struct {
+	card       engine.Card
+	attack     int
+	durability int
+}
+
+func assertWeaponStatus(
+	t *testing.T,
+	player engine.Player,
+	status weaponStatus) {
+	w := player.Weapon()
+	if w == nil {
+		t.Errorf("Player%d does not equip a weapon, expected so", player.ID())
+	}
+	if w.Card() != status.card {
+		t.Errorf("Weapon of player%d is '%v', expected '%v'",
+			player.ID(), w.Card(), status.card)
+	}
+	if w.Attack() != status.attack {
+		t.Errorf("Weapon of player%d has attack %d, expected %d",
+			player.ID(), w.Attack(), status.attack)
+	}
+	if w.Durability() != status.durability {
+		t.Errorf("Weapon of player%d has durability %d, expected %d",
+			player.ID(), w.Durability(), status.durability)
+	}
+}

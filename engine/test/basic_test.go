@@ -297,17 +297,34 @@ func TestCastSpell(t *testing.T) {
 	cfb := card.Fireball
 	player1 := game.NewPlayer(1, 30, 0, game.NewDeck(), cfb)
 	player1.GainCrystal(10)
-	player1.GainMana(10)
 	player2 := game.NewPlayer(2, 30, 0, game.NewDeck())
-	g := game.New(player1, player2, nil /* rng */)
+	g := game.Resume(player1, player2, 1, nil /* rng */)
+	player1.Refresh()
 
 	assertPlayerStatus(t, player1, playerStatus{
-		29, 0, 0, false, 10, 10, 1, 0, 0})
+		30, 0, 0, false, 10, 10, 1, 0, 0})
 	assertPlayerStatus(t, player2, playerStatus{
 		30, 0, 0, false, 0, 0, 0, 0, 0})
 	action.PlayCard(g, player1, 0, 0, player2)
 	assertPlayerStatus(t, player1, playerStatus{
-		29, 0, 0, false, 10 - cfb.Mana(), 10, 0, 0, 0})
+		30, 0, 0, false, 10 - cfb.Mana(), 10, 0, 0, 0})
 	assertPlayerStatus(t, player2, playerStatus{
 		24, 0, 0, false, 0, 0, 0, 0, 0}) // hardcoded Fireball damage here
+}
+
+func TestEquipWeapon(t *testing.T) {
+	cfwa := card.FieryWarAxe
+	player1 := game.NewPlayer(1, 30, 0, game.NewDeck(), cfwa)
+	player1.GainCrystal(10)
+	player2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	g := game.Resume(player1, player2, 1, nil /* rng */)
+	player1.Refresh()
+
+	assertPlayerStatus(t, player1, playerStatus{
+		30, 0, 0, false, 10, 10, 1, 0, 0})
+	action.PlayCard(g, player1, 0, 0, nil)
+	assertPlayerStatus(t, player1, playerStatus{
+		30, 0, cfwa.Attack(), true, 10 - cfwa.Mana(), 10, 0, 0, 0})
+	assertWeaponStatus(t, player1, weaponStatus{
+		cfwa, cfwa.Attack(), cfwa.Durability()})
 }
