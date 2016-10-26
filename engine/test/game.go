@@ -25,7 +25,7 @@ func assertCurrentPlayer(
 	game engine.Game,
 	player engine.Player) {
 	if game.CurrentPlayer() != player {
-		t.Errorf("Current player is player%d, expected player%d",
+		t.Errorf("Current player is player%v, expected player%v",
 			game.CurrentPlayer().ID(), player.ID())
 	}
 }
@@ -47,10 +47,10 @@ func assertGameOver(
 		t.Errorf("Game is not over, expected over")
 	} else if w != winner {
 		if w == nil {
-			t.Errorf("Dual, expected winner player%d", winner.ID())
+			t.Errorf("Dual, expected winner player%v", winner.ID())
 		}
 		if winner == nil {
-			t.Errorf("Winner is player%d, expected dual", w.ID())
+			t.Errorf("Winner is player%v, expected dual", w.ID())
 		}
 	}
 }

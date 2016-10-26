@@ -94,8 +94,7 @@ func (bus *EventBus) reduce(ev CombinedEvent) {
 	if len(resultIndices) > 1 {
 		results := make([]Event, len(resultIndices))
 		for i, idx := range resultIndices {
-			results[i] =
-				bus.events[idx-i].instance
+			results[i] = bus.events[idx-i].instance
 			bus.events = append(bus.events[:idx-i], bus.events[idx-i+1:]...)
 		}
 		idx0 := resultIndices[0]
