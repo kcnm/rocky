@@ -11,6 +11,7 @@ const (
 	Summon        Verb = "Summon"
 	Cast          Verb = "Cast"
 	Equip         Verb = "Equip"
+	HeroPower     Verb = "HeroPower"
 	Attack        Verb = "Attack"
 	Damage        Verb = "Damage"
 	Dying         Verb = "Dying"

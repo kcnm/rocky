@@ -7,6 +7,8 @@ type Player interface {
 	Mana() int
 	Crystal() int
 	HasMaxCrystal() bool
+	Power() Power
+	Powered() bool
 	Weapon() Weapon
 	Board() Board
 	Deck() Deck
@@ -18,6 +20,7 @@ type Player interface {
 	GainCrystal(crystal int)
 	Take(card Card) bool
 	Play(cardIndex int) Card
+	HeroPower() []Effect
 	Equip(card WeaponCard)
 	DestroyWeapon()
 }

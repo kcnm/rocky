@@ -15,21 +15,12 @@ var (
 	s4  = NewSpellCard(engine.Neutral, 4, target.Manual, target.Any, target.Char, nil)
 	w32 = NewWeaponCard(engine.Neutral, 2, 3, 2)
 	w33 = NewWeaponCard(engine.Neutral, 4, 3, 3)
+	pw2 = NewPower(engine.Neutral, 2)
 )
 
 func TestBasicGame(t *testing.T) {
-	p1 := game.NewPlayer(
-		1,  // id
-		30, // health
-		0,  // armor
-		game.NewDeck(m11, m11, m11, m11),
-	)
-	p2 := game.NewPlayer(
-		2,  // id
-		30, // health
-		0,  // armor
-		game.NewDeck(m11, m11, m11, m11),
-	)
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(m11, m11, m11, m11))
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck(m11, m11, m11, m11))
 	g := game.New(p1, p2, nil /* rng */)
 
 	for _, turn := range []struct {
@@ -245,9 +236,9 @@ func TestBasicGame(t *testing.T) {
 }
 
 func TestPlayMinion(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, game.NewDeck(), m45, m11, m45)
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(), m45, m11, m45)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
@@ -294,9 +285,9 @@ func TestPlayMinion(t *testing.T) {
 }
 
 func TestCastSpell(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, game.NewDeck(), s4)
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(), s4)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
@@ -312,9 +303,9 @@ func TestCastSpell(t *testing.T) {
 }
 
 func TestEquipWeapon(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, game.NewDeck(), w32)
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(), w32)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
@@ -333,9 +324,9 @@ func TestEquipWeapon(t *testing.T) {
 }
 
 func TestMinionAttack(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, game.NewDeck())
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck())
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
 	p2.Equip(w32.(engine.WeaponCard))
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	g.Summon(m11.(engine.MinionCard), p1.Board(), 0)
@@ -402,10 +393,10 @@ func TestMinionAttack(t *testing.T) {
 }
 
 func TestPlayerAttack(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, game.NewDeck())
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck())
 	p1.GainCrystal(10)
 	p1.Equip(w33.(engine.WeaponCard))
-	p2 := game.NewPlayer(2, 30, 0, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
 	p2.GainCrystal(10)
 	p2.Equip(w32.(engine.WeaponCard))
 	g := game.Resume(p1, p2, 1, nil /* rng */)
@@ -490,4 +481,21 @@ func TestPlayerAttack(t *testing.T) {
 	assertPlayerStatus(t, p2, p2status)
 	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
 	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 2, true})
+}
+
+func TestHeroPower(t *testing.T) {
+	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck())
+	p1.GainCrystal(10)
+	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
+	g := game.Resume(p1, p2, 1, nil /* rng */)
+	p1.Refresh()
+
+	t.Logf("Resume game")
+	p1status := playerStatus{30, 0, 0, false, 10, 10, 0, 0, 0}
+	assertPlayerStatus(t, p1, p1status)
+
+	t.Logf("P1 uses hero power")
+	action.HeroPower(g, p1, p2)
+	p1status.mana -= 2
+	assertPlayerStatus(t, p1, p1status)
 }

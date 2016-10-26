@@ -16,6 +16,8 @@ type player struct {
 	armor   int
 	mana    int
 	crystal int
+	power   engine.Power
+	powered bool
 	weapon  engine.Weapon
 	hand    []engine.Card
 	deck    engine.Deck
@@ -26,6 +28,7 @@ func NewPlayer(
 	id engine.CharID,
 	health int,
 	armor int,
+	power engine.Power,
 	deck engine.Deck,
 	hand ...engine.Card) engine.Player {
 	if len(hand) > *maxHand {
@@ -41,6 +44,8 @@ func NewPlayer(
 		armor, // armor
 		0,     // mana
 		0,     // crystal
+		power, // power
+		false, // powered
 		nil,   // weapon
 		hand,
 		deck,
@@ -63,6 +68,7 @@ func (p *player) Active() bool {
 func (p *player) Refresh() {
 	p.char.Refresh()
 	p.mana = p.crystal
+	p.powered = false
 	for _, minion := range p.board.Minions() {
 		minion.Refresh()
 	}
@@ -94,6 +100,14 @@ func (p *player) Crystal() int {
 
 func (p *player) HasMaxCrystal() bool {
 	return p.crystal >= *maxCrystal
+}
+
+func (p *player) Power() engine.Power {
+	return p.power
+}
+
+func (p *player) Powered() bool {
+	return p.powered
 }
 
 func (p *player) Weapon() engine.Weapon {
@@ -162,6 +176,18 @@ func (p *player) Play(cardIndex int) engine.Card {
 	p.GainMana(-card.Mana())
 	p.hand = append(p.hand[:cardIndex], p.hand[cardIndex+1:]...)
 	return card
+}
+
+func (p *player) HeroPower() []engine.Effect {
+	if p.powered {
+		panic("player has already used hero power this turn")
+	}
+	if p.mana < p.power.Mana() {
+		panic("player does not have enough mana to hero power")
+	}
+	p.powered = true
+	p.mana -= p.power.Mana()
+	return p.power.Effects()
 }
 
 func (p *player) Equip(card engine.WeaponCard) {

@@ -3,6 +3,7 @@ package target
 type Assign string
 
 const (
+	None   Assign = "None"
 	All    Assign = "All"
 	Random Assign = "Random"
 	Manual Assign = "Manual"
