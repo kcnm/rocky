@@ -1,12 +1,12 @@
 package card
 
-type minion int
-type spell int
-type weapon int
+type minion string
+type spell string
+type weapon string
 
 const (
-	ChillwindYeti     minion = iota
-	FieryWarAxe       weapon = iota
-	Fireball          spell  = iota
-	SilverHandRecruit minion = iota
+	ChillwindYeti     minion = "Chillwind Yeti"
+	FieryWarAxe       weapon = "Fiery War Axe"
+	Fireball          spell  = "Fireball"
+	SilverHandRecruit minion = "Silve Hand Recruit"
 )

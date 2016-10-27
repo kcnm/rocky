@@ -7,7 +7,6 @@ import (
 )
 
 type spellSpec struct {
-	name    string
 	class   engine.Class
 	mana    int
 	assign  target.Assign
@@ -40,13 +39,8 @@ func (c spell) Effects() []engine.Effect {
 	return spells[c].effects
 }
 
-func (c spell) String() string {
-	return spells[c].name
-}
-
 var spells = map[spell]*spellSpec{
 	Fireball: &spellSpec{
-		name:   "Fireball",
 		class:  engine.Mage,
 		mana:   4,
 		assign: target.Manual,

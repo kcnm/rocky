@@ -5,7 +5,6 @@ import (
 )
 
 type weaponSpec struct {
-	name       string
 	class      engine.Class
 	mana       int
 	attack     int
@@ -28,13 +27,8 @@ func (c weapon) Durability() int {
 	return weapons[c].durability
 }
 
-func (c weapon) String() string {
-	return weapons[c].name
-}
-
 var weapons = map[weapon]*weaponSpec{
 	FieryWarAxe: &weaponSpec{
-		name:       "Fiery War Axe",
 		class:      engine.Warrior,
 		mana:       2,
 		attack:     3,
