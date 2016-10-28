@@ -1,16 +1,16 @@
 package engine
 
-type Class int
+type Class string
 
 const (
-	Neutral Class = iota
-	Druid
-	Hunter
-	Mage
-	Paladin
-	Priest
-	Rogue
-	Shaman
-	Warlock
-	Warrior
+	Neutral Class = "Neutral"
+	Druid         = "Druid"
+	Hunter        = "Hunter"
+	Mage          = "Mage"
+	Paladin       = "Paladin"
+	Priest        = "Priest"
+	Rogue         = "Rogue"
+	Shaman        = "Shaman"
+	Warlock       = "Warlock"
+	Warrior       = "Warrior"
 )

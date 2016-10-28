@@ -10,7 +10,7 @@ import (
 )
 
 type game struct {
-	*engine.EventBus
+	events  engine.EventBus
 	players []engine.Player
 	turn    int
 	over    bool
@@ -23,7 +23,7 @@ func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
 	g := Resume(player1, player2, 0, rng).(*game)
 	player1.Deck().Shuffle(g.rng)
 	player2.Deck().Shuffle(g.rng)
-	g.PostAndTrigger(engine.StartTurn)
+	g.events.PostAndTrigger(engine.StartTurn)
 	return g
 }
 
@@ -68,7 +68,7 @@ func Resume(
 		}
 	}
 	g := &game{
-		engine.NewEventBus(),
+		event.NewBus(),
 		[]engine.Player{player2, player1},
 		turn,
 		false, // over
@@ -76,9 +76,9 @@ func Resume(
 		idGen,
 		rng,
 	}
-	g.AddListener(g)
-	g.AddListener(player1.Board())
-	g.AddListener(player2.Board())
+	g.events.AddListener(g)
+	g.events.AddListener(player1.Board())
+	g.events.AddListener(player2.Board())
 	return g
 }
 
@@ -88,11 +88,17 @@ func (g *game) Handle(ev engine.Event) {
 		g.handleStartTurn(ev)
 	case engine.Destroy:
 		g.handleDestroy(ev)
+	case engine.GameOver:
+		g.events.Drain()
+	case engine.Combined:
+		for _, e := range ev.Subject().([]engine.Event) {
+			g.Handle(e)
+		}
 	}
 }
 
-func (g *game) Events() *engine.EventBus {
-	return g.EventBus
+func (g *game) Events() engine.EventBus {
+	return g.events
 }
 
 func (g *game) Turn() int {
@@ -136,7 +142,7 @@ func (g *game) nextCharID() engine.CharID {
 func (g *game) handleStartTurn(ev engine.Event) {
 	g.turn++
 	player := g.CurrentPlayer()
-	g.Post(event.Draw(g, player), ev)
+	g.events.Post(event.Draw(g, player), ev)
 	if !player.HasMaxCrystal() {
 		player.GainCrystal(1)
 	}
@@ -144,29 +150,16 @@ func (g *game) handleStartTurn(ev engine.Event) {
 }
 
 func (g *game) handleDestroy(ev engine.Event) {
-	p0, p1 := false, false
-	subject := ev.Subject()
-	if subjects, ok := subject.([]interface{}); ok {
-		for _, sub := range subjects {
-			if sub == g.players[0] {
-				p0 = true
-			} else if sub == g.players[1] {
-				p1 = true
+	for i := 0; i < 2; i++ {
+		if ev.Subject() == g.players[i] {
+			g.over = true
+			if g.winner == nil {
+				g.winner = g.players[(i+1)%2]
+			} else {
+				g.winner = nil
 			}
+			g.events.Post(engine.GameOver, ev)
 		}
-	} else if subject == g.players[0] {
-		p0 = true
-	} else if subject == g.players[1] {
-		p1 = true
-	}
-	if p0 || p1 {
-		g.over = true
-		if !p0 && p1 {
-			g.winner = g.players[0]
-		} else if p0 && !p1 {
-			g.winner = g.players[1]
-		}
-		g.Post(engine.GameOver, ev)
 	}
 }
 

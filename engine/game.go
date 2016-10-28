@@ -3,7 +3,7 @@ package engine
 type Game interface {
 	Listener
 
-	Events() *EventBus
+	Events() EventBus
 	Turn() int
 	CurrentPlayer() Player
 	Opponent(player Player) Player

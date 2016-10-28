@@ -29,6 +29,6 @@ func (e *dealDamage) Happen(
 			events[i] = event.Damage(game, tgt, nil, e.dmg)
 		}
 		game.Events().Post(
-			engine.Combined(events...), cause)
+			event.Combined(events...), cause)
 	}
 }

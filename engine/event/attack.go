@@ -31,7 +31,7 @@ func (ev *attack) Trigger() {
 	passive := Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack())
 	_, isPlayer := ev.defender.(engine.Player)
 	if !isPlayer && ev.defender.Attack() > 0 {
-		ev.game.Events().Post(engine.Combined(active, passive), ev)
+		ev.game.Events().Post(Combined(active, passive), ev)
 	} else {
 		ev.game.Events().Post(active, ev)
 	}

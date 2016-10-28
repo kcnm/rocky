@@ -1,5 +1,7 @@
 package engine
 
+type Verb string
+
 type Event interface {
 	Subject() interface{}
 	Verb() Verb
@@ -7,52 +9,46 @@ type Event interface {
 	Trigger()
 }
 
-type CombinedEvent interface {
-	Event
+type ListenerID int
 
-	HasEvent(ev Event) bool
+type Listener interface {
+	Handle(ev Event)
 }
 
-type combined struct {
-	events []Event
+type EventBus interface {
+	AddListener(listener Listener) ListenerID
+	RemoveListener(id ListenerID) bool
+	Post(ev Event, cause Event)
+	PostAndTrigger(ev Event)
+	Drain()
 }
 
-func Combined(events ...Event) CombinedEvent {
-	if len(events) <= 0 {
-		panic("0 combined events")
-	}
-	v := events[0].Verb()
-	for _, ev := range events {
-		if ev.Verb() != v {
-			panic("inconsistent verb")
-		}
-	}
-	return &combined{events}
+const (
+	StartTurn     Verb = "StartTurn"
+	EndTurn       Verb = "EndTurn"
+	Draw          Verb = "Draw"
+	TakeCard      Verb = "TakeCard"
+	PlayCard      Verb = "PlayCard"
+	Summon        Verb = "Summon"
+	Cast          Verb = "Cast"
+	Equip         Verb = "Equip"
+	HeroPower     Verb = "HeroPower"
+	Attack        Verb = "Attack"
+	Damage        Verb = "Damage"
+	Dying         Verb = "Dying"
+	Destroy       Verb = "Destroy"
+	DestroyWeapon Verb = "DestroyWeapon"
+	GameOver      Verb = "GameOver"
+	Combined      Verb = "Combined"
+)
+
+func (v Verb) Subject() interface{} {
+	return nil
 }
 
-func (c *combined) Subject() interface{} {
-	subjects := make([]interface{}, len(c.events))
-	for i, ev := range c.events {
-		subjects[i] = ev.Subject()
-	}
-	return subjects
+func (v Verb) Verb() Verb {
+	return v
 }
 
-func (c *combined) Verb() Verb {
-	return c.events[0].Verb()
-}
-
-func (c *combined) Trigger() {
-	for _, ev := range c.events {
-		ev.Trigger()
-	}
-}
-
-func (c *combined) HasEvent(ev Event) bool {
-	for _, e := range c.events {
-		if e == ev {
-			return true
-		}
-	}
-	return false
+func (v Verb) Trigger() {
 }

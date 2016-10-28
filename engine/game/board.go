@@ -22,6 +22,10 @@ func (b *board) Handle(ev engine.Event) {
 	switch ev.Verb() {
 	case engine.Destroy:
 		b.remove(ev.Subject())
+	case engine.Combined:
+		for _, e := range ev.Subject().([]engine.Event) {
+			b.Handle(e)
+		}
 	}
 }
 
@@ -60,17 +64,6 @@ func (b *board) Put(minion engine.Minion, position int) engine.Minion {
 }
 
 func (b *board) remove(subject interface{}) int {
-	if subjects, ok := subject.([]interface{}); ok {
-		removed := 0
-		for _, sub := range subjects {
-			removed += b.removeSingle(sub)
-		}
-		return removed
-	}
-	return b.removeSingle(subject)
-}
-
-func (b *board) removeSingle(subject interface{}) int {
 	if minion, ok := subject.(engine.Minion); ok {
 		if i := b.Find(minion); i >= 0 {
 			b.minions = append(b.minions[:i], b.minions[i+1:]...)
