@@ -2,13 +2,23 @@ package test
 
 import (
 	"github.com/kcnm/rocky/engine"
+	"github.com/kcnm/rocky/engine/effect"
+)
+
+var (
+	M11 = NewMinionCard(engine.Neutral, 1, 1, 1)
+	M45 = NewMinionCard(engine.Neutral, 4, 4, 5)
+	S4  = NewSpellCard(engine.Neutral, 4, effect.None)
+	W32 = NewWeaponCard(engine.Neutral, 2, 3, 2)
+	W33 = NewWeaponCard(engine.Neutral, 4, 3, 3)
+	Pw2 = NewPower(engine.Neutral, 2, effect.None)
 )
 
 func NewMinionCard(
 	class engine.Class,
 	mana int,
 	attack int,
-	health int) engine.Card {
+	health int) engine.MinionCard {
 	return &minionCard{class, mana, attack, health}
 }
 
@@ -38,7 +48,7 @@ func (c *minionCard) Health() int {
 func NewSpellCard(
 	class engine.Class,
 	mana int,
-	effect engine.Effect) engine.Card {
+	effect engine.Effect) engine.SpellCard {
 	return &spellCard{class, mana, effect}
 }
 
@@ -64,7 +74,7 @@ func NewWeaponCard(
 	class engine.Class,
 	mana int,
 	attack int,
-	durability int) engine.Card {
+	durability int) engine.WeaponCard {
 	return &weaponCard{class, mana, attack, durability}
 }
 

@@ -5,22 +5,12 @@ import (
 
 	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/action"
-	"github.com/kcnm/rocky/engine/effect"
 	"github.com/kcnm/rocky/engine/game"
 )
 
-var (
-	m11 = NewMinionCard(engine.Neutral, 1, 1, 1)
-	m45 = NewMinionCard(engine.Neutral, 4, 4, 5)
-	s4  = NewSpellCard(engine.Neutral, 4, effect.None)
-	w32 = NewWeaponCard(engine.Neutral, 2, 3, 2)
-	w33 = NewWeaponCard(engine.Neutral, 4, 3, 3)
-	pw2 = NewPower(engine.Neutral, 2, effect.None)
-)
-
 func TestBasicGame(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(m11, m11, m11, m11))
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck(m11, m11, m11, m11))
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck(M11, M11, M11, M11))
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck(M11, M11, M11, M11))
 	g := game.New(p1, p2, nil /* rng */)
 
 	for _, turn := range []struct {
@@ -236,9 +226,9 @@ func TestBasicGame(t *testing.T) {
 }
 
 func TestPlayMinion(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(), m45, m11, m45)
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck(), M45, M11, M45)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
@@ -252,7 +242,7 @@ func TestPlayMinion(t *testing.T) {
 	p1status.handSize -= 1
 	p1status.boardSize += 1
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, false})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, false})
 
 	t.Logf("P1 ends turn %d", g.Turn())
 	action.EndTurn(g, p1)
@@ -262,7 +252,7 @@ func TestPlayMinion(t *testing.T) {
 	p1status.health -= 1 // fatigue
 	p1status.mana = p1status.crystal
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, true})
 
 	t.Logf("P1 plays the second 4/5 minion at position 0")
 	action.PlayCard(g, p1, 1, 0, nil)
@@ -270,8 +260,8 @@ func TestPlayMinion(t *testing.T) {
 	p1status.handSize -= 1
 	p1status.boardSize += 1
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, false})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, false})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M45, 4, 5, true})
 
 	t.Logf("P1 plays the 1/1 minion at position 2")
 	action.PlayCard(g, p1, 0, 2, nil)
@@ -279,15 +269,15 @@ func TestPlayMinion(t *testing.T) {
 	p1status.handSize -= 1
 	p1status.boardSize += 1
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, false})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m45, 4, 5, true})
-	assertMinionStatus(t, p1.Board().Get(2), minionStatus{m11, 1, 1, false})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, false})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(2), minionStatus{M11, 1, 1, false})
 }
 
 func TestCastSpell(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(), s4)
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck(), S4)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
@@ -303,9 +293,9 @@ func TestCastSpell(t *testing.T) {
 }
 
 func TestEquipWeapon(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck(), w32)
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck(), W32)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
@@ -320,100 +310,100 @@ func TestEquipWeapon(t *testing.T) {
 	p1status.mana -= 2
 	p1status.handSize -= 1
 	assertPlayerStatus(t, p1, p1status)
-	assertWeaponStatus(t, p1, weaponStatus{w32, 3, 2})
+	assertWeaponStatus(t, p1, weaponStatus{W32, 3, 2})
 }
 
 func TestMinionAttack(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck())
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck())
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
-	p2.Equip(w32.(engine.WeaponCard))
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck())
+	p2.Equip(W32)
 	g := game.Resume(p1, p2, 1, nil /* rng */)
-	g.Summon(m11.(engine.MinionCard), p1.Board(), 0)
-	g.Summon(m11.(engine.MinionCard), p1.Board(), 1)
-	g.Summon(m45.(engine.MinionCard), p1.Board(), 2)
-	g.Summon(m45.(engine.MinionCard), p1.Board(), 3)
-	g.Summon(m11.(engine.MinionCard), p2.Board(), 0)
-	g.Summon(m45.(engine.MinionCard), p2.Board(), 1)
+	g.Summon(M11, p1.Board(), 0)
+	g.Summon(M11, p1.Board(), 1)
+	g.Summon(M45, p1.Board(), 2)
+	g.Summon(M45, p1.Board(), 3)
+	g.Summon(M11, p2.Board(), 0)
+	g.Summon(M45, p2.Board(), 1)
 	p1.Refresh()
 
 	t.Logf("Resume game")
 	p1status := playerStatus{30, 0, 0, false, 10, 10, 0, 0, 4}
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m11, 1, 1, true})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m11, 1, 1, true})
-	assertMinionStatus(t, p1.Board().Get(2), minionStatus{m45, 4, 5, true})
-	assertMinionStatus(t, p1.Board().Get(3), minionStatus{m45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M11, 1, 1, true})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M11, 1, 1, true})
+	assertMinionStatus(t, p1.Board().Get(2), minionStatus{M45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(3), minionStatus{M45, 4, 5, true})
 	p2status := playerStatus{30, 0, 3, false, 0, 0, 0, 0, 2}
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m11, 1, 1, false})
-	assertMinionStatus(t, p2.Board().Get(1), minionStatus{m45, 4, 5, false})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M11, 1, 1, false})
+	assertMinionStatus(t, p2.Board().Get(1), minionStatus{M45, 4, 5, false})
 
 	t.Logf("P1's left most 1/1 minion killed itself onto P2's 4/5")
 	action.Attack(g, p1.Board().Get(1), p2.Board().Get(1))
 	p1status.boardSize -= 1
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m11, 1, 1, true})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m45, 4, 5, true})
-	assertMinionStatus(t, p1.Board().Get(2), minionStatus{m45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M11, 1, 1, true})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(2), minionStatus{M45, 4, 5, true})
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m11, 1, 1, false})
-	assertMinionStatus(t, p2.Board().Get(1), minionStatus{m45, 4, 4, false})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M11, 1, 1, false})
+	assertMinionStatus(t, p2.Board().Get(1), minionStatus{M45, 4, 4, false})
 
 	t.Logf("Both left most 1/1 minions destroyed each other")
 	action.Attack(g, p1.Board().Get(0), p2.Board().Get(0))
 	p1status.boardSize -= 1
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, true})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M45, 4, 5, true})
 	p2status.boardSize -= 1
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 4, false})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M45, 4, 4, false})
 
 	t.Logf("P1's right 4/5 minion kills P2's 4/4")
 	action.Attack(g, p1.Board().Get(1), p2.Board().Get(0))
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, true})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m45, 4, 1, false})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, true})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M45, 4, 1, false})
 	p2status.boardSize -= 1
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
 
 	t.Logf("P1's left 4/5 minion attacks P2")
 	action.Attack(g, p1.Board().Get(0), p2)
 	assertPlayerStatus(t, p1, p1status)
-	assertMinionStatus(t, p1.Board().Get(0), minionStatus{m45, 4, 5, false})
-	assertMinionStatus(t, p1.Board().Get(1), minionStatus{m45, 4, 1, false})
+	assertMinionStatus(t, p1.Board().Get(0), minionStatus{M45, 4, 5, false})
+	assertMinionStatus(t, p1.Board().Get(1), minionStatus{M45, 4, 1, false})
 	p2status.health -= 4
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
 }
 
 func TestPlayerAttack(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck())
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck())
 	p1.GainCrystal(10)
-	p1.Equip(w33.(engine.WeaponCard))
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
+	p1.Equip(W33)
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck())
 	p2.GainCrystal(10)
-	p2.Equip(w32.(engine.WeaponCard))
+	p2.Equip(W32)
 	g := game.Resume(p1, p2, 1, nil /* rng */)
-	g.Summon(m11.(engine.MinionCard), p2.Board(), 0)
-	g.Summon(m45.(engine.MinionCard), p2.Board(), 1)
+	g.Summon(M11, p2.Board(), 0)
+	g.Summon(M45, p2.Board(), 1)
 	p1.Refresh()
 
 	t.Logf("Resume game")
 	p1status := playerStatus{30, 0, 3, true, 10, 10, 0, 0, 0}
-	w1status := weaponStatus{w33, 3, 3}
+	w1status := weaponStatus{W33, 3, 3}
 	assertPlayerStatus(t, p1, p1status)
 	assertWeaponStatus(t, p1, w1status)
 	p2status := playerStatus{30, 0, 3, false, 0, 10, 0, 0, 2}
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m11, 1, 1, false})
-	assertMinionStatus(t, p2.Board().Get(1), minionStatus{m45, 4, 5, false})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M11, 1, 1, false})
+	assertMinionStatus(t, p2.Board().Get(1), minionStatus{M45, 4, 5, false})
 
 	t.Logf("P1 kills P2's 1/1 minion")
 	action.Attack(g, p1, p2.Board().Get(0))
@@ -424,8 +414,8 @@ func TestPlayerAttack(t *testing.T) {
 	assertWeaponStatus(t, p1, w1status)
 	p2status.boardSize -= 1
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 5, false})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M45, 4, 5, false})
 
 	t.Logf("P1 ends turn %d", g.Turn())
 	action.EndTurn(g, p1)
@@ -440,8 +430,8 @@ func TestPlayerAttack(t *testing.T) {
 	p2status.active = true
 	p2status.mana = p2status.crystal
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 5, true})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M45, 4, 5, true})
 
 	t.Logf("P1 attacks P2's 4/5 minion")
 	action.Attack(g, p1, p2.Board().Get(0))
@@ -451,8 +441,8 @@ func TestPlayerAttack(t *testing.T) {
 	assertPlayerStatus(t, p1, p1status)
 	assertWeaponStatus(t, p1, w1status)
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 2, true})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M45, 4, 2, true})
 
 	t.Logf("P1 ends turn %d", g.Turn())
 	action.EndTurn(g, p1)
@@ -466,8 +456,8 @@ func TestPlayerAttack(t *testing.T) {
 	p2status.health -= 2 // fatigue
 	p2status.active = true
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 2, true})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M45, 4, 2, true})
 
 	t.Logf("P1 attacks P2")
 	action.Attack(g, p1, p2)
@@ -479,14 +469,14 @@ func TestPlayerAttack(t *testing.T) {
 	}
 	p2status.health -= 3
 	assertPlayerStatus(t, p2, p2status)
-	assertWeaponStatus(t, p2, weaponStatus{w32, 3, 2})
-	assertMinionStatus(t, p2.Board().Get(0), minionStatus{m45, 4, 2, true})
+	assertWeaponStatus(t, p2, weaponStatus{W32, 3, 2})
+	assertMinionStatus(t, p2.Board().Get(0), minionStatus{M45, 4, 2, true})
 }
 
 func TestHeroPower(t *testing.T) {
-	p1 := game.NewPlayer(1, 30, 0, pw2, game.NewDeck())
+	p1 := game.NewPlayer(1, 30, 0, Pw2, game.NewDeck())
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(2, 30, 0, pw2, game.NewDeck())
+	p2 := game.NewPlayer(2, 30, 0, Pw2, game.NewDeck())
 	g := game.Resume(p1, p2, 1, nil /* rng */)
 	p1.Refresh()
 
