@@ -27,6 +27,6 @@ func EndTurn(game engine.Game, player engine.Player) {
 	if ok, err := CanEndTurn(game, player); !ok {
 		panic(err)
 	}
-	game.Events().PostAndTrigger(
+	game.Events().Fire(
 		event.EndTurn(game))
 }

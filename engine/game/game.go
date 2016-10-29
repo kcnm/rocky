@@ -23,7 +23,7 @@ func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
 	g := Resume(player1, player2, 0, rng).(*game)
 	player1.Deck().Shuffle(g.rng)
 	player2.Deck().Shuffle(g.rng)
-	g.events.PostAndTrigger(engine.StartTurn)
+	g.events.Fire(engine.StartTurn)
 	return g
 }
 

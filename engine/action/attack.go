@@ -42,6 +42,6 @@ func Attack(
 	if ok, err := CanAttack(game, attacker, defender); !ok {
 		panic(err)
 	}
-	game.Events().PostAndTrigger(
+	game.Events().Fire(
 		event.Attack(game, attacker, defender))
 }

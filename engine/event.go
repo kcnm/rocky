@@ -18,8 +18,9 @@ type Listener interface {
 type EventBus interface {
 	AddListener(listener Listener) ListenerID
 	RemoveListener(id ListenerID) bool
+	Fire(ev Event)
 	Post(ev Event, cause Event)
-	PostAndTrigger(ev Event)
+	Cache(ev Event, cause Event)
 	Drain()
 }
 
@@ -41,6 +42,7 @@ const (
 	Impact        Verb = "Impact"
 	GameOver      Verb = "GameOver"
 	Combined      Verb = "Combined"
+	Sequence      Verb = "Sequence"
 )
 
 func (v Verb) Subject() interface{} {
