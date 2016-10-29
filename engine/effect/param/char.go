@@ -26,6 +26,15 @@ func (p char) Eval(
 		} else {
 			return nil
 		}
+	case choose.All:
+		chars := game.AllChars()
+		result := make([]engine.Char, 0, len(chars))
+		for _, ch := range chars {
+			if p.pred(game, you, ch) {
+				result = append(result, ch)
+			}
+		}
+		return result
 	default:
 		// TODO: other choose type
 		return nil

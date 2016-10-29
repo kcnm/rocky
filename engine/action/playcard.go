@@ -29,13 +29,13 @@ func CanPlayCard(
 		return false, fmt.Errorf("invalid cardIndex %d", cardIndex)
 	}
 
-	c := player.Hand()[cardIndex].(engine.Card)
-	if c.Mana() > player.Mana() {
+	card := player.Hand()[cardIndex].(engine.Card)
+	if card.Mana() > player.Mana() {
 		return false, fmt.Errorf("player has insufficient mana %d for card cost %d",
-			player.Mana(), c.Mana())
+			player.Mana(), card.Mana())
 	}
 
-	switch card := c.(type) {
+	switch card := card.(type) {
 	case engine.MinionCard:
 		if ok, err := canPlayMinion(player, position); !ok {
 			return false, err
@@ -57,10 +57,10 @@ func PlayCard(
 	if ok, err := CanPlayCard(game, player, cardIndex, position, target); !ok {
 		panic(err)
 	}
-	c := player.Hand()[cardIndex]
+	card := player.Hand()[cardIndex]
 	game.Events().Fire(
 		event.PlayCard(player, cardIndex))
-	switch card := c.(type) {
+	switch card := card.(type) {
 	case engine.MinionCard:
 		game.Events().Fire(
 			event.Summon(game, player, card, player.Board(), position))

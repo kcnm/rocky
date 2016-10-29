@@ -17,6 +17,11 @@ func (e sequence) CanHappen(
 	game engine.Game,
 	you engine.Player,
 	target engine.Char) bool {
+	for _, x := range e.effects {
+		if !x.CanHappen(game, you, target) {
+			return false
+		}
+	}
 	return true
 }
 

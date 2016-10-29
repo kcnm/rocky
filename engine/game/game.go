@@ -119,6 +119,20 @@ func (g *game) Opponent(player engine.Player) engine.Player {
 	panic("player is not in the game")
 }
 
+func (g *game) AllChars() []engine.Char {
+	b1, b2 := g.players[1].Board().Minions(), g.players[0].Board().Minions()
+	chars := make([]engine.Char, 2+len(b1)+len(b2))
+	chars[0] = g.players[1]
+	chars[1] = g.players[0]
+	for i := 0; i < len(b1); i++ {
+		chars[2+i] = b1[i]
+	}
+	for i := 0; i < len(b2); i++ {
+		chars[2+i] = b2[i]
+	}
+	return chars
+}
+
 func (g *game) IsOver() (over bool, winner engine.Player) {
 	return g.over, g.winner
 }

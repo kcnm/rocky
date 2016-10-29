@@ -19,7 +19,7 @@ func (e dealDamage) CanHappen(
 	game engine.Game,
 	you engine.Player,
 	target engine.Char) bool {
-	return true
+	return e.target.Eval(game, you, target) != nil
 }
 
 func (e dealDamage) Happen(
@@ -27,9 +27,19 @@ func (e dealDamage) Happen(
 	you engine.Player,
 	target engine.Char,
 	cause engine.Event) {
-	if target == nil {
-		panic("nil target")
+	t := e.target.Eval(game, you, target)
+	switch t := t.(type) {
+	case engine.Char:
+		game.Events().Post(
+			event.Damage(game, t, nil, e.dmg), cause)
+	case []engine.Char:
+		events := make([]engine.Event, len(t))
+		for i, ch := range t {
+			events[i] = event.Damage(game, ch, nil, e.dmg)
+		}
+		game.Events().Post(
+			event.Combined(events...), cause)
+	default:
+		panic("invalid evaluated target")
 	}
-	game.Events().Post(
-		event.Damage(game, target, nil, e.dmg), cause)
 }
