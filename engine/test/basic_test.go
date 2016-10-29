@@ -13,10 +13,10 @@ import (
 var (
 	m11 = NewMinionCard(engine.Neutral, 1, 1, 1)
 	m45 = NewMinionCard(engine.Neutral, 4, 4, 5)
-	s4  = NewSpellCard(engine.Neutral, 4, target.Manual, target.Any, target.Char, effect.None())
+	s4  = NewSpellCard(engine.Neutral, 4, target.Manual, target.Any, target.Char, effect.None)
 	w32 = NewWeaponCard(engine.Neutral, 2, 3, 2)
 	w33 = NewWeaponCard(engine.Neutral, 4, 3, 3)
-	pw2 = NewPower(engine.Neutral, 2, effect.None())
+	pw2 = NewPower(engine.Neutral, 2, effect.None)
 )
 
 func TestBasicGame(t *testing.T) {

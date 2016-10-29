@@ -4,15 +4,13 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
-type none struct {
-}
+type none int
 
-func None() engine.Effect {
-	return &none{}
-}
+var None none = 0
 
-func (e *none) Happen(
+func (e none) Happen(
 	game engine.Game,
 	cause engine.Event,
-	targets []engine.Char) {
+	target engine.Char) {
+	// Do nothing.
 }

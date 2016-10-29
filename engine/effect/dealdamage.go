@@ -16,19 +16,10 @@ func DealDamage(dmg int) engine.Effect {
 func (e *dealDamage) Happen(
 	game engine.Game,
 	cause engine.Event,
-	targets []engine.Char) {
-	if len(targets) == 0 {
-		panic("deal damage to 0 targets")
+	target engine.Char) {
+	if target == nil {
+		panic("nil target")
 	}
-	if len(targets) == 1 {
-		game.Events().Post(
-			event.Damage(game, targets[0], nil, e.dmg), cause)
-	} else {
-		events := make([]engine.Event, len(targets))
-		for i, tgt := range targets {
-			events[i] = event.Damage(game, tgt, nil, e.dmg)
-		}
-		game.Events().Post(
-			event.Combined(events...), cause)
-	}
+	game.Events().Post(
+		event.Damage(game, target, nil, e.dmg), cause)
 }

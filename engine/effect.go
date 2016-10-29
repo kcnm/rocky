@@ -1,5 +1,5 @@
 package engine
 
 type Effect interface {
-	Happen(game Game, cause Event, targets []Char)
+	Happen(game Game, cause Event, target Char)
 }

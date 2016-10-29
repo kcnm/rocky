@@ -7,14 +7,14 @@ import (
 type heroPower struct {
 	game   engine.Game
 	player engine.Player
-	tgt    engine.Char
+	target engine.Char
 }
 
 func HeroPower(
 	game engine.Game,
 	player engine.Player,
-	tgt engine.Char) engine.Event {
-	return &heroPower{game, player, tgt}
+	target engine.Char) engine.Event {
+	return &heroPower{game, player, target}
 }
 
 func (ev *heroPower) Subject() interface{} {
@@ -26,5 +26,6 @@ func (ev *heroPower) Verb() engine.Verb {
 }
 
 func (ev *heroPower) Trigger() {
-	ev.player.HeroPower().Happen(ev.game, ev, []engine.Char{ev.tgt})
+	ev.game.Events().Post(
+		Impact(ev.game, ev.target, ev.player.HeroPower()), ev)
 }

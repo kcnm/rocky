@@ -38,6 +38,7 @@ const (
 	Dying         Verb = "Dying"
 	Destroy       Verb = "Destroy"
 	DestroyWeapon Verb = "DestroyWeapon"
+	Impact        Verb = "Impact"
 	GameOver      Verb = "GameOver"
 	Combined      Verb = "Combined"
 )
