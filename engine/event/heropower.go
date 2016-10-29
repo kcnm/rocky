@@ -26,7 +26,5 @@ func (ev *heroPower) Verb() engine.Verb {
 }
 
 func (ev *heroPower) Trigger() {
-	for _, e := range ev.player.HeroPower() {
-		e.Happen(ev.game, ev, []engine.Char{ev.tgt})
-	}
+	ev.player.HeroPower().Happen(ev.game, ev, []engine.Char{ev.tgt})
 }

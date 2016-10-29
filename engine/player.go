@@ -20,7 +20,7 @@ type Player interface {
 	GainCrystal(crystal int)
 	Take(card Card) bool
 	Play(cardIndex int) Card
-	HeroPower() []Effect
+	HeroPower() Effect
 	Equip(card WeaponCard)
 	DestroyWeapon()
 }

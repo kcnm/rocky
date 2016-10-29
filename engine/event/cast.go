@@ -28,7 +28,5 @@ func (ev *cast) Verb() engine.Verb {
 }
 
 func (ev *cast) Trigger() {
-	for _, effect := range ev.card.Effects() {
-		effect.Happen(ev.game, ev, []engine.Char{ev.tgt})
-	}
+	ev.card.Effect().Happen(ev.game, ev, []engine.Char{ev.tgt})
 }

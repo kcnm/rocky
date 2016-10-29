@@ -7,12 +7,12 @@ import (
 )
 
 type spellSpec struct {
-	class   engine.Class
-	mana    int
-	assign  target.Assign
-	side    target.Side
-	role    target.Role
-	effects []engine.Effect
+	class  engine.Class
+	mana   int
+	assign target.Assign
+	side   target.Side
+	role   target.Role
+	effect engine.Effect
 }
 
 func (c spell) Class() engine.Class {
@@ -35,8 +35,8 @@ func (c spell) Role() target.Role {
 	return spells[c].role
 }
 
-func (c spell) Effects() []engine.Effect {
-	return spells[c].effects
+func (c spell) Effect() engine.Effect {
+	return spells[c].effect
 }
 
 var spells = map[spell]*spellSpec{
@@ -46,8 +46,6 @@ var spells = map[spell]*spellSpec{
 		assign: target.Manual,
 		side:   target.Any,
 		role:   target.Char,
-		effects: []engine.Effect{
-			effect.DealDamage(6),
-		},
+		effect: effect.DealDamage(6),
 	},
 }

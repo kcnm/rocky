@@ -7,14 +7,14 @@ import (
 func NewPower(
 	class engine.Class,
 	mana int,
-	effects ...engine.Effect) engine.Power {
-	return &power{class, mana, effects}
+	effect engine.Effect) engine.Power {
+	return &power{class, mana, effect}
 }
 
 type power struct {
-	class   engine.Class
-	mana    int
-	effects []engine.Effect
+	class  engine.Class
+	mana   int
+	effect engine.Effect
 }
 
 func (pw *power) Class() engine.Class {
@@ -25,6 +25,6 @@ func (pw *power) Mana() int {
 	return pw.mana
 }
 
-func (pw *power) Effects() []engine.Effect {
-	return pw.effects
+func (pw *power) Effect() engine.Effect {
+	return pw.effect
 }

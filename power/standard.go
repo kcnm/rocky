@@ -13,8 +13,8 @@ func (pw standard) Mana() int {
 	return standards[pw].mana
 }
 
-func (pw standard) Effects() []engine.Effect {
-	return standards[pw].effects
+func (pw standard) Effect() engine.Effect {
+	return standards[pw].effect
 }
 
 func (pw standard) String() string {
@@ -23,11 +23,9 @@ func (pw standard) String() string {
 
 var standards = map[standard]*powerSpec{
 	Fireblast: &powerSpec{
-		name:  "Fireblast",
-		class: engine.Mage,
-		mana:  2,
-		effects: []engine.Effect{
-			effect.DealDamage(1),
-		},
+		name:   "Fireblast",
+		class:  engine.Mage,
+		mana:   2,
+		effect: effect.DealDamage(1),
 	},
 }

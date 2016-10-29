@@ -42,17 +42,17 @@ func NewSpellCard(
 	assign target.Assign,
 	side target.Side,
 	role target.Role,
-	effects []engine.Effect) engine.Card {
-	return &spellCard{class, mana, assign, side, role, effects}
+	effect engine.Effect) engine.Card {
+	return &spellCard{class, mana, assign, side, role, effect}
 }
 
 type spellCard struct {
-	class   engine.Class
-	mana    int
-	assign  target.Assign
-	side    target.Side
-	role    target.Role
-	effects []engine.Effect
+	class  engine.Class
+	mana   int
+	assign target.Assign
+	side   target.Side
+	role   target.Role
+	effect engine.Effect
 }
 
 func (c *spellCard) Class() engine.Class {
@@ -75,8 +75,8 @@ func (c *spellCard) Role() target.Role {
 	return c.role
 }
 
-func (c *spellCard) Effects() []engine.Effect {
-	return c.effects
+func (c *spellCard) Effect() engine.Effect {
+	return c.effect
 }
 
 func NewWeaponCard(

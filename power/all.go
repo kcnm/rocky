@@ -11,8 +11,8 @@ const (
 )
 
 type powerSpec struct {
-	name    string
-	class   engine.Class
-	mana    int
-	effects []engine.Effect
+	name   string
+	class  engine.Class
+	mana   int
+	effect engine.Effect
 }

@@ -178,7 +178,7 @@ func (p *player) Play(cardIndex int) engine.Card {
 	return card
 }
 
-func (p *player) HeroPower() []engine.Effect {
+func (p *player) HeroPower() engine.Effect {
 	if p.powered {
 		panic("player has already used hero power this turn")
 	}
@@ -187,7 +187,7 @@ func (p *player) HeroPower() []engine.Effect {
 	}
 	p.powered = true
 	p.mana -= p.power.Mana()
-	return p.power.Effects()
+	return p.power.Effect()
 }
 
 func (p *player) Equip(card engine.WeaponCard) {

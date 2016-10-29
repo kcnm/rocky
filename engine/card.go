@@ -20,7 +20,7 @@ type SpellCard interface {
 	Card
 	target.Spec
 
-	Effects() []Effect
+	Effect() Effect
 }
 
 type WeaponCard interface {
