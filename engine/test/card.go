@@ -2,7 +2,6 @@ package test
 
 import (
 	"github.com/kcnm/rocky/engine"
-	"github.com/kcnm/rocky/engine/target"
 )
 
 func NewMinionCard(
@@ -39,19 +38,13 @@ func (c *minionCard) Health() int {
 func NewSpellCard(
 	class engine.Class,
 	mana int,
-	assign target.Assign,
-	side target.Side,
-	role target.Role,
 	effect engine.Effect) engine.Card {
-	return &spellCard{class, mana, assign, side, role, effect}
+	return &spellCard{class, mana, effect}
 }
 
 type spellCard struct {
 	class  engine.Class
 	mana   int
-	assign target.Assign
-	side   target.Side
-	role   target.Role
 	effect engine.Effect
 }
 
@@ -61,18 +54,6 @@ func (c *spellCard) Class() engine.Class {
 
 func (c *spellCard) Mana() int {
 	return c.mana
-}
-
-func (c *spellCard) Assign() target.Assign {
-	return c.assign
-}
-
-func (c *spellCard) Side() target.Side {
-	return c.side
-}
-
-func (c *spellCard) Role() target.Role {
-	return c.role
 }
 
 func (c *spellCard) Effect() engine.Effect {

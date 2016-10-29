@@ -1,9 +1,5 @@
 package engine
 
-import (
-	"github.com/kcnm/rocky/engine/target"
-)
-
 type Card interface {
 	Class() Class
 	Mana() int
@@ -18,7 +14,6 @@ type MinionCard interface {
 
 type SpellCard interface {
 	Card
-	target.Spec
 
 	Effect() Effect
 }

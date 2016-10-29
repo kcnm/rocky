@@ -5,7 +5,6 @@ import (
 
 	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/event"
-	"github.com/kcnm/rocky/engine/target"
 )
 
 func CanPlayCard(
@@ -13,7 +12,7 @@ func CanPlayCard(
 	player engine.Player,
 	cardIndex int,
 	position int,
-	tgt engine.Char) (bool, error) {
+	target engine.Char) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
 	}
@@ -42,7 +41,7 @@ func CanPlayCard(
 			return false, err
 		}
 	case engine.SpellCard:
-		if ok, err := canPlaySpell(game, player, card, tgt); !ok {
+		if ok, err := canPlaySpell(game, player, card, target); !ok {
 			return false, err
 		}
 	}
@@ -54,8 +53,8 @@ func PlayCard(
 	player engine.Player,
 	cardIndex int,
 	position int,
-	tgt engine.Char) {
-	if ok, err := CanPlayCard(game, player, cardIndex, position, tgt); !ok {
+	target engine.Char) {
+	if ok, err := CanPlayCard(game, player, cardIndex, position, target); !ok {
 		panic(err)
 	}
 	c := player.Hand()[cardIndex]
@@ -67,7 +66,7 @@ func PlayCard(
 			event.Summon(game, player, card, player.Board(), position))
 	case engine.SpellCard:
 		game.Events().Fire(
-			event.Cast(game, player, card, tgt))
+			event.Cast(game, player, card, target))
 	case engine.WeaponCard:
 		if player.Weapon() != nil {
 			game.Events().Fire(
@@ -92,23 +91,9 @@ func canPlaySpell(
 	game engine.Game,
 	player engine.Player,
 	card engine.SpellCard,
-	tgt engine.Char) (bool, error) {
-	if card.Assign() == target.Manual {
-		opponent := game.Opponent(player)
-		if card.Side() == target.Friend && !player.IsControlling(tgt) {
-			return false, fmt.Errorf("target is not friend")
-		}
-		if card.Side() == target.Enemy && !opponent.IsControlling(tgt) {
-			return false, fmt.Errorf("target is not enemy")
-		}
-		if _, ok := tgt.(engine.Minion); card.Role() == target.Minion && !ok {
-			return false, fmt.Errorf("target is not minion")
-		}
-		if _, ok := tgt.(engine.Player); card.Role() == target.Player && !ok {
-			return false, fmt.Errorf("target is not player")
-		}
-	} else if tgt != nil {
-		return false, fmt.Errorf("unexpected target")
+	target engine.Char) (bool, error) {
+	if !card.Effect().CanHappen(game, player, target) {
+		return false, fmt.Errorf("Spell effect cannot happen")
 	}
 	return true, nil
 }

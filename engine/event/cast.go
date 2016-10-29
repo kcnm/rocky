@@ -8,15 +8,15 @@ type cast struct {
 	game   engine.Game
 	player engine.Player
 	card   engine.SpellCard
-	tgt    engine.Char
+	target engine.Char
 }
 
 func Cast(
 	game engine.Game,
 	player engine.Player,
 	card engine.SpellCard,
-	tgt engine.Char) engine.Event {
-	return &cast{game, player, card, tgt}
+	target engine.Char) engine.Event {
+	return &cast{game, player, card, target}
 }
 
 func (ev *cast) Subject() interface{} {
@@ -29,5 +29,5 @@ func (ev *cast) Verb() engine.Verb {
 
 func (ev *cast) Trigger() {
 	ev.game.Events().Post(
-		Impact(ev.game, ev.tgt, ev.card.Effect()), ev)
+		Impact(ev.game, ev.player, ev.target, ev.card.Effect()), ev)
 }

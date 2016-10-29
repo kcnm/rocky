@@ -1,5 +1,6 @@
 package engine
 
 type Effect interface {
-	Happen(game Game, cause Event, target Char)
+	CanHappen(game Game, you Player, target Char) bool
+	Happen(game Game, you Player, target Char, cause Event)
 }

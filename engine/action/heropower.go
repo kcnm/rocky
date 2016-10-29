@@ -10,7 +10,7 @@ import (
 func CanHeroPower(
 	game engine.Game,
 	player engine.Player,
-	tgt engine.Char) (bool, error) {
+	target engine.Char) (bool, error) {
 	if game == nil {
 		return false, fmt.Errorf("nil game")
 	}
@@ -35,10 +35,10 @@ func CanHeroPower(
 func HeroPower(
 	game engine.Game,
 	player engine.Player,
-	tgt engine.Char) {
-	if ok, err := CanHeroPower(game, player, tgt); !ok {
+	target engine.Char) {
+	if ok, err := CanHeroPower(game, player, target); !ok {
 		panic(err)
 	}
 	game.Events().Fire(
-		event.HeroPower(game, player, tgt))
+		event.HeroPower(game, player, target))
 }

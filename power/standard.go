@@ -3,6 +3,9 @@ package power
 import (
 	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/effect"
+	"github.com/kcnm/rocky/engine/effect/choose"
+	"github.com/kcnm/rocky/engine/effect/param"
+	"github.com/kcnm/rocky/engine/effect/pred"
 )
 
 func (pw standard) Class() engine.Class {
@@ -26,6 +29,6 @@ var standards = map[standard]*powerSpec{
 		name:   "Fireblast",
 		class:  engine.Mage,
 		mana:   2,
-		effect: effect.DealDamage(1),
+		effect: effect.DealDamage(1, param.Char(choose.Manual, pred.Char)),
 	},
 }
