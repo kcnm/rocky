@@ -7,7 +7,14 @@ import (
 
 var (
 	M11 = NewMinionCard(engine.Neutral, 1, 1, 1)
+	M22 = NewMinionCard(engine.Neutral, 2, 2, 2)
+	M33 = NewMinionCard(engine.Neutral, 3, 3, 3)
+	M44 = NewMinionCard(engine.Neutral, 4, 4, 4)
 	M45 = NewMinionCard(engine.Neutral, 4, 4, 5)
+	M55 = NewMinionCard(engine.Neutral, 5, 5, 5)
+	M66 = NewMinionCard(engine.Neutral, 6, 6, 6)
+	M77 = NewMinionCard(engine.Neutral, 7, 7, 7)
+	M88 = NewMinionCard(engine.Neutral, 8, 8, 8)
 	S4  = NewSpellCard(engine.Neutral, 4, effect.None)
 	W32 = NewWeaponCard(engine.Neutral, 2, 3, 2)
 	W33 = NewWeaponCard(engine.Neutral, 4, 3, 3)

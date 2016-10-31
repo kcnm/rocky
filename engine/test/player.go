@@ -64,7 +64,7 @@ func AssertPlayerStatus(
 }
 
 type MinionStatus struct {
-	Card   engine.Card
+	Card   engine.MinionCard
 	Attack int
 	Health int
 	Active bool
@@ -96,7 +96,7 @@ func AssertMinionStatus(
 }
 
 type WeaponStatus struct {
-	Card       engine.Card
+	Card       engine.WeaponCard
 	Attack     int
 	Durability int
 }
