@@ -1,9 +1,8 @@
-package spells
+package card
 
 import (
 	"testing"
 
-	"github.com/kcnm/rocky/card"
 	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/test"
 )
@@ -116,6 +115,6 @@ func TestFireball(t *testing.T) {
 		},
 	} {
 		t.Run(act.name, test.PlaySingleSpell(
-			t, card.Fireball, status, act.target, act.update))
+			t, Fireball, status, act.target, act.update))
 	}
 }

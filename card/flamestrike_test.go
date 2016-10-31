@@ -1,9 +1,8 @@
-package spells
+package card
 
 import (
 	"testing"
 
-	"github.com/kcnm/rocky/card"
 	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/test"
 )
@@ -136,6 +135,6 @@ func TestFlamestrike(t *testing.T) {
 	} {
 		act.setup()
 		t.Run(act.name, test.PlaySingleSpell(
-			t, card.Flamestrike, status, target, act.update))
+			t, Flamestrike, status, target, act.update))
 	}
 }
