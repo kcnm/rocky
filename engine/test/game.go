@@ -6,21 +6,21 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
-func assertGameStatus(
+func AssertGameStatus(
 	t *testing.T,
 	game engine.Game,
 	current engine.Player,
 	over bool,
 	winner engine.Player) {
-	assertCurrentPlayer(t, game, current)
+	AssertCurrentPlayer(t, game, current)
 	if over {
-		assertGameOver(t, game, winner)
+		AssertGameOver(t, game, winner)
 	} else {
-		assertGameNotOver(t, game)
+		AssertGameNotOver(t, game)
 	}
 }
 
-func assertCurrentPlayer(
+func AssertCurrentPlayer(
 	t *testing.T,
 	game engine.Game,
 	player engine.Player) {
@@ -30,7 +30,7 @@ func assertCurrentPlayer(
 	}
 }
 
-func assertGameNotOver(
+func AssertGameNotOver(
 	t *testing.T,
 	game engine.Game) {
 	if over, _ := game.IsOver(); over {
@@ -38,7 +38,7 @@ func assertGameNotOver(
 	}
 }
 
-func assertGameOver(
+func AssertGameOver(
 	t *testing.T,
 	game engine.Game,
 	winner engine.Player) {
