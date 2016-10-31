@@ -3,7 +3,6 @@ package test
 import (
 	"testing"
 
-	"github.com/kcnm/rocky/engine"
 	"github.com/kcnm/rocky/engine/action"
 	"github.com/kcnm/rocky/engine/game"
 )
@@ -14,214 +13,214 @@ func TestBasicGame(t *testing.T) {
 	g := game.New(p1, p2, nil /* rng */)
 
 	for _, turn := range []struct {
-		current engine.Player
-		over    bool
-		winner  engine.Player
-		players []PlayerStatus
+		name   string
+		status GameStatus
 	}{
 		{
-			// turn 1
-			p1, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 1, 1, 1, 3, 0},
-				{30, 0, 0, false, 0, 0, 0, 4, 0},
+			"Turn 1",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{30, 0, 0, false, 1, 1, 1, 3, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 0, 0, 0, 4, 0},
 			},
 		},
 		{
-			// turn 2
-			p2, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 1, 1, 1, 3, 0},
-				{30, 0, 0, false, 1, 1, 1, 3, 0},
+			"Turn 2",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{30, 0, 0, false, 1, 1, 1, 3, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 1, 1, 1, 3, 0},
 			},
 		},
 		{
-			// turn 3
-			p1, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 2, 2, 2, 2, 0},
-				{30, 0, 0, false, 1, 1, 1, 3, 0},
+			"Turn 3",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{30, 0, 0, false, 2, 2, 2, 2, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 1, 1, 1, 3, 0},
 			},
 		},
 		{
-			// turn 4
-			p2, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 2, 2, 2, 2, 0},
-				{30, 0, 0, false, 2, 2, 2, 2, 0},
+			"Turn 4",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{30, 0, 0, false, 2, 2, 2, 2, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 2, 2, 2, 2, 0},
 			},
 		},
 		{
-			// turn 5
-			p1, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 3, 3, 3, 1, 0},
-				{30, 0, 0, false, 2, 2, 2, 2, 0},
+			"Turn 5",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{30, 0, 0, false, 3, 3, 3, 1, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 2, 2, 2, 2, 0},
 			},
 		},
 		{
-			// turn 6
-			p2, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 3, 3, 3, 1, 0},
-				{30, 0, 0, false, 3, 3, 3, 1, 0},
+			"Turn 6",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{30, 0, 0, false, 3, 3, 3, 1, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 3, 3, 3, 1, 0},
 			},
 		},
 		{
-			// turn 7
-			p1, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 4, 4, 4, 0, 0},
-				{30, 0, 0, false, 3, 3, 3, 1, 0},
+			"Turn 7",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{30, 0, 0, false, 4, 4, 4, 0, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 3, 3, 3, 1, 0},
 			},
 		},
 		{
-			// turn 8
-			p2, false, nil,
-			[]PlayerStatus{
-				{30, 0, 0, false, 4, 4, 4, 0, 0},
-				{30, 0, 0, false, 4, 4, 4, 0, 0},
+			"Turn 8",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{30, 0, 0, false, 4, 4, 4, 0, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 4, 4, 4, 0, 0},
 			},
 		},
 		{
-			// turn 9
-			p1, false, nil,
-			[]PlayerStatus{
-				{29, 0, 0, false, 5, 5, 4, 0, 0},
-				{30, 0, 0, false, 4, 4, 4, 0, 0},
+			"Turn 9",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{29, 0, 0, false, 5, 5, 4, 0, 0},
+				P2:      PlayerStatus{30, 0, 0, false, 4, 4, 4, 0, 0},
 			},
 		},
 		{
-			// turn 10
-			p2, false, nil,
-			[]PlayerStatus{
-				{29, 0, 0, false, 5, 5, 4, 0, 0},
-				{29, 0, 0, false, 5, 5, 4, 0, 0},
+			"Turn 10",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{29, 0, 0, false, 5, 5, 4, 0, 0},
+				P2:      PlayerStatus{29, 0, 0, false, 5, 5, 4, 0, 0},
 			},
 		},
 		{
-			// turn 11
-			p1, false, nil,
-			[]PlayerStatus{
-				{27, 0, 0, false, 6, 6, 4, 0, 0},
-				{29, 0, 0, false, 5, 5, 4, 0, 0},
+			"Turn 11",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{27, 0, 0, false, 6, 6, 4, 0, 0},
+				P2:      PlayerStatus{29, 0, 0, false, 5, 5, 4, 0, 0},
 			},
 		},
 		{
-			// turn 12
-			p2, false, nil,
-			[]PlayerStatus{
-				{27, 0, 0, false, 6, 6, 4, 0, 0},
-				{27, 0, 0, false, 6, 6, 4, 0, 0},
+			"Turn 12",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{27, 0, 0, false, 6, 6, 4, 0, 0},
+				P2:      PlayerStatus{27, 0, 0, false, 6, 6, 4, 0, 0},
 			},
 		},
 		{
-			// turn 13
-			p1, false, nil,
-			[]PlayerStatus{
-				{24, 0, 0, false, 7, 7, 4, 0, 0},
-				{27, 0, 0, false, 6, 6, 4, 0, 0},
+			"Turn 13",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{24, 0, 0, false, 7, 7, 4, 0, 0},
+				P2:      PlayerStatus{27, 0, 0, false, 6, 6, 4, 0, 0},
 			},
 		},
 		{
-			// turn 14
-			p2, false, nil,
-			[]PlayerStatus{
-				{24, 0, 0, false, 7, 7, 4, 0, 0},
-				{24, 0, 0, false, 7, 7, 4, 0, 0},
+			"Turn 14",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{24, 0, 0, false, 7, 7, 4, 0, 0},
+				P2:      PlayerStatus{24, 0, 0, false, 7, 7, 4, 0, 0},
 			},
 		},
 		{
-			// turn 15
-			p1, false, nil,
-			[]PlayerStatus{
-				{20, 0, 0, false, 8, 8, 4, 0, 0},
-				{24, 0, 0, false, 7, 7, 4, 0, 0},
+			"Turn 15",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{20, 0, 0, false, 8, 8, 4, 0, 0},
+				P2:      PlayerStatus{24, 0, 0, false, 7, 7, 4, 0, 0},
 			},
 		},
 		{
-			// turn 16
-			p2, false, nil,
-			[]PlayerStatus{
-				{20, 0, 0, false, 8, 8, 4, 0, 0},
-				{20, 0, 0, false, 8, 8, 4, 0, 0},
+			"Turn 16",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{20, 0, 0, false, 8, 8, 4, 0, 0},
+				P2:      PlayerStatus{20, 0, 0, false, 8, 8, 4, 0, 0},
 			},
 		},
 		{
-			// turn 17
-			p1, false, nil,
-			[]PlayerStatus{
-				{15, 0, 0, false, 9, 9, 4, 0, 0},
-				{20, 0, 0, false, 8, 8, 4, 0, 0},
+			"Turn 17",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{15, 0, 0, false, 9, 9, 4, 0, 0},
+				P2:      PlayerStatus{20, 0, 0, false, 8, 8, 4, 0, 0},
 			},
 		},
 		{
-			// turn 18
-			p2, false, nil,
-			[]PlayerStatus{
-				{15, 0, 0, false, 9, 9, 4, 0, 0},
-				{15, 0, 0, false, 9, 9, 4, 0, 0},
+			"Turn 18",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{15, 0, 0, false, 9, 9, 4, 0, 0},
+				P2:      PlayerStatus{15, 0, 0, false, 9, 9, 4, 0, 0},
 			},
 		},
 		{
-			// turn 19
-			p1, false, nil,
-			[]PlayerStatus{
-				{9, 0, 0, false, 10, 10, 4, 0, 0},
-				{15, 0, 0, false, 9, 9, 4, 0, 0},
+			"Turn 19",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{9, 0, 0, false, 10, 10, 4, 0, 0},
+				P2:      PlayerStatus{15, 0, 0, false, 9, 9, 4, 0, 0},
 			},
 		},
 		{
-			// turn 20
-			p2, false, nil,
-			[]PlayerStatus{
-				{9, 0, 0, false, 10, 10, 4, 0, 0},
-				{9, 0, 0, false, 10, 10, 4, 0, 0},
+			"Turn 20",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{9, 0, 0, false, 10, 10, 4, 0, 0},
+				P2:      PlayerStatus{9, 0, 0, false, 10, 10, 4, 0, 0},
 			},
 		},
 		{
-			// turn 21
-			p1, false, nil,
-			[]PlayerStatus{
-				{2, 0, 0, false, 10, 10, 4, 0, 0},
-				{9, 0, 0, false, 10, 10, 4, 0, 0},
+			"Turn 21",
+			GameStatus{
+				Current: p1,
+				P1:      PlayerStatus{2, 0, 0, false, 10, 10, 4, 0, 0},
+				P2:      PlayerStatus{9, 0, 0, false, 10, 10, 4, 0, 0},
 			},
 		},
 		{
-			// turn 22
-			p2, false, nil,
-			[]PlayerStatus{
-				{2, 0, 0, false, 10, 10, 4, 0, 0},
-				{2, 0, 0, false, 10, 10, 4, 0, 0},
+			"Turn 22",
+			GameStatus{
+				Current: p2,
+				P1:      PlayerStatus{2, 0, 0, false, 10, 10, 4, 0, 0},
+				P2:      PlayerStatus{2, 0, 0, false, 10, 10, 4, 0, 0},
 			},
 		},
 		{
-			// turn 23
-			p1, true, p2,
-			[]PlayerStatus{
-				{-6, 0, 0, false, 10, 10, 4, 0, 0},
-				{2, 0, 0, false, 10, 10, 4, 0, 0},
+			"Turn 23",
+			GameStatus{
+				Current: p1,
+				Over:    true,
+				Winner:  p2,
+				P1:      PlayerStatus{-6, 0, 0, false, 10, 10, 4, 0, 0},
+				P2:      PlayerStatus{2, 0, 0, false, 10, 10, 4, 0, 0},
 			},
 		},
 	} {
-		t.Logf("Turn %d", g.Turn())
-		AssertGameStatus(t, g, turn.current, turn.over, turn.winner)
-		AssertPlayerStatus(t, p1, turn.players[0])
-		AssertPlayerStatus(t, p2, turn.players[1])
-		p := g.CurrentPlayer()
-		if over, _ := g.IsOver(); !over {
-			if ok, _ := action.CanEndTurn(g, g.Opponent(p)); ok {
-				t.Errorf("Opponent can end turn, expected not")
+		t.Run(turn.name, func(t *testing.T) {
+			t.Logf("Turn %d", g.Turn())
+			AssertGameStatus(t, g, turn.status)
+			p := g.CurrentPlayer()
+			if over, _ := g.IsOver(); !over {
+				if ok, _ := action.CanEndTurn(g, g.Opponent(p)); ok {
+					t.Errorf("Opponent can end turn, expected not")
+				}
+				action.EndTurn(g, p)
+			} else {
+				if ok, _ := action.CanEndTurn(g, p); ok {
+					t.Errorf("Player can end turn after game over, expected not")
+				}
+				if ok, _ := action.CanEndTurn(g, g.Opponent(p)); ok {
+					t.Errorf("Opponent can end turn after game over, expected not")
+				}
 			}
-			action.EndTurn(g, p)
-		} else {
-			if ok, _ := action.CanEndTurn(g, p); ok {
-				t.Errorf("Player can end turn after game over, expected not")
-			}
-			if ok, _ := action.CanEndTurn(g, g.Opponent(p)); ok {
-				t.Errorf("Opponent can end turn after game over, expected not")
-			}
-		}
+		})
 	}
 }
 

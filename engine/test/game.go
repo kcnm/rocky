@@ -6,17 +6,41 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+type GameStatus struct {
+	Current engine.Player
+	Over    bool
+	Winner  engine.Player
+	P1, P2  PlayerStatus
+	B1, B2  []MinionStatus
+}
+
 func AssertGameStatus(
 	t *testing.T,
 	game engine.Game,
-	current engine.Player,
-	over bool,
-	winner engine.Player) {
-	AssertCurrentPlayer(t, game, current)
-	if over {
-		AssertGameOver(t, game, winner)
+	status GameStatus) {
+	// Checks general game status.
+	AssertCurrentPlayer(t, game, status.Current)
+	if status.Over {
+		AssertGameOver(t, game, status.Winner)
 	} else {
 		AssertGameNotOver(t, game)
+	}
+
+	// Checks each player's status.
+	p1 := game.CurrentPlayer()
+	if game.Turn()%2 == 0 {
+		p1 = game.Opponent(p1)
+	}
+	p2 := game.Opponent(p1)
+	AssertPlayerStatus(t, p1, status.P1)
+	AssertPlayerStatus(t, p2, status.P2)
+
+	// Checks board status.
+	for i, m := range status.B1 {
+		AssertMinionStatus(t, p1.Board().Get(i), m)
+	}
+	for i, m := range status.B2 {
+		AssertMinionStatus(t, p2.Board().Get(i), m)
 	}
 }
 
