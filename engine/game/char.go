@@ -7,18 +7,20 @@ import (
 )
 
 type char struct {
-	id      engine.CharID
-	attack  int
-	health  int
-	stamina int
+	id        engine.CharID
+	attack    int
+	health    int
+	maxHealth int
+	stamina   int
 }
 
 func newChar(
 	id engine.CharID,
 	attack int,
 	health int,
+	maxHealth int,
 	stamina int) engine.Char {
-	return &char{id, attack, health, stamina}
+	return &char{id, attack, health, maxHealth, stamina}
 }
 
 func (ch *char) ID() engine.CharID {
@@ -31,6 +33,10 @@ func (ch *char) Attack() int {
 
 func (ch *char) Health() int {
 	return ch.health
+}
+
+func (ch *char) MaxHealth() int {
+	return ch.maxHealth
 }
 
 func (ch *char) Stamina() int {

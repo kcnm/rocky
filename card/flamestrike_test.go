@@ -10,14 +10,16 @@ import (
 func TestFlamestrike(t *testing.T) {
 	status := test.GameStatus{
 		P1: test.PlayerStatus{
-			Health:   30,
-			Mana:     10,
-			Crystal:  10,
-			HandSize: 1,
+			Health:    30,
+			MaxHealth: 30,
+			Mana:      10,
+			Crystal:   10,
+			HandSize:  1,
 		},
 		B1: []test.MinionStatus{},
 		P2: test.PlayerStatus{
-			Health: 30,
+			Health:    30,
+			MaxHealth: 30,
 		},
 		B2: []test.MinionStatus{},
 	}
@@ -39,9 +41,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 1-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M11, 1, 1, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M11, 1, 1, 1, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M11, 1, 1, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M11, 1, 1, 1, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 1
@@ -52,9 +54,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 2-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M22, 2, 2, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M22, 2, 2, 2, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M22, 2, 2, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M22, 2, 2, 2, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 2
@@ -65,9 +67,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 3-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M33, 3, 3, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M33, 3, 3, 3, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M33, 3, 3, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M33, 3, 3, 3, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 3
@@ -78,9 +80,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 4-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M44, 4, 4, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M44, 4, 4, 4, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M44, 4, 4, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M44, 4, 4, 4, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 4
@@ -91,9 +93,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 5-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M55, 5, 5, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M55, 5, 5, 5, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M55, 5, 5, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M55, 5, 5, 5, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 4
@@ -105,9 +107,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 6-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M66, 6, 6, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M66, 6, 6, 6, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M66, 6, 6, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M66, 6, 6, 6, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 4
@@ -120,9 +122,9 @@ func TestFlamestrike(t *testing.T) {
 			"Cast on 7-Minion Board",
 			func() {
 				status.P1.BoardSize += 1
-				status.B1 = append(status.B1, test.MinionStatus{test.M77, 7, 7, true})
+				status.B1 = append(status.B1, test.MinionStatus{test.M77, 7, 7, 7, true})
 				status.P2.BoardSize += 1
-				status.B2 = append(status.B2, test.MinionStatus{test.M77, 7, 7, false})
+				status.B2 = append(status.B2, test.MinionStatus{test.M77, 7, 7, 7, false})
 			},
 			func(status *test.GameStatus) {
 				status.P2.BoardSize -= 4

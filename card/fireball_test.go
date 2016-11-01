@@ -11,24 +11,26 @@ func TestFireball(t *testing.T) {
 	status := test.GameStatus{
 		P1: test.PlayerStatus{
 			Health:    30,
+			MaxHealth: 30,
 			Mana:      10,
 			Crystal:   10,
 			HandSize:  1,
 			BoardSize: 3,
 		},
 		B1: []test.MinionStatus{
-			{test.M11, 1, 1, true},
-			{test.M66, 6, 6, true},
-			{test.M88, 8, 8, true},
+			{test.M11, 1, 1, 1, true},
+			{test.M66, 6, 6, 6, true},
+			{test.M88, 8, 8, 8, true},
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
+			MaxHealth: 30,
 			BoardSize: 3,
 		},
 		B2: []test.MinionStatus{
-			{test.M11, 1, 1, false},
-			{test.M66, 6, 6, false},
-			{test.M88, 8, 8, false},
+			{test.M11, 1, 1, 1, false},
+			{test.M66, 6, 6, 6, false},
+			{test.M88, 8, 8, 8, false},
 		},
 	}
 

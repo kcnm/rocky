@@ -27,6 +27,7 @@ type player struct {
 func NewPlayer(
 	id engine.CharID,
 	health int,
+	maxHealth int,
 	armor int,
 	power engine.Power,
 	deck engine.Deck,
@@ -36,10 +37,11 @@ func NewPlayer(
 	}
 	return &player{
 		newChar(
-			id,     // id
-			0,      // attack
-			health, // health
-			0,      // stamina
+			id,        // id
+			0,         // attack
+			health,    // health
+			maxHealth, // maxHealth
+			0,         // stamina
 		).(*char),
 		armor, // armor
 		0,     // mana

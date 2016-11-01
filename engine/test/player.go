@@ -8,6 +8,7 @@ import (
 
 type PlayerStatus struct {
 	Health    int
+	MaxHealth int
 	Armor     int
 	Attack    int
 	Active    bool
@@ -25,6 +26,10 @@ func AssertPlayerStatus(
 	if player.Health() != status.Health {
 		t.Errorf("Player%v has health %d, expected %d",
 			player.ID(), player.Health(), status.Health)
+	}
+	if player.MaxHealth() != status.MaxHealth {
+		t.Errorf("Player%v has max health %d, expected %d",
+			player.ID(), player.MaxHealth(), status.MaxHealth)
 	}
 	if player.Armor() != status.Armor {
 		t.Errorf("Player%v has armor %d, expected %d",
@@ -64,10 +69,11 @@ func AssertPlayerStatus(
 }
 
 type MinionStatus struct {
-	Card   engine.MinionCard
-	Attack int
-	Health int
-	Active bool
+	Card      engine.MinionCard
+	Attack    int
+	Health    int
+	MaxHealth int
+	Active    bool
 }
 
 func AssertMinionStatus(
@@ -81,6 +87,10 @@ func AssertMinionStatus(
 	if minion.Health() != status.Health {
 		t.Errorf("Minion%d has health %d, expected %d",
 			minion.ID(), minion.Health(), status.Health)
+	}
+	if minion.MaxHealth() != status.MaxHealth {
+		t.Errorf("Minion%d has max health %d, expected %d",
+			minion.ID(), minion.MaxHealth(), status.MaxHealth)
 	}
 	if minion.Attack() != status.Attack {
 		t.Errorf("Minion%d has attack %d, expected %d",

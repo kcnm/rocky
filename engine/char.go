@@ -6,6 +6,7 @@ type Char interface {
 	ID() CharID
 	Attack() int
 	Health() int
+	MaxHealth() int
 	Stamina() int
 	Active() bool
 

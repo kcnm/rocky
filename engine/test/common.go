@@ -19,6 +19,7 @@ func PlaySingleCard(
 		p1 := game.NewPlayer(
 			1,
 			status.P1.Health,
+			status.P1.MaxHealth,
 			status.P1.Armor,
 			nil,
 			game.NewDeck(),
@@ -26,6 +27,7 @@ func PlaySingleCard(
 		p2 := game.NewPlayer(
 			2,
 			status.P2.Health,
+			status.P2.MaxHealth,
 			status.P2.Armor,
 			nil,
 			game.NewDeck())

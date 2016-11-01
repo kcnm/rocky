@@ -17,6 +17,7 @@ func newMinion(id engine.CharID, card engine.MinionCard) engine.Minion {
 			id,
 			card.Attack(),
 			card.Health(),
+			card.Health(),
 			0, // stamina
 		).(*char),
 		card,
