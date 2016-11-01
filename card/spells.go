@@ -28,13 +28,19 @@ func (c spell) Effect() engine.Effect {
 
 var spells = map[spell]*spellSpec{
 	Fireball: &spellSpec{
-		class:  engine.Mage,
-		mana:   4,
-		effect: effect.DealDamage(6, param.Char(choose.Manual, pred.Char)),
+		class: engine.Mage,
+		mana:  4,
+		effect: effect.DealDamage(
+			param.Const(6),
+			param.Char(choose.Manual, pred.Char),
+		),
 	},
 	Flamestrike: &spellSpec{
-		class:  engine.Mage,
-		mana:   7,
-		effect: effect.DealDamage(4, param.Char(choose.All, pred.And(pred.Enemy, pred.Minion))),
+		class: engine.Mage,
+		mana:  7,
+		effect: effect.DealDamage(
+			param.Const(4),
+			param.Char(choose.All, pred.And(pred.Enemy, pred.Minion)),
+		),
 	},
 }

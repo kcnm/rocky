@@ -26,9 +26,12 @@ func (pw standard) String() string {
 
 var standards = map[standard]*powerSpec{
 	Fireblast: &powerSpec{
-		name:   "Fireblast",
-		class:  engine.Mage,
-		mana:   2,
-		effect: effect.DealDamage(1, param.Char(choose.Manual, pred.Char)),
+		name:  "Fireblast",
+		class: engine.Mage,
+		mana:  2,
+		effect: effect.DealDamage(
+			param.Const(1),
+			param.Char(choose.Manual, pred.Char),
+		),
 	},
 }

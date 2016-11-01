@@ -7,19 +7,21 @@ import (
 )
 
 type dealDamage struct {
-	dmg    int
+	damage param.Param
 	target param.Param
 }
 
-func DealDamage(dmg int, target param.Param) engine.Effect {
-	return &dealDamage{dmg, target}
+func DealDamage(damage param.Param, target param.Param) engine.Effect {
+	return &dealDamage{damage, target}
 }
 
 func (e dealDamage) CanHappen(
 	game engine.Game,
 	you engine.Player,
 	target engine.Char) bool {
-	return e.target.Eval(game, you, target) != nil
+	dmg := e.damage.Eval(game, you, target)
+	t := e.target.Eval(game, you, target)
+	return dmg.(int) > 0 && t != nil
 }
 
 func (e dealDamage) Happen(
@@ -27,15 +29,16 @@ func (e dealDamage) Happen(
 	you engine.Player,
 	target engine.Char,
 	cause engine.Event) {
+	dmg := e.damage.Eval(game, you, target).(int)
 	t := e.target.Eval(game, you, target)
 	switch t := t.(type) {
 	case engine.Char:
 		game.Events().Post(
-			event.Damage(game, t, nil, e.dmg), cause)
+			event.Damage(game, t, nil, dmg), cause)
 	case []engine.Char:
 		events := make([]engine.Event, len(t))
 		for i, ch := range t {
-			events[i] = event.Damage(game, ch, nil, e.dmg)
+			events[i] = event.Damage(game, ch, nil, dmg)
 		}
 		game.Events().Post(
 			event.Combined(events...), cause)
