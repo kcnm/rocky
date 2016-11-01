@@ -137,6 +137,6 @@ func TestFlamestrike(t *testing.T) {
 	} {
 		act.setup()
 		t.Run(act.name, test.PlaySingleSpell(
-			t, Flamestrike, status, target, act.update))
+			Flamestrike, status, target, act.update))
 	}
 }

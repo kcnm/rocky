@@ -9,5 +9,6 @@ const (
 	FieryWarAxe       weapon = "Fiery War Axe"
 	Fireball          spell  = "Fireball"
 	Flamestrike       spell  = "Flamestrike"
+	LightningStorm    spell  = "Lightning Storm"
 	SilverHandRecruit minion = "Silve Hand Recruit"
 )

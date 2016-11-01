@@ -39,6 +39,7 @@ func (e dealDamage) Happen(
 		events := make([]engine.Event, len(t))
 		for i, ch := range t {
 			events[i] = event.Damage(game, ch, nil, dmg)
+			dmg = e.damage.Eval(game, you, target).(int)
 		}
 		game.Events().Post(
 			event.Combined(events...), cause)

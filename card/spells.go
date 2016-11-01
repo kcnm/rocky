@@ -43,4 +43,13 @@ var spells = map[spell]*spellSpec{
 			param.Char(choose.All, pred.And(pred.Enemy, pred.Minion)),
 		),
 	},
+	LightningStorm: &spellSpec{
+		class: engine.Shaman,
+		mana:  3,
+		// TODO: Overload
+		effect: effect.DealDamage(
+			param.Span(2, 3),
+			param.Char(choose.All, pred.And(pred.Enemy, pred.Minion)),
+		),
+	},
 }

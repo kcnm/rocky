@@ -9,7 +9,6 @@ import (
 )
 
 func PlaySingleCard(
-	t *testing.T,
 	card engine.Card,
 	status GameStatus,
 	pos int,
@@ -54,12 +53,11 @@ func PlaySingleCard(
 }
 
 func PlaySingleSpell(
-	t *testing.T,
 	card engine.SpellCard,
 	status GameStatus,
 	target func(engine.Game) engine.Char,
 	update func(*GameStatus)) func(*testing.T) {
-	return PlaySingleCard(t, card, status, 0, target, update)
+	return PlaySingleCard(card, status, 0, target, update)
 }
 
 func copyBoard(status *GameStatus) {

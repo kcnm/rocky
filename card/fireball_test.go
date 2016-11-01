@@ -117,6 +117,6 @@ func TestFireball(t *testing.T) {
 		},
 	} {
 		t.Run(act.name, test.PlaySingleSpell(
-			t, Fireball, status, act.target, act.update))
+			Fireball, status, act.target, act.update))
 	}
 }

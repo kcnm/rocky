@@ -101,6 +101,10 @@ func (g *game) Events() engine.EventBus {
 	return g.events
 }
 
+func (g *game) RNG() *rand.Rand {
+	return g.rng
+}
+
 func (g *game) Turn() int {
 	return g.turn
 }
