@@ -35,8 +35,17 @@ func (p char) Eval(
 			}
 		}
 		return result
+	case choose.Random:
+		chars := game.AllChars()
+		cands := make([]engine.Char, 0, len(chars))
+		for _, ch := range chars {
+			if p.pred(game, you, ch) {
+				cands = append(cands, ch)
+			}
+		}
+		result := cands[game.RNG().Intn(len(cands))]
+		return result
 	default:
-		// TODO: other choose type
-		return nil
+		panic("invalid choose type")
 	}
 }

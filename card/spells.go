@@ -27,6 +27,14 @@ func (c spell) Effect() engine.Effect {
 }
 
 var spells = map[spell]*spellSpec{
+	ArcaneMissiles: &spellSpec{
+		class: engine.Mage,
+		mana:  1,
+		effect: effect.SplitDamage(
+			param.Const(3),
+			param.Char(choose.Random, pred.Enemy),
+		),
+	},
 	Fireball: &spellSpec{
 		class: engine.Mage,
 		mana:  4,

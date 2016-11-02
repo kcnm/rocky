@@ -5,6 +5,7 @@ type spell string
 type weapon string
 
 const (
+	ArcaneMissiles    spell  = "Arcane Missiles"
 	ChillwindYeti     minion = "Chillwind Yeti"
 	FieryWarAxe       weapon = "Fiery War Axe"
 	Fireball          spell  = "Fireball"
