@@ -8,7 +8,7 @@ import (
 	"github.com/kcnm/rocky/engine/test"
 )
 
-func TestLightningStormOnEmptyBoard(t *testing.T) {
+func TestArcaneMissilesOnEmptyBoard(t *testing.T) {
 	status := test.GameStatus{
 		P1: test.PlayerStatus{
 			Health:    30,
@@ -23,15 +23,17 @@ func TestLightningStormOnEmptyBoard(t *testing.T) {
 		},
 	}
 	test.PlaySingleCard(
-		LightningStorm,
+		ArcaneMissiles,
 		status,
 		0,
 		test.NilTarget,
-		test.NilUpdate,
+		func(status *test.GameStatus) {
+			status.P2.Health -= 3
+		},
 	)(t)
 }
 
-func TestLightningStorm(t *testing.T) {
+func TestArcaneMissiles(t *testing.T) {
 	status := test.GameStatus{
 		P1: test.PlayerStatus{
 			Health:    30,
@@ -42,9 +44,6 @@ func TestLightningStorm(t *testing.T) {
 		},
 		B1: []test.MinionStatus{
 			test.MinionStatus{test.M11, 1, 1, 1, true},
-			test.MinionStatus{test.M22, 2, 2, 2, true},
-			test.MinionStatus{test.M33, 3, 3, 3, true},
-			test.MinionStatus{test.M44, 4, 4, 4, true},
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
@@ -52,23 +51,22 @@ func TestLightningStorm(t *testing.T) {
 		},
 		B2: []test.MinionStatus{
 			test.MinionStatus{test.M11, 1, 1, 1, false},
-			test.MinionStatus{test.M22, 2, 2, 2, false},
-			test.MinionStatus{test.M33, 3, 3, 3, false},
-			test.MinionStatus{test.M44, 4, 4, 4, false},
 		},
 	}
 
 	b2Size := make(map[int]bool)
 	satisfy := false
 	record := func(g engine.Game, status *test.GameStatus) error {
-		b2 := g.Opponent(g.CurrentPlayer()).Board().Minions()
-		status.B2 = status.B2[len(status.B2)-len(b2):]
-		for i, m := range b2 {
-			dmg := m.MaxHealth() - m.Health()
-			if dmg < 2 || 3 < dmg {
-				return fmt.Errorf("Minion%d took %d damage, expected 2-3", m.ID(), dmg)
-			}
-			status.B2[i].Health -= dmg
+		op := g.Opponent(g.CurrentPlayer())
+		hp := op.Health()
+		b2 := op.Board().Minions()
+		status.P2.Health = op.Health()
+		status.B2 = status.B2[:len(b2)]
+		for _, m := range b2 {
+			hp += m.Health()
+		}
+		if hp != 28 {
+			return fmt.Errorf("Total health of P2's Chars is %d, expected 28", hp)
 		}
 		test.AssertGameStatus(t, g, *status)
 		b2Size[len(status.B2)] = true
@@ -77,7 +75,7 @@ func TestLightningStorm(t *testing.T) {
 	}
 	test.PlaySingleCardWithRNG(
 		t,
-		LightningStorm,
+		ArcaneMissiles,
 		status,
 		0,
 		test.NilTarget,

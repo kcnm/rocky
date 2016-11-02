@@ -15,7 +15,6 @@ func TestFireball(t *testing.T) {
 			Mana:      10,
 			Crystal:   10,
 			HandSize:  1,
-			BoardSize: 3,
 		},
 		B1: []test.MinionStatus{
 			{test.M11, 1, 1, 1, true},
@@ -25,7 +24,6 @@ func TestFireball(t *testing.T) {
 		P2: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
-			BoardSize: 3,
 		},
 		B2: []test.MinionStatus{
 			{test.M11, 1, 1, 1, false},
@@ -36,8 +34,8 @@ func TestFireball(t *testing.T) {
 
 	for _, act := range []struct {
 		name   string
-		target func(engine.Game) engine.Char
-		update func(*test.GameStatus)
+		target test.TargetFn
+		update test.UpdateFn
 	}{
 		{
 			"Cast on your Hero",
@@ -54,7 +52,6 @@ func TestFireball(t *testing.T) {
 				return g.CurrentPlayer().Board().Get(0)
 			},
 			func(status *test.GameStatus) {
-				status.P1.BoardSize -= 1
 				status.B1 = status.B1[1:]
 			},
 		},
@@ -64,7 +61,6 @@ func TestFireball(t *testing.T) {
 				return g.CurrentPlayer().Board().Get(1)
 			},
 			func(status *test.GameStatus) {
-				status.P1.BoardSize -= 1
 				status.B1 = append(status.B1[:1], status.B1[2:]...)
 			},
 		},
@@ -92,7 +88,6 @@ func TestFireball(t *testing.T) {
 				return g.Opponent(g.CurrentPlayer()).Board().Get(0)
 			},
 			func(status *test.GameStatus) {
-				status.P2.BoardSize -= 1
 				status.B2 = status.B2[1:]
 			},
 		},
@@ -102,7 +97,6 @@ func TestFireball(t *testing.T) {
 				return g.Opponent(g.CurrentPlayer()).Board().Get(1)
 			},
 			func(status *test.GameStatus) {
-				status.P2.BoardSize -= 1
 				status.B2 = append(status.B2[:1], status.B2[2:]...)
 			},
 		},
@@ -116,7 +110,7 @@ func TestFireball(t *testing.T) {
 			},
 		},
 	} {
-		t.Run(act.name, test.PlaySingleSpell(
-			Fireball, status, act.target, act.update))
+		t.Run(act.name, test.PlaySingleCard(
+			Fireball, status, 0, act.target, act.update))
 	}
 }

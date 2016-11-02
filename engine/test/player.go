@@ -16,7 +16,6 @@ type PlayerStatus struct {
 	Crystal   int
 	HandSize  int
 	DeckSize  int
-	BoardSize int
 }
 
 func AssertPlayerStatus(
@@ -61,10 +60,6 @@ func AssertPlayerStatus(
 	if player.Deck().Remain() != status.DeckSize {
 		t.Errorf("Player%v has %d cards in deck, expected %d",
 			player.ID(), player.Deck().Remain(), status.DeckSize)
-	}
-	if len(player.Board().Minions()) != status.BoardSize {
-		t.Errorf("Player%v has %d minions on board, expected %d",
-			player.ID(), len(player.Board().Minions()), status.BoardSize)
 	}
 }
 
