@@ -12,5 +12,5 @@ const (
 	Flamestrike       spell  = "Flamestrike"
 	LeperGnome        minion = "Leper Gnome"
 	LightningStorm    spell  = "Lightning Storm"
-	SilverHandRecruit minion = "Silve Hand Recruit"
+	SilverHandRecruit minion = "Silver Hand Recruit"
 )
