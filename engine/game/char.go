@@ -12,6 +12,7 @@ type char struct {
 	health    int
 	maxHealth int
 	stamina   int
+	handlers  []engine.Handler
 }
 
 func newChar(
@@ -20,7 +21,20 @@ func newChar(
 	health int,
 	maxHealth int,
 	stamina int) engine.Char {
-	return &char{id, attack, health, maxHealth, stamina}
+	return &char{
+		id,
+		attack,
+		health,
+		maxHealth,
+		stamina,
+		make([]engine.Handler, 0),
+	}
+}
+
+func (ch *char) Handle(ev engine.Event) {
+	for _, h := range ch.handlers {
+		h(ev)
+	}
 }
 
 func (ch *char) ID() engine.CharID {
@@ -49,6 +63,10 @@ func (ch *char) Active() bool {
 
 func (ch *char) Refresh() {
 	ch.stamina = 1
+}
+
+func (ch *char) AddHandler(handler engine.Handler) {
+	ch.handlers = append(ch.handlers, handler)
 }
 
 func (ch *char) TakeDamage(damage int) (actual int, fatal bool) {

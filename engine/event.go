@@ -15,6 +15,8 @@ type Listener interface {
 	Handle(ev Event)
 }
 
+type Handler func(Event)
+
 type EventBus interface {
 	AddListener(listener Listener) ListenerID
 	RemoveListener(id ListenerID) bool

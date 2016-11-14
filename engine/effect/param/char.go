@@ -21,7 +21,7 @@ func (p char) Eval(
 	target engine.Char) interface{} {
 	switch p.chosen {
 	case choose.Manual:
-		if p.pred(game, you, target) {
+		if p.pred.Eval(game, you, target) {
 			return target
 		} else {
 			return nil
@@ -30,7 +30,7 @@ func (p char) Eval(
 		chars := game.AllChars()
 		result := make([]engine.Char, 0, len(chars))
 		for _, ch := range chars {
-			if p.pred(game, you, ch) {
+			if p.pred.Eval(game, you, ch) {
 				result = append(result, ch)
 			}
 		}
@@ -39,7 +39,7 @@ func (p char) Eval(
 		chars := game.AllChars()
 		cands := make([]engine.Char, 0, len(chars))
 		for _, ch := range chars {
-			if p.pred(game, you, ch) {
+			if p.pred.Eval(game, you, ch) {
 				cands = append(cands, ch)
 			}
 		}
