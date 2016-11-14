@@ -33,7 +33,13 @@ func newChar(
 
 func (ch *char) Handle(ev engine.Event) {
 	for _, h := range ch.handlers {
-		h(ev)
+		if ev.Verb() == engine.Combined {
+			for _, ev := range ev.Subject().([]engine.Event) {
+				h(ev)
+			}
+		} else {
+			h(ev)
+		}
 	}
 }
 

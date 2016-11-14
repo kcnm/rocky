@@ -10,14 +10,13 @@ import (
 )
 
 type game struct {
-	events      engine.EventBus
-	listenerIDs map[engine.Char]engine.ListenerID
-	players     []engine.Player
-	turn        int
-	over        bool
-	winner      engine.Player
-	idGen       engine.CharID
-	rng         *rand.Rand
+	events  engine.EventBus
+	players []engine.Player
+	turn    int
+	over    bool
+	winner  engine.Player
+	idGen   engine.CharID
+	rng     *rand.Rand
 }
 
 func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
@@ -70,7 +69,6 @@ func Resume(
 	}
 	g := &game{
 		event.NewBus(),
-		make(map[engine.Char]engine.ListenerID),
 		[]engine.Player{player2, player1},
 		turn,
 		false, // over
@@ -154,8 +152,7 @@ func (g *game) Summon(
 		return nil
 	}
 	minion := newMinion(g.nextCharID(), card)
-	listenerID := g.events.AddListener(minion)
-	g.listenerIDs[minion] = listenerID
+	g.events.AddListener(minion)
 	card.Buff().Apply(g, player, minion)
 	return player.Board().Put(minion, position)
 }
@@ -176,11 +173,6 @@ func (g *game) handleStartTurn(ev engine.Event) {
 }
 
 func (g *game) handleDestroy(ev engine.Event) {
-	minion, ok := ev.Subject().(engine.Minion)
-	if ok {
-		g.events.RemoveListener(g.listenerIDs[minion])
-	}
-
 	for i := 0; i < 2; i++ {
 		if ev.Subject() == g.players[i] {
 			g.over = true

@@ -23,8 +23,8 @@ func (b *board) Handle(ev engine.Event) {
 	case engine.Destroy:
 		b.remove(ev.Subject())
 	case engine.Combined:
-		for _, e := range ev.Subject().([]engine.Event) {
-			b.Handle(e)
+		for _, ev := range ev.Subject().([]engine.Event) {
+			b.Handle(ev)
 		}
 	}
 }
