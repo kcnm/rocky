@@ -148,15 +148,16 @@ func (g *game) IsOver() (over bool, winner engine.Player) {
 
 func (g *game) Summon(
 	card engine.MinionCard,
-	board engine.Board,
+	player engine.Player,
 	position int) engine.Minion {
-	if board.IsFull() {
+	if player.Board().IsFull() {
 		return nil
 	}
 	minion := newMinion(g.nextCharID(), card)
 	listenerID := g.events.AddListener(minion)
 	g.listenerIDs[minion] = listenerID
-	return board.Put(minion, position)
+	card.Buff().Apply(g, player, minion)
+	return player.Board().Put(minion, position)
 }
 
 func (g *game) nextCharID() engine.CharID {

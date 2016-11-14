@@ -84,10 +84,10 @@ func playSingleCard(
 	p1.GainCrystal(10)
 	g := game.Resume(p1, p2, 1, rng)
 	for i, m := range status.B1 {
-		g.Summon(m.Card, p1.Board(), i)
+		g.Summon(m.Card, p1, i)
 	}
 	for i, m := range status.B2 {
-		g.Summon(m.Card, p2.Board(), i)
+		g.Summon(m.Card, p2, i)
 	}
 	p1.Refresh()
 	status.Current = p1

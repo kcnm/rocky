@@ -33,6 +33,15 @@ func (c minion) Health() int {
 	return minions[c].health
 }
 
+func (c minion) Buff() engine.Buff {
+	b := minions[c].buff
+	if b == nil {
+		return buff.None
+	} else {
+		return b
+	}
+}
+
 var minions = map[minion]*minionSpec{
 	ChillwindYeti: &minionSpec{
 		class:  engine.Neutral,
