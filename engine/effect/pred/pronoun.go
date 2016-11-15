@@ -19,6 +19,6 @@ func (p *it) Eval(
 	return p.it == sub
 }
 
-func (p *it) BindIt(it interface{}) {
-	p.it = it
+func (p *it) BindIt(x interface{}) Pred {
+	return &it{x}
 }

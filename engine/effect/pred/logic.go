@@ -24,10 +24,12 @@ func (p *and) Eval(
 	return true
 }
 
-func (p *and) BindIt(it interface{}) {
-	for _, pred := range p.preds {
-		pred.BindIt(it)
+func (p *and) BindIt(x interface{}) Pred {
+	preds := make([]Pred, len(p.preds))
+	for i, pred := range p.preds {
+		preds[i] = pred.BindIt(x)
 	}
+	return &and{preds}
 }
 
 type or struct {
@@ -50,8 +52,10 @@ func (p *or) Eval(
 	return false
 }
 
-func (p *or) BindIt(it interface{}) {
-	for _, pred := range p.preds {
-		pred.BindIt(it)
+func (p *or) BindIt(x interface{}) Pred {
+	preds := make([]Pred, len(p.preds))
+	for i, pred := range p.preds {
+		preds[i] = pred.BindIt(x)
 	}
+	return &or{preds}
 }

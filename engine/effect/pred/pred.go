@@ -10,7 +10,7 @@ type Pred interface {
 		you engine.Player,
 		sub interface{}) bool
 
-	BindIt(it interface{})
+	BindIt(x interface{}) Pred
 }
 
 type fn struct {
@@ -27,4 +27,6 @@ func (p *fn) Eval(
 	return p.eval(game, you, sub)
 }
 
-func (p *fn) BindIt(it interface{}) {}
+func (p *fn) BindIt(x interface{}) Pred {
+	return p
+}

@@ -337,7 +337,7 @@ func TestMinionAttack(t *testing.T) {
 	AssertMinionStatus(t, p2.Board().Get(1), MinionStatus{M45, 4, 5, 5, false})
 
 	t.Logf("P1's left most 1/1 minion killed itself onto P2's 4/5")
-	action.Attack(g, p1.Board().Get(1), p2.Board().Get(1))
+	action.Attack(g, p1.Board().Get(0), p2.Board().Get(1))
 	AssertPlayerStatus(t, p1, p1status)
 	AssertMinionStatus(t, p1.Board().Get(0), MinionStatus{M11, 1, 1, 1, true})
 	AssertMinionStatus(t, p1.Board().Get(1), MinionStatus{M45, 4, 5, 5, true})

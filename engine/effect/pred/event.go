@@ -26,8 +26,11 @@ func (p *event) Eval(
 	return true
 }
 
-func (p *event) BindIt(it interface{}) {
-	p.subPred.BindIt(it)
+func (p *event) BindIt(x interface{}) Pred {
+	return &event{
+		p.subPred.BindIt(x),
+		p.verb,
+	}
 }
 
 func Destroy(subPred Pred) Pred {
