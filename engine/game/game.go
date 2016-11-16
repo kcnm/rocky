@@ -3,6 +3,7 @@ package game
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 	"time"
 
 	"github.com/kcnm/rocky/engine"
@@ -54,14 +55,14 @@ func Resume(
 		rng = rand.New(rand.NewSource(time.Now().Unix()))
 	}
 	// Validates character IDs, and initialize ID generator.
-	ids, idGen := make(map[engine.CharID]bool), engine.CharID(2)
+	chars, idGen := make(map[engine.CharID]engine.Char), engine.CharID(2)
 	for _, p := range []engine.Player{player1, player2} {
-		ids[p.ID()] = true
+		chars[p.ID()] = p
 		for _, m := range p.Board().Minions() {
-			if ids[m.ID()] {
+			if _, ok := chars[m.ID()]; ok {
 				panic(fmt.Errorf("duplicated character ID %d", m.ID()))
 			}
-			ids[m.ID()] = true
+			chars[m.ID()] = m
 			if m.ID() > idGen {
 				idGen = m.ID()
 			}
@@ -76,12 +77,19 @@ func Resume(
 		idGen,
 		rng,
 	}
+	// Register event listeners.
 	g.events.AddListener(g)
 	g.events.AddListener(player1.Board())
 	g.events.AddListener(player2.Board())
-	g.events.AddListener(player1)
-	g.events.AddListener(player2)
-	// TODO: Add listeners for existing minions.
+	ids, i := make([]int, len(chars)), 0
+	for id := range chars {
+		ids[i] = int(id)
+		i++
+	}
+	sort.Ints(ids)
+	for _, id := range ids {
+		g.events.AddListener(chars[engine.CharID(id)])
+	}
 	return g
 }
 
