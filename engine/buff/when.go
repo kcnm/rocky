@@ -10,6 +10,10 @@ type when struct {
 	effect engine.Effect
 }
 
+func When(evPred pred.Pred, effect engine.Effect) engine.Buff {
+	return &when{evPred, effect}
+}
+
 func (b *when) Apply(
 	game engine.Game,
 	you engine.Player,
@@ -19,10 +23,6 @@ func (b *when) Apply(
 			b.effect.Happen(game, you, nil, ev)
 		}
 	})
-}
-
-func When(evPred pred.Pred, effect engine.Effect) engine.Buff {
-	return &when{evPred, effect}
 }
 
 func Deathrattle(effect engine.Effect) engine.Buff {
