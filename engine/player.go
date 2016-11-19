@@ -18,6 +18,7 @@ type Player interface {
 
 	GainMana(mana int)
 	GainCrystal(crystal int)
+	GainArmor(armor int)
 	Take(card Card) bool
 	Play(cardIndex int) Card
 	HeroPower() Effect

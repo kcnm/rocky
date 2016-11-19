@@ -15,5 +15,6 @@ type Game interface {
 	AllChars() []Char
 	IsOver() (over bool, winner Player)
 
+	Start()
 	Summon(card MinionCard, player Player, position int) Minion
 }

@@ -59,6 +59,32 @@ func PlaySingleCardWithRNG(
 	}
 }
 
+func newGame(rng *rand.Rand, status *GameStatus) engine.Game {
+	p1 := game.NewPlayer(status.P1.MaxHealth, nil, game.NewDeck())
+	if status.P1.Health < status.P1.MaxHealth {
+		p1.TakeDamage(status.P1.MaxHealth - status.P1.Health)
+	}
+	if status.P1.Armor > 0 {
+		p1.GainArmor(status.P1.Armor)
+	}
+	p2 := game.NewPlayer(status.P2.MaxHealth, nil, game.NewDeck())
+	if status.P2.Health < status.P2.MaxHealth {
+		p2.TakeDamage(status.P2.MaxHealth - status.P2.Health)
+	}
+	if status.P2.Armor > 0 {
+		p2.GainArmor(status.P2.Armor)
+	}
+	g := game.New(p1, p2, rng)
+	for i, m := range status.B1 {
+		g.Summon(m.Card, p1, i)
+	}
+	for i, m := range status.B2 {
+		g.Summon(m.Card, p2, i)
+	}
+	status.Current = p1
+	return g
+}
+
 func playSingleCard(
 	t *testing.T,
 	rng *rand.Rand,
@@ -66,37 +92,15 @@ func playSingleCard(
 	status *GameStatus,
 	pos int,
 	target TargetFn) engine.Game {
-	p1 := game.NewPlayer(
-		1,
-		status.P1.Health,
-		status.P1.MaxHealth,
-		status.P1.Armor,
-		nil,
-		game.NewDeck(),
-		card)
-	p2 := game.NewPlayer(
-		2,
-		status.P2.Health,
-		status.P2.MaxHealth,
-		status.P2.Armor,
-		nil,
-		game.NewDeck())
+	g := newGame(rng, status)
+	p1 := status.Current
 	p1.GainCrystal(10)
-	g := game.Resume(p1, p2, 1, rng)
-	for i, m := range status.B1 {
-		g.Summon(m.Card, p1, i)
-	}
-	for i, m := range status.B2 {
-		g.Summon(m.Card, p2, i)
-	}
-	p1.Refresh()
-	status.Current = p1
-
+	p1.Deck().PutOnTop(card)
+	g.Start()
 	AssertGameStatus(t, g, *status)
 	action.PlayCard(g, p1, 0, pos, target(g))
 	status.P1.Mana -= card.Mana()
 	status.P1.HandSize -= 1
-
 	return g
 }
 
