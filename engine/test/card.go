@@ -7,6 +7,7 @@ import (
 )
 
 var (
+	M01 = NewMinionCard(engine.Neutral, 1, 0, 1, buff.None)
 	M11 = NewMinionCard(engine.Neutral, 1, 1, 1, buff.None)
 	M22 = NewMinionCard(engine.Neutral, 2, 2, 2, buff.None)
 	M33 = NewMinionCard(engine.Neutral, 3, 3, 3, buff.None)

@@ -19,12 +19,13 @@ func AssertGameStatus(
 	game engine.Game,
 	status GameStatus) {
 	// Checks general game status.
-	AssertCurrentPlayer(t, game, status.Current)
 	if status.Over {
 		AssertGameOver(t, game, status.Winner)
+		return // No need for rest of checks.
 	} else {
 		AssertGameNotOver(t, game)
 	}
+	AssertCurrentPlayer(t, game, status.Current)
 
 	// Checks each player's status.
 	p1 := game.CurrentPlayer()
