@@ -25,10 +25,7 @@ type player struct {
 }
 
 func NewPlayer(
-	id engine.CharID,
-	health int,
 	maxHealth int,
-	armor int,
 	power engine.Power,
 	deck engine.Deck,
 	hand ...engine.Card) engine.Player {
@@ -37,13 +34,13 @@ func NewPlayer(
 	}
 	return &player{
 		newChar(
-			id,        // id
+			0,         // id
 			0,         // attack
-			health,    // health
+			maxHealth, // health
 			maxHealth, // maxHealth
 			0,         // stamina
 		).(*char),
-		armor, // armor
+		0,     // armor
 		0,     // mana
 		0,     // crystal
 		power, // power
@@ -163,6 +160,10 @@ func (p *player) GainCrystal(crystal int) {
 	if p.mana > p.crystal {
 		p.mana = p.crystal
 	}
+}
+
+func (p *player) GainArmor(armor int) {
+	p.armor += armor
 }
 
 func (p *player) Take(card engine.Card) bool {

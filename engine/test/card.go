@@ -2,19 +2,21 @@ package test
 
 import (
 	"github.com/kcnm/rocky/engine"
+	"github.com/kcnm/rocky/engine/buff"
 	"github.com/kcnm/rocky/engine/effect"
 )
 
 var (
-	M11 = NewMinionCard(engine.Neutral, 1, 1, 1)
-	M22 = NewMinionCard(engine.Neutral, 2, 2, 2)
-	M33 = NewMinionCard(engine.Neutral, 3, 3, 3)
-	M44 = NewMinionCard(engine.Neutral, 4, 4, 4)
-	M45 = NewMinionCard(engine.Neutral, 4, 4, 5)
-	M55 = NewMinionCard(engine.Neutral, 5, 5, 5)
-	M66 = NewMinionCard(engine.Neutral, 6, 6, 6)
-	M77 = NewMinionCard(engine.Neutral, 7, 7, 7)
-	M88 = NewMinionCard(engine.Neutral, 8, 8, 8)
+	M01 = NewMinionCard(engine.Neutral, 1, 0, 1, buff.None)
+	M11 = NewMinionCard(engine.Neutral, 1, 1, 1, buff.None)
+	M22 = NewMinionCard(engine.Neutral, 2, 2, 2, buff.None)
+	M33 = NewMinionCard(engine.Neutral, 3, 3, 3, buff.None)
+	M44 = NewMinionCard(engine.Neutral, 4, 4, 4, buff.None)
+	M45 = NewMinionCard(engine.Neutral, 4, 4, 5, buff.None)
+	M55 = NewMinionCard(engine.Neutral, 5, 5, 5, buff.None)
+	M66 = NewMinionCard(engine.Neutral, 6, 6, 6, buff.None)
+	M77 = NewMinionCard(engine.Neutral, 7, 7, 7, buff.None)
+	M88 = NewMinionCard(engine.Neutral, 8, 8, 8, buff.None)
 	S4  = NewSpellCard(engine.Neutral, 4, effect.None)
 	W32 = NewWeaponCard(engine.Neutral, 2, 3, 2)
 	W33 = NewWeaponCard(engine.Neutral, 4, 3, 3)
@@ -25,8 +27,9 @@ func NewMinionCard(
 	class engine.Class,
 	mana int,
 	attack int,
-	health int) engine.MinionCard {
-	return &minionCard{class, mana, attack, health}
+	health int,
+	buff engine.Buff) engine.MinionCard {
+	return &minionCard{class, mana, attack, health, buff}
 }
 
 type minionCard struct {
@@ -34,6 +37,7 @@ type minionCard struct {
 	mana   int
 	attack int
 	health int
+	buff   engine.Buff
 }
 
 func (c *minionCard) Class() engine.Class {
@@ -50,6 +54,10 @@ func (c *minionCard) Attack() int {
 
 func (c *minionCard) Health() int {
 	return c.health
+}
+
+func (c *minionCard) Buff() engine.Buff {
+	return c.buff
 }
 
 func NewSpellCard(

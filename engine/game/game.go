@@ -20,29 +20,12 @@ type game struct {
 }
 
 func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
-	g := Resume(player1, player2, 0, rng).(*game)
-	player1.Deck().Shuffle(g.rng)
-	player2.Deck().Shuffle(g.rng)
-	g.events.Fire(engine.StartTurn)
-	return g
-}
-
-func Resume(
-	player1 engine.Player,
-	player2 engine.Player,
-	turn int,
-	rng *rand.Rand) engine.Game {
+	// Initial checks.
 	if player1 == nil {
 		panic("nil player1")
 	}
 	if player2 == nil {
 		panic("nil player2")
-	}
-	if player1.ID() != 1 {
-		panic(fmt.Errorf("invalid player1 ID %d", player1.ID()))
-	}
-	if player2.ID() != 2 {
-		panic(fmt.Errorf("invalid player2 ID %d", player2.ID()))
 	}
 	if player1.Health() <= 0 {
 		panic(fmt.Errorf("non-positive player1 health %d", player1.Health()))
@@ -53,30 +36,23 @@ func Resume(
 	if rng == nil {
 		rng = rand.New(rand.NewSource(time.Now().Unix()))
 	}
-	// Validates character IDs, and initialize ID generator.
-	ids, idGen := make(map[engine.CharID]bool), engine.CharID(2)
-	for _, p := range []engine.Player{player1, player2} {
-		ids[p.ID()] = true
-		for _, m := range p.Board().Minions() {
-			if ids[m.ID()] {
-				panic(fmt.Errorf("duplicated character ID %d", m.ID()))
-			}
-			ids[m.ID()] = true
-			if m.ID() > idGen {
-				idGen = m.ID()
-			}
-		}
-	}
+	// Instantiate game.
 	g := &game{
 		event.NewBus(),
 		[]engine.Player{player2, player1},
-		turn,
+		0,     // turn
 		false, // over
 		nil,   // winner
-		idGen,
+		0,     // idGen
 		rng,
 	}
+	// Assign player character IDs.
+	player1.(*player).id = g.nextCharID()
+	player2.(*player).id = g.nextCharID()
+	// Register event listeners.
 	g.events.AddListener(g)
+	g.events.AddListener(player1)
+	g.events.AddListener(player2)
 	g.events.AddListener(player1.Board())
 	g.events.AddListener(player2.Board())
 	return g
@@ -141,15 +117,24 @@ func (g *game) IsOver() (over bool, winner engine.Player) {
 	return g.over, g.winner
 }
 
+func (g *game) Start() {
+	if g.turn != 0 {
+		panic(fmt.Errorf("non-zero start turn %d", g.turn))
+	}
+	g.events.Fire(engine.StartTurn)
+}
+
 func (g *game) Summon(
 	card engine.MinionCard,
-	board engine.Board,
+	player engine.Player,
 	position int) engine.Minion {
-	if board.IsFull() {
+	if player.Board().IsFull() {
 		return nil
 	}
 	minion := newMinion(g.nextCharID(), card)
-	return board.Put(minion, position)
+	g.events.AddListener(minion)
+	card.Buff().Apply(g, player, minion)
+	return player.Board().Put(minion, position)
 }
 
 func (g *game) nextCharID() engine.CharID {

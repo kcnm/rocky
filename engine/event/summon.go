@@ -6,23 +6,21 @@ import (
 
 type summon struct {
 	game     engine.Game
-	summoner engine.Char
+	player   engine.Player
 	card     engine.MinionCard
-	board    engine.Board
 	position int
 }
 
 func Summon(
 	game engine.Game,
-	summoner engine.Char,
+	player engine.Player,
 	card engine.MinionCard,
-	board engine.Board,
 	position int) engine.Event {
-	return &summon{game, summoner, card, board, position}
+	return &summon{game, player, card, position}
 }
 
 func (ev *summon) Subject() interface{} {
-	return ev.summoner
+	return ev.player
 }
 
 func (ev *summon) Verb() engine.Verb {
@@ -30,5 +28,5 @@ func (ev *summon) Verb() engine.Verb {
 }
 
 func (ev *summon) Trigger() {
-	ev.game.Summon(ev.card, ev.board, ev.position)
+	ev.game.Summon(ev.card, ev.player, ev.position)
 }

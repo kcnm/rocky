@@ -13,19 +13,15 @@ func TestArcaneMissilesOnEmptyBoard(t *testing.T) {
 		P1: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
-			Mana:      10,
-			Crystal:   10,
-			HandSize:  1,
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
 		},
 	}
-	test.PlaySingleCard(
+	test.PlayCard(
 		ArcaneMissiles,
 		status,
-		0,
 		test.NilTarget,
 		func(status *test.GameStatus) {
 			status.P2.Health -= 3
@@ -38,12 +34,9 @@ func TestArcaneMissiles(t *testing.T) {
 		P1: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
-			Mana:      10,
-			Crystal:   10,
-			HandSize:  1,
 		},
 		B1: []test.MinionStatus{
-			test.MinionStatus{test.M11, 1, 1, 1, true},
+			test.MinionStatus{test.M11, 1, 1, 1, false},
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
@@ -73,11 +66,10 @@ func TestArcaneMissiles(t *testing.T) {
 		satisfy = len(b2Size) == 2
 		return nil
 	}
-	test.PlaySingleCardWithRNG(
+	test.PlayCardWithRNG(
 		t,
 		ArcaneMissiles,
 		status,
-		0,
 		test.NilTarget,
 		record,
 		&satisfy)

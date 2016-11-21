@@ -4,30 +4,38 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
-func Char(game engine.Game, you engine.Player, sub interface{}) bool {
+var (
+	Char     = &fn{char}
+	Hero     = &fn{hero}
+	Minion   = &fn{minion}
+	Friendly = &fn{friendly}
+	Enemy    = &fn{enemy}
+)
+
+func char(game engine.Game, you engine.Player, sub interface{}) bool {
 	_, ok := sub.(engine.Char)
 	return ok
 }
 
-func Hero(game engine.Game, you engine.Player, sub interface{}) bool {
+func hero(game engine.Game, you engine.Player, sub interface{}) bool {
 	_, ok := sub.(engine.Player)
 	return ok
 }
 
-func Minion(game engine.Game, you engine.Player, sub interface{}) bool {
+func minion(game engine.Game, you engine.Player, sub interface{}) bool {
 	_, ok := sub.(engine.Minion)
 	return ok
 }
 
-func Friendly(game engine.Game, you engine.Player, sub interface{}) bool {
-	if !Char(game, you, sub) {
+func friendly(game engine.Game, you engine.Player, sub interface{}) bool {
+	if !char(game, you, sub) {
 		return false
 	}
 	return you.IsControlling(sub.(engine.Char))
 }
 
-func Enemy(game engine.Game, you engine.Player, sub interface{}) bool {
-	if !Char(game, you, sub) {
+func enemy(game engine.Game, you engine.Player, sub interface{}) bool {
+	if !char(game, you, sub) {
 		return false
 	}
 	return game.Opponent(you).IsControlling(sub.(engine.Char))

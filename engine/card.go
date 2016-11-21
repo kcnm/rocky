@@ -10,6 +10,7 @@ type MinionCard interface {
 
 	Attack() int
 	Health() int
+	Buff() Buff
 }
 
 type SpellCard interface {

@@ -63,7 +63,7 @@ func PlayCard(
 	switch card := card.(type) {
 	case engine.MinionCard:
 		game.Events().Fire(
-			event.Summon(game, player, card, player.Board(), position))
+			event.Summon(game, player, card, position))
 	case engine.SpellCard:
 		game.Events().Fire(
 			event.Cast(game, player, card, target))

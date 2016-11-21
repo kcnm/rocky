@@ -80,7 +80,7 @@ func (b *bus) settle() {
 		b.events = b.events[1:]
 		mark := len(b.events)
 		ev.Trigger()
-		// Merge direct results for combined event.
+		// Merges direct results for combined event.
 		if ev.Verb() == engine.Combined && len(b.events) > mark {
 			comb := &combined{make([]engine.Event, len(b.events)-mark)}
 			for i := mark; i < len(b.events); i++ {
@@ -88,8 +88,32 @@ func (b *bus) settle() {
 			}
 			b.events = append(b.events[:mark], &event{comb, ev})
 		}
+		// Notifies registered listeners.
 		for _, listener := range b.listeners {
 			listener.Handle(ev)
+		}
+		// Removes listeners if destroyed.
+		if ev.Verb() == engine.Combined {
+			for _, ev := range ev.Subject().([]engine.Event) {
+				b.maybeDestroyListener(ev)
+			}
+		} else {
+			b.maybeDestroyListener(ev)
+		}
+	}
+}
+
+func (b *bus) maybeDestroyListener(ev engine.Event) {
+	if ev.Verb() != engine.Destroy {
+		return
+	}
+	listener, ok := ev.Subject().(engine.Listener)
+	if !ok {
+		return
+	}
+	for i, l := range b.listeners {
+		if l == listener {
+			b.listeners = append(b.listeners[:i], b.listeners[i+1:]...)
 		}
 	}
 }

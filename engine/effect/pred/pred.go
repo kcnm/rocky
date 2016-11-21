@@ -4,37 +4,29 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
-type Pred func(
+type Pred interface {
+	Eval(
+		game engine.Game,
+		you engine.Player,
+		sub interface{}) bool
+
+	BindIt(x interface{}) Pred
+}
+
+type fn struct {
+	eval func(
+		game engine.Game,
+		you engine.Player,
+		sub interface{}) bool
+}
+
+func (p *fn) Eval(
 	game engine.Game,
 	you engine.Player,
-	sub interface{}) bool
-
-func True(game engine.Game, you engine.Player, sub interface{}) bool {
-	return true
+	sub interface{}) bool {
+	return p.eval(game, you, sub)
 }
 
-func False(game engine.Game, you engine.Player, sub interface{}) bool {
-	return false
-}
-
-func And(preds ...Pred) Pred {
-	return func(game engine.Game, you engine.Player, sub interface{}) bool {
-		for _, p := range preds {
-			if !p(game, you, sub) {
-				return false
-			}
-		}
-		return true
-	}
-}
-
-func Or(preds ...Pred) Pred {
-	return func(game engine.Game, you engine.Player, sub interface{}) bool {
-		for _, p := range preds {
-			if p(game, you, sub) {
-				return true
-			}
-		}
-		return false
-	}
+func (p *fn) BindIt(x interface{}) Pred {
+	return p
 }

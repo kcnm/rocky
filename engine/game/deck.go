@@ -22,6 +22,10 @@ func (d *deck) Remain() int {
 	return len(d.cards)
 }
 
+func (d *deck) PutOnTop(card engine.Card) {
+	d.cards = append([]engine.Card{card}, d.cards...)
+}
+
 func (d *deck) Shuffle(rng *rand.Rand) {
 	shuffled := make([]engine.Card, len(d.cards))
 	for i, p := range rng.Perm(len(d.cards)) {

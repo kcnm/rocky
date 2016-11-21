@@ -13,19 +13,15 @@ func TestLightningStormOnEmptyBoard(t *testing.T) {
 		P1: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
-			Mana:      10,
-			Crystal:   10,
-			HandSize:  1,
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
 		},
 	}
-	test.PlaySingleCard(
+	test.PlayCard(
 		LightningStorm,
 		status,
-		0,
 		test.NilTarget,
 		test.NilUpdate,
 	)(t)
@@ -36,15 +32,12 @@ func TestLightningStorm(t *testing.T) {
 		P1: test.PlayerStatus{
 			Health:    30,
 			MaxHealth: 30,
-			Mana:      10,
-			Crystal:   10,
-			HandSize:  1,
 		},
 		B1: []test.MinionStatus{
-			test.MinionStatus{test.M11, 1, 1, 1, true},
-			test.MinionStatus{test.M22, 2, 2, 2, true},
-			test.MinionStatus{test.M33, 3, 3, 3, true},
-			test.MinionStatus{test.M44, 4, 4, 4, true},
+			test.MinionStatus{test.M11, 1, 1, 1, false},
+			test.MinionStatus{test.M22, 2, 2, 2, false},
+			test.MinionStatus{test.M33, 3, 3, 3, false},
+			test.MinionStatus{test.M44, 4, 4, 4, false},
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
@@ -75,11 +68,10 @@ func TestLightningStorm(t *testing.T) {
 		satisfy = len(b2Size) == 2
 		return nil
 	}
-	test.PlaySingleCardWithRNG(
+	test.PlayCardWithRNG(
 		t,
 		LightningStorm,
 		status,
-		0,
 		test.NilTarget,
 		record,
 		&satisfy)

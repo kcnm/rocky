@@ -2,6 +2,11 @@ package card
 
 import (
 	"github.com/kcnm/rocky/engine"
+	"github.com/kcnm/rocky/engine/buff"
+	"github.com/kcnm/rocky/engine/effect"
+	"github.com/kcnm/rocky/engine/effect/choose"
+	"github.com/kcnm/rocky/engine/effect/param"
+	"github.com/kcnm/rocky/engine/effect/pred"
 )
 
 type minionSpec struct {
@@ -9,6 +14,7 @@ type minionSpec struct {
 	mana   int
 	attack int
 	health int
+	buff   engine.Buff
 }
 
 func (c minion) Class() engine.Class {
@@ -27,17 +33,38 @@ func (c minion) Health() int {
 	return minions[c].health
 }
 
+func (c minion) Buff() engine.Buff {
+	b := minions[c].buff
+	if b == nil {
+		return buff.None
+	} else {
+		return b
+	}
+}
+
 var minions = map[minion]*minionSpec{
-	SilverHandRecruit: &minionSpec{
-		class:  engine.Neutral,
-		mana:   1,
-		attack: 1,
-		health: 1,
-	},
 	ChillwindYeti: &minionSpec{
 		class:  engine.Neutral,
 		mana:   4,
 		attack: 4,
 		health: 5,
+	},
+	LeperGnome: &minionSpec{
+		class:  engine.Neutral,
+		mana:   1,
+		attack: 1,
+		health: 1,
+		buff: buff.Deathrattle(
+			effect.DealDamage(
+				param.Const(2),
+				param.Char(choose.All, pred.And(pred.Enemy, pred.Hero)),
+			),
+		),
+	},
+	SilverHandRecruit: &minionSpec{
+		class:  engine.Neutral,
+		mana:   1,
+		attack: 1,
+		health: 1,
 	},
 }
