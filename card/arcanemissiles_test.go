@@ -20,7 +20,7 @@ func TestArcaneMissilesOnEmptyBoard(t *testing.T) {
 		},
 	}
 	test.PlayCard(
-		ArcaneMissiles,
+		ArcaneMissiles(),
 		status,
 		test.NilTarget,
 		func(status *test.GameStatus) {
@@ -68,7 +68,7 @@ func TestArcaneMissiles(t *testing.T) {
 	}
 	test.PlayCardWithRNG(
 		t,
-		ArcaneMissiles,
+		ArcaneMissiles(),
 		status,
 		test.NilTarget,
 		record,

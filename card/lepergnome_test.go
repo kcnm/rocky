@@ -13,7 +13,7 @@ func TestLeperGnome(t *testing.T) {
 			MaxHealth: 30,
 		},
 		B1: []test.MinionStatus{
-			{LeperGnome, 1, 1, 1, false},
+			{LeperGnome(), 1, 1, 1, false},
 		},
 		P2: test.PlayerStatus{
 			Health:    30,
@@ -78,14 +78,14 @@ func TestLeperGnomeDual(t *testing.T) {
 			MaxHealth: 30,
 		},
 		B1: []test.MinionStatus{
-			{LeperGnome, 1, 1, 1, false},
+			{LeperGnome(), 1, 1, 1, false},
 		},
 		P2: test.PlayerStatus{
 			Health:    2,
 			MaxHealth: 30,
 		},
 		B2: []test.MinionStatus{
-			{LeperGnome, 1, 1, 1, false},
+			{LeperGnome(), 1, 1, 1, false},
 		},
 	}
 	test.MinionAttack(

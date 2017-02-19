@@ -109,6 +109,6 @@ func TestFlamestrike(t *testing.T) {
 	} {
 		act.setup()
 		t.Run(act.name, test.PlayCard(
-			Flamestrike, status, test.NilTarget, act.update))
+			Flamestrike(), status, test.NilTarget, act.update))
 	}
 }

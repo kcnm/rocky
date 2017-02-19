@@ -17,24 +17,24 @@ type minionSpec struct {
 	buff   engine.Buff
 }
 
-func (c minion) Class() engine.Class {
-	return minions[c].class
+func (s minionSpec) Class() engine.Class {
+	return s.class
 }
 
-func (c minion) Mana() int {
-	return minions[c].mana
+func (s minionSpec) Mana() int {
+	return s.mana
 }
 
-func (c minion) Attack() int {
-	return minions[c].attack
+func (s minionSpec) Attack() int {
+	return s.attack
 }
 
-func (c minion) Health() int {
-	return minions[c].health
+func (s minionSpec) Health() int {
+	return s.health
 }
 
-func (c minion) Buff() engine.Buff {
-	b := minions[c].buff
+func (s minionSpec) Buff() engine.Buff {
+	b := s.buff
 	if b == nil {
 		return buff.None
 	} else {
@@ -42,14 +42,14 @@ func (c minion) Buff() engine.Buff {
 	}
 }
 
-var minions = map[minion]*minionSpec{
-	ChillwindYeti: &minionSpec{
+var minions = map[string]*minionSpec{
+	chillwindYeti: &minionSpec{
 		class:  engine.Neutral,
 		mana:   4,
 		attack: 4,
 		health: 5,
 	},
-	LeperGnome: &minionSpec{
+	leperGnome: &minionSpec{
 		class:  engine.Neutral,
 		mana:   1,
 		attack: 1,
@@ -61,7 +61,7 @@ var minions = map[minion]*minionSpec{
 			),
 		),
 	},
-	SilverHandRecruit: &minionSpec{
+	silverHandRecruit: &minionSpec{
 		class:  engine.Neutral,
 		mana:   1,
 		attack: 1,

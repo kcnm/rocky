@@ -11,24 +11,24 @@ type weaponSpec struct {
 	durability int
 }
 
-func (c weapon) Class() engine.Class {
-	return weapons[c].class
+func (s weaponSpec) Class() engine.Class {
+	return s.class
 }
 
-func (c weapon) Mana() int {
-	return weapons[c].mana
+func (s weaponSpec) Mana() int {
+	return s.mana
 }
 
-func (c weapon) Attack() int {
-	return weapons[c].attack
+func (s weaponSpec) Attack() int {
+	return s.attack
 }
 
-func (c weapon) Durability() int {
-	return weapons[c].durability
+func (s weaponSpec) Durability() int {
+	return s.durability
 }
 
-var weapons = map[weapon]*weaponSpec{
-	FieryWarAxe: &weaponSpec{
+var weapons = map[string]*weaponSpec{
+	fieryWarAxe: &weaponSpec{
 		class:      engine.Warrior,
 		mana:       2,
 		attack:     3,

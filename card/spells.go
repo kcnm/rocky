@@ -14,20 +14,20 @@ type spellSpec struct {
 	effect engine.Effect
 }
 
-func (c spell) Class() engine.Class {
-	return spells[c].class
+func (s spellSpec) Class() engine.Class {
+	return s.class
 }
 
-func (c spell) Mana() int {
-	return spells[c].mana
+func (s spellSpec) Mana() int {
+	return s.mana
 }
 
-func (c spell) Effect() engine.Effect {
-	return spells[c].effect
+func (s spellSpec) Effect() engine.Effect {
+	return s.effect
 }
 
-var spells = map[spell]*spellSpec{
-	ArcaneMissiles: &spellSpec{
+var spells = map[string]*spellSpec{
+	arcaneMissiles: &spellSpec{
 		class: engine.Mage,
 		mana:  1,
 		effect: effect.SplitDamage(
@@ -35,7 +35,7 @@ var spells = map[spell]*spellSpec{
 			param.Char(choose.Random, pred.Enemy),
 		),
 	},
-	Fireball: &spellSpec{
+	fireball: &spellSpec{
 		class: engine.Mage,
 		mana:  4,
 		effect: effect.DealDamage(
@@ -43,7 +43,7 @@ var spells = map[spell]*spellSpec{
 			param.Char(choose.Manual, pred.Char),
 		),
 	},
-	Flamestrike: &spellSpec{
+	flamestrike: &spellSpec{
 		class: engine.Mage,
 		mana:  7,
 		effect: effect.DealDamage(
@@ -51,7 +51,7 @@ var spells = map[spell]*spellSpec{
 			param.Char(choose.All, pred.And(pred.Enemy, pred.Minion)),
 		),
 	},
-	LightningStorm: &spellSpec{
+	lightningStorm: &spellSpec{
 		class: engine.Shaman,
 		mana:  3,
 		// TODO: Overload

@@ -91,6 +91,6 @@ func TestFireball(t *testing.T) {
 		},
 	} {
 		t.Run(act.name, test.PlayCard(
-			Fireball, status, act.target, act.update))
+			Fireball(), status, act.target, act.update))
 	}
 }

@@ -20,7 +20,7 @@ func TestLightningStormOnEmptyBoard(t *testing.T) {
 		},
 	}
 	test.PlayCard(
-		LightningStorm,
+		LightningStorm(),
 		status,
 		test.NilTarget,
 		test.NilUpdate,
@@ -70,7 +70,7 @@ func TestLightningStorm(t *testing.T) {
 	}
 	test.PlayCardWithRNG(
 		t,
-		LightningStorm,
+		LightningStorm(),
 		status,
 		test.NilTarget,
 		record,
