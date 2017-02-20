@@ -10,11 +10,12 @@ import (
 )
 
 type minionSpec struct {
-	class  engine.Class
-	mana   int
-	attack int
-	health int
-	buff   engine.Buff
+	class     engine.Class
+	mana      int
+	attack    int
+	health    int
+	battlecry engine.Effect
+	buff      engine.Buff
 }
 
 func (s minionSpec) Class() engine.Class {
@@ -33,6 +34,15 @@ func (s minionSpec) Health() int {
 	return s.health
 }
 
+func (s minionSpec) Battlecry() engine.Effect {
+	e := s.battlecry
+	if e == nil {
+		return effect.None
+	} else {
+		return e
+	}
+}
+
 func (s minionSpec) Buff() engine.Buff {
 	b := s.buff
 	if b == nil {
@@ -48,6 +58,16 @@ var minions = map[string]*minionSpec{
 		mana:   4,
 		attack: 4,
 		health: 5,
+	},
+	elvenArcher: &minionSpec{
+		class:  engine.Neutral,
+		mana:   1,
+		attack: 1,
+		health: 1,
+		battlecry: effect.DealDamage(
+			param.Const(1),
+			param.Char(choose.Manual, pred.Char),
+		),
 	},
 	leperGnome: &minionSpec{
 		class:  engine.Neutral,

@@ -141,6 +141,11 @@ func playCard(
 	action.PlayCard(g, p1, 0, 0, target(g))
 	status.P1.Mana -= card.Mana()
 	status.P1.HandSize -= 1
+	if c, ok := card.(engine.MinionCard); ok {
+		status.B1 = append(
+			[]MinionStatus{{c, c.Attack(), c.Health(), c.Health(), false}},
+			status.B1...)
+	}
 	return g
 }
 

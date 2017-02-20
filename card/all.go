@@ -7,6 +7,7 @@ import (
 const (
 	arcaneMissiles    = "Arcane Missiles"
 	chillwindYeti     = "Chillwind Yeti"
+	elvenArcher       = "Elven Archer"
 	fieryWarAxe       = "Fiery War Axe"
 	fireball          = "Fireball"
 	flamestrike       = "Flamestrike"
@@ -17,6 +18,7 @@ const (
 
 func ArcaneMissiles() engine.SpellCard     { return *spells[arcaneMissiles] }
 func ChillwindYeti() engine.MinionCard     { return *minions[chillwindYeti] }
+func ElvenArcher() engine.MinionCard       { return *minions[elvenArcher] }
 func FieryWarAxe() engine.WeaponCard       { return *weapons[fieryWarAxe] }
 func Fireball() engine.SpellCard           { return *spells[fireball] }
 func Flamestrike() engine.SpellCard        { return *spells[flamestrike] }

@@ -2,6 +2,7 @@ package card
 
 import (
 	"github.com/kcnm/rocky/engine"
+	"github.com/kcnm/rocky/engine/effect"
 )
 
 type weaponSpec struct {
@@ -9,6 +10,7 @@ type weaponSpec struct {
 	mana       int
 	attack     int
 	durability int
+	battlecry  engine.Effect
 }
 
 func (s weaponSpec) Class() engine.Class {
@@ -25,6 +27,15 @@ func (s weaponSpec) Attack() int {
 
 func (s weaponSpec) Durability() int {
 	return s.durability
+}
+
+func (s weaponSpec) Battlecry() engine.Effect {
+	e := s.battlecry
+	if e == nil {
+		return effect.None
+	} else {
+		return e
+	}
 }
 
 var weapons = map[string]*weaponSpec{

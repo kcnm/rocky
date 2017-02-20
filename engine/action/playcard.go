@@ -63,11 +63,15 @@ func PlayCard(
 	switch card := card.(type) {
 	case engine.MinionCard:
 		game.Events().Fire(
+			event.Impact(game, player, target, card.Battlecry()))
+		game.Events().Fire(
 			event.Summon(game, player, card, position))
 	case engine.SpellCard:
 		game.Events().Fire(
 			event.Cast(game, player, card, target))
 	case engine.WeaponCard:
+		game.Events().Fire(
+			event.Impact(game, player, target, card.Battlecry()))
 		if player.Weapon() != nil {
 			game.Events().Fire(
 				event.DestroyWeapon(game, player))

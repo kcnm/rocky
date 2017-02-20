@@ -10,6 +10,7 @@ type MinionCard interface {
 
 	Attack() int
 	Health() int
+	Battlecry() Effect
 	Buff() Buff
 }
 
@@ -24,4 +25,5 @@ type WeaponCard interface {
 
 	Attack() int
 	Durability() int
+	Battlecry() Effect
 }
