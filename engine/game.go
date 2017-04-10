@@ -1,3 +1,5 @@
+// Package engine defines the game engine that executes rules, together with
+// basic interfaces that abstract in-game entities.
 package engine
 
 import (

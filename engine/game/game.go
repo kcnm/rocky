@@ -121,7 +121,7 @@ func (g *game) Start() {
 	if g.turn != 0 {
 		panic(fmt.Errorf("non-zero start turn %d", g.turn))
 	}
-	g.events.Fire(engine.StartTurn)
+	g.events.Fire(event.StartTurn())
 }
 
 func (g *game) Summon(
@@ -161,7 +161,7 @@ func (g *game) handleDestroy(ev engine.Event) {
 			} else {
 				g.winner = nil
 			}
-			g.events.Post(engine.GameOver, ev)
+			g.events.Post(event.GameOver(), ev)
 		}
 	}
 }
