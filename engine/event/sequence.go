@@ -23,6 +23,6 @@ func (ev *sequence) Verb() engine.Verb {
 
 func (ev *sequence) Trigger() {
 	for _, x := range ev.events {
-		ev.game.Events().Cache(x, ev)
+		ev.game.Cache(x, ev)
 	}
 }

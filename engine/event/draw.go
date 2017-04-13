@@ -24,13 +24,13 @@ func (ev *draw) Verb() engine.Verb {
 func (ev *draw) Trigger() {
 	card, fatigue := ev.player.Deck().Draw()
 	if fatigue > 0 {
-		ev.game.Events().Post(
+		ev.game.Post(
 			Damage(ev.game, ev.player, nil, fatigue), ev)
 		return
 	}
 	if ev.player.HandIsFull() {
 		return
 	}
-	ev.game.Events().Post(
+	ev.game.Post(
 		TakeCard(ev.player, card), ev)
 }

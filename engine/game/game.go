@@ -10,7 +10,7 @@ import (
 )
 
 type game struct {
-	events  engine.EventBus
+	engine.EventBus
 	players []engine.Player
 	turn    int
 	over    bool
@@ -50,11 +50,11 @@ func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
 	player1.(*player).id = g.nextCharID()
 	player2.(*player).id = g.nextCharID()
 	// Register event listeners.
-	g.events.AddListener(g)
-	g.events.AddListener(player1)
-	g.events.AddListener(player2)
-	g.events.AddListener(player1.Board())
-	g.events.AddListener(player2.Board())
+	g.AddListener(g)
+	g.AddListener(player1)
+	g.AddListener(player2)
+	g.AddListener(player1.Board())
+	g.AddListener(player2.Board())
 	return g
 }
 
@@ -65,16 +65,12 @@ func (g *game) Handle(ev engine.Event) {
 	case engine.Destroy:
 		g.handleDestroy(ev)
 	case engine.GameOver:
-		g.events.Drain()
+		g.Drain()
 	case engine.Combined:
 		for _, e := range ev.Subject().([]engine.Event) {
 			g.Handle(e)
 		}
 	}
-}
-
-func (g *game) Events() engine.EventBus {
-	return g.events
 }
 
 func (g *game) RNG() *rand.Rand {
@@ -121,7 +117,7 @@ func (g *game) Start() {
 	if g.turn != 0 {
 		panic(fmt.Errorf("non-zero start turn %d", g.turn))
 	}
-	g.events.Fire(event.StartTurn())
+	g.Fire(event.StartTurn())
 }
 
 func (g *game) Summon(
@@ -132,7 +128,7 @@ func (g *game) Summon(
 		return nil
 	}
 	minion := newMinion(g.nextCharID(), card)
-	g.events.AddListener(minion)
+	g.AddListener(minion)
 	card.Buff().Apply(g, player, minion)
 	return player.Board().Put(minion, position)
 }
@@ -145,7 +141,7 @@ func (g *game) nextCharID() engine.CharID {
 func (g *game) handleStartTurn(ev engine.Event) {
 	g.turn++
 	player := g.CurrentPlayer()
-	g.events.Post(event.Draw(g, player), ev)
+	g.Post(event.Draw(g, player), ev)
 	if !player.HasMaxCrystal() {
 		player.GainCrystal(1)
 	}
@@ -161,7 +157,7 @@ func (g *game) handleDestroy(ev engine.Event) {
 			} else {
 				g.winner = nil
 			}
-			g.events.Post(event.GameOver(), ev)
+			g.Post(event.GameOver(), ev)
 		}
 	}
 }

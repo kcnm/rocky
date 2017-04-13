@@ -22,6 +22,6 @@ func (ev *dying) Verb() engine.Verb {
 }
 
 func (ev *dying) Trigger() {
-	ev.game.Events().Post(
+	ev.game.Post(
 		Destroy(ev.game, ev.char), ev)
 }

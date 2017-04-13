@@ -28,6 +28,6 @@ func (ev *cast) Verb() engine.Verb {
 }
 
 func (ev *cast) Trigger() {
-	ev.game.Events().Post(
+	ev.game.Post(
 		Impact(ev.game, ev.player, ev.target, ev.card.Effect()), ev)
 }

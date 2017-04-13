@@ -26,6 +26,6 @@ func (ev *heroPower) Verb() engine.Verb {
 }
 
 func (ev *heroPower) Trigger() {
-	ev.game.Events().Post(
+	ev.game.Post(
 		Impact(ev.game, ev.player, ev.target, ev.player.HeroPower()), ev)
 }

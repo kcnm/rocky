@@ -58,25 +58,25 @@ func PlayCard(
 		panic(err)
 	}
 	card := player.Hand()[cardIndex]
-	game.Events().Fire(
+	game.Fire(
 		event.PlayCard(player, cardIndex))
 	switch card := card.(type) {
 	case engine.MinionCard:
-		game.Events().Fire(
+		game.Fire(
 			event.Impact(game, player, target, card.Battlecry()))
-		game.Events().Fire(
+		game.Fire(
 			event.Summon(game, player, card, position))
 	case engine.SpellCard:
-		game.Events().Fire(
+		game.Fire(
 			event.Cast(game, player, card, target))
 	case engine.WeaponCard:
-		game.Events().Fire(
+		game.Fire(
 			event.Impact(game, player, target, card.Battlecry()))
 		if player.Weapon() != nil {
-			game.Events().Fire(
+			game.Fire(
 				event.DestroyWeapon(game, player))
 		}
-		game.Events().Fire(
+		game.Fire(
 			event.Equip(game, player, card))
 	}
 }

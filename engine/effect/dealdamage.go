@@ -33,7 +33,7 @@ func (e dealDamage) Happen(
 	t := e.target.Eval(game, you, target)
 	switch t := t.(type) {
 	case engine.Char:
-		game.Events().Post(
+		game.Post(
 			event.Damage(game, t, nil, dmg), cause)
 	case []engine.Char:
 		events := make([]engine.Event, len(t))
@@ -41,7 +41,7 @@ func (e dealDamage) Happen(
 			events[i] = event.Damage(game, ch, nil, dmg)
 			dmg = e.damage.Eval(game, you, target).(int)
 		}
-		game.Events().Post(
+		game.Post(
 			event.Combined(events...), cause)
 	default:
 		panic("invalid evaluated target")

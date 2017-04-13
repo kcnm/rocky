@@ -31,14 +31,14 @@ func (ev *attack) Trigger() {
 	passive := Damage(ev.game, ev.attacker, ev.defender, ev.defender.Attack())
 	_, isPlayer := ev.defender.(engine.Player)
 	if !isPlayer && ev.defender.Attack() > 0 {
-		ev.game.Events().Post(Combined(active, passive), ev)
+		ev.game.Post(Combined(active, passive), ev)
 	} else {
-		ev.game.Events().Post(active, ev)
+		ev.game.Post(active, ev)
 	}
 	if player, isPlayer := ev.attacker.(engine.Player); isPlayer {
 		player.Weapon().LoseDurability()
 		if player.Weapon().Durability() == 0 {
-			ev.game.Events().Post(DestroyWeapon(ev.game, player), ev)
+			ev.game.Post(DestroyWeapon(ev.game, player), ev)
 		}
 	}
 }

@@ -39,6 +39,6 @@ func HeroPower(
 	if ok, err := CanHeroPower(game, player, target); !ok {
 		panic(err)
 	}
-	game.Events().Fire(
+	game.Fire(
 		event.HeroPower(game, player, target))
 }

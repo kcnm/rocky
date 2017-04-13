@@ -7,9 +7,9 @@ import (
 )
 
 type Game interface {
+	EventBus
 	Listener
 
-	Events() EventBus
 	RNG() *rand.Rand
 	Turn() int
 	CurrentPlayer() Player
