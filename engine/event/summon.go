@@ -27,6 +27,10 @@ func (ev *summon) Verb() engine.Verb {
 	return engine.Summon
 }
 
+func (ev *summon) Object() interface{} {
+	return ev.card
+}
+
 func (ev *summon) Trigger(q engine.EventQueue) {
 	ev.game.Summon(ev.card, ev.player, ev.position)
 }

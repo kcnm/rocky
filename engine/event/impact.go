@@ -27,6 +27,10 @@ func (ev *impact) Verb() engine.Verb {
 	return engine.Impact
 }
 
+func (ev *impact) Object() interface{} {
+	return ev.target
+}
+
 func (ev *impact) Trigger(q engine.EventQueue) {
 	ev.effect.Happen(ev.game, ev.you, ev.target, ev)
 }

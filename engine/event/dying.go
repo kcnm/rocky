@@ -20,6 +20,10 @@ func (ev *dying) Verb() engine.Verb {
 	return engine.Dying
 }
 
+func (ev *dying) Object() interface{} {
+	return nil
+}
+
 func (ev *dying) Trigger(q engine.EventQueue) {
 	q.Post(Destroy(ev.char), ev)
 }

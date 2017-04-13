@@ -23,10 +23,14 @@ func (ev *attack) Verb() engine.Verb {
 	return engine.Attack
 }
 
+func (ev *attack) Object() interface{} {
+	return ev.defender
+}
+
 func (ev *attack) Trigger(q engine.EventQueue) {
 	ev.attacker.LoseStamina()
-	active := Damage(ev.defender, ev.attacker, ev.attacker.Attack())
-	passive := Damage(ev.attacker, ev.defender, ev.defender.Attack())
+	active := Damage(ev.attacker, ev.defender, ev.attacker.Attack())
+	passive := Damage(ev.defender, ev.attacker, ev.defender.Attack())
 	_, isPlayer := ev.defender.(engine.Player)
 	if !isPlayer && ev.defender.Attack() > 0 {
 		q.Post(Combined(active, passive), ev)

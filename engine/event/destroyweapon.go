@@ -20,6 +20,10 @@ func (ev *destroyWeapon) Verb() engine.Verb {
 	return engine.DestroyWeapon
 }
 
+func (ev *destroyWeapon) Object() interface{} {
+	return nil
+}
+
 func (ev *destroyWeapon) Trigger(q engine.EventQueue) {
 	ev.player.DestroyWeapon()
 }

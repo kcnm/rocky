@@ -20,6 +20,10 @@ func (ev *endTurn) Verb() engine.Verb {
 	return engine.EndTurn
 }
 
+func (ev *endTurn) Object() interface{} {
+	return ev.game
+}
+
 func (ev *endTurn) Trigger(q engine.EventQueue) {
 	q.Post(StartTurn(ev.game), ev)
 }

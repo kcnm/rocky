@@ -20,5 +20,9 @@ func (ev *gameOver) Verb() engine.Verb {
 	return engine.GameOver
 }
 
+func (ev *gameOver) Object() interface{} {
+	return nil
+}
+
 func (ev *gameOver) Trigger(q engine.EventQueue) {
 }

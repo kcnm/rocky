@@ -20,5 +20,9 @@ func (ev *startTurn) Verb() engine.Verb {
 	return engine.StartTurn
 }
 
+func (ev *startTurn) Object() interface{} {
+	return ev.game
+}
+
 func (ev *startTurn) Trigger(q engine.EventQueue) {
 }

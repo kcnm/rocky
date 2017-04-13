@@ -20,5 +20,9 @@ func (ev *destroy) Verb() engine.Verb {
 	return engine.Destroy
 }
 
+func (ev *destroy) Object() interface{} {
+	return nil
+}
+
 func (ev *destroy) Trigger(q engine.EventQueue) {
 }

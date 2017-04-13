@@ -20,6 +20,10 @@ func (ev *sequence) Verb() engine.Verb {
 	return engine.Sequence
 }
 
+func (ev *sequence) Object() interface{} {
+	return nil
+}
+
 func (ev *sequence) Trigger(q engine.EventQueue) {
 	for _, x := range ev.events {
 		q.Cache(x, ev)

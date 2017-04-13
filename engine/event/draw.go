@@ -20,10 +20,14 @@ func (ev *draw) Verb() engine.Verb {
 	return engine.Draw
 }
 
+func (ev *draw) Object() interface{} {
+	return ev.player.Deck()
+}
+
 func (ev *draw) Trigger(q engine.EventQueue) {
 	card, fatigue := ev.player.Deck().Draw()
 	if fatigue > 0 {
-		q.Post(Damage(ev.player, nil, fatigue), ev)
+		q.Post(Damage(nil, ev.player, fatigue), ev)
 		return
 	}
 	if ev.player.HandIsFull() {

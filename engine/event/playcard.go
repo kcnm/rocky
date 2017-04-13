@@ -21,6 +21,10 @@ func (ev *playCard) Verb() engine.Verb {
 	return engine.PlayCard
 }
 
+func (ev *playCard) Object() interface{} {
+	return ev.player.Hand()[ev.cardIndex]
+}
+
 func (ev *playCard) Trigger(q engine.EventQueue) {
 	ev.player.Play(ev.cardIndex)
 }

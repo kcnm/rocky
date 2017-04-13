@@ -32,7 +32,7 @@ const (
 type Event interface {
 	Subject() interface{}
 	Verb() Verb
-
+	Object() interface{}
 	Trigger(EventQueue)
 }
 

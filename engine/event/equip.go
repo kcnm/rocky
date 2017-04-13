@@ -23,6 +23,10 @@ func (ev *equip) Verb() engine.Verb {
 	return engine.Equip
 }
 
+func (ev *equip) Object() interface{} {
+	return ev.card
+}
+
 func (ev *equip) Trigger(q engine.EventQueue) {
 	ev.player.Equip(ev.card)
 }

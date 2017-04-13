@@ -21,6 +21,10 @@ func (ev *takeCard) Verb() engine.Verb {
 	return engine.TakeCard
 }
 
+func (ev *takeCard) Object() interface{} {
+	return ev.card
+}
+
 func (ev *takeCard) Trigger(q engine.EventQueue) {
 	ev.player.Take(ev.card)
 }

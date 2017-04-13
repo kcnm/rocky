@@ -27,6 +27,10 @@ func (ev *cast) Verb() engine.Verb {
 	return engine.Cast
 }
 
+func (ev *cast) Object() interface{} {
+	return []interface{}{ev.card, ev.target}
+}
+
 func (ev *cast) Trigger(q engine.EventQueue) {
 	q.Post(Impact(ev.game, ev.player, ev.target, ev.card.Effect()), ev)
 }
