@@ -5,12 +5,11 @@ import (
 )
 
 type sequence struct {
-	game   engine.Game
 	events []engine.Event
 }
 
-func Sequence(game engine.Game, events ...engine.Event) engine.Event {
-	return &sequence{game, events}
+func Sequence(events ...engine.Event) engine.Event {
+	return &sequence{events}
 }
 
 func (ev *sequence) Subject() interface{} {
@@ -21,8 +20,8 @@ func (ev *sequence) Verb() engine.Verb {
 	return engine.Sequence
 }
 
-func (ev *sequence) Trigger() {
+func (ev *sequence) Trigger(q engine.EventQueue) {
 	for _, x := range ev.events {
-		ev.game.Cache(x, ev)
+		q.Cache(x, ev)
 	}
 }

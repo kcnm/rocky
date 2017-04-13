@@ -25,7 +25,6 @@ func (ev *heroPower) Verb() engine.Verb {
 	return engine.HeroPower
 }
 
-func (ev *heroPower) Trigger() {
-	ev.game.Post(
-		Impact(ev.game, ev.player, ev.target, ev.player.HeroPower()), ev)
+func (ev *heroPower) Trigger(q engine.EventQueue) {
+	q.Post(Impact(ev.game, ev.player, ev.target, ev.player.HeroPower()), ev)
 }

@@ -5,12 +5,11 @@ import (
 )
 
 type destroyWeapon struct {
-	game   engine.Game
 	player engine.Player
 }
 
-func DestroyWeapon(game engine.Game, player engine.Player) engine.Event {
-	return &destroyWeapon{game, player}
+func DestroyWeapon(player engine.Player) engine.Event {
+	return &destroyWeapon{player}
 }
 
 func (ev *destroyWeapon) Subject() interface{} {
@@ -21,6 +20,6 @@ func (ev *destroyWeapon) Verb() engine.Verb {
 	return engine.DestroyWeapon
 }
 
-func (ev *destroyWeapon) Trigger() {
+func (ev *destroyWeapon) Trigger(q engine.EventQueue) {
 	ev.player.DestroyWeapon()
 }

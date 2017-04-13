@@ -5,19 +5,20 @@ import (
 )
 
 type startTurn struct {
+	game engine.Game
 }
 
-func StartTurn() engine.Event {
-	return &startTurn{}
+func StartTurn(game engine.Game) engine.Event {
+	return &startTurn{game}
 }
 
 func (ev *startTurn) Subject() interface{} {
-	return nil
+	return ev.game.CurrentPlayer()
 }
 
 func (ev *startTurn) Verb() engine.Verb {
 	return engine.StartTurn
 }
 
-func (ev *startTurn) Trigger() {
+func (ev *startTurn) Trigger(q engine.EventQueue) {
 }

@@ -5,16 +5,14 @@ import (
 )
 
 type equip struct {
-	game   engine.Game
 	player engine.Player
 	card   engine.WeaponCard
 }
 
 func Equip(
-	game engine.Game,
 	player engine.Player,
 	card engine.WeaponCard) engine.Event {
-	return &equip{game, player, card}
+	return &equip{player, card}
 }
 
 func (ev *equip) Subject() interface{} {
@@ -25,6 +23,6 @@ func (ev *equip) Verb() engine.Verb {
 	return engine.Equip
 }
 
-func (ev *equip) Trigger() {
+func (ev *equip) Trigger(q engine.EventQueue) {
 	ev.player.Equip(ev.card)
 }

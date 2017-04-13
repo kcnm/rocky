@@ -10,7 +10,7 @@ import (
 )
 
 type game struct {
-	engine.EventBus
+	engine.EventQueue
 	players []engine.Player
 	turn    int
 	over    bool
@@ -38,7 +38,7 @@ func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
 	}
 	// Instantiate game.
 	g := &game{
-		event.NewBus(),
+		event.NewQueue(),
 		[]engine.Player{player2, player1},
 		0,     // turn
 		false, // over
@@ -117,7 +117,7 @@ func (g *game) Start() {
 	if g.turn != 0 {
 		panic(fmt.Errorf("non-zero start turn %d", g.turn))
 	}
-	g.Fire(event.StartTurn())
+	g.Fire(event.StartTurn(g))
 }
 
 func (g *game) Summon(
@@ -141,7 +141,7 @@ func (g *game) nextCharID() engine.CharID {
 func (g *game) handleStartTurn(ev engine.Event) {
 	g.turn++
 	player := g.CurrentPlayer()
-	g.Post(event.Draw(g, player), ev)
+	g.Post(event.Draw(player), ev)
 	if !player.HasMaxCrystal() {
 		player.GainCrystal(1)
 	}
@@ -157,7 +157,7 @@ func (g *game) handleDestroy(ev engine.Event) {
 			} else {
 				g.winner = nil
 			}
-			g.Post(event.GameOver(), ev)
+			g.Post(event.GameOver(g), ev)
 		}
 	}
 }

@@ -5,12 +5,11 @@ import (
 )
 
 type dying struct {
-	game engine.Game
 	char engine.Char
 }
 
-func Dying(game engine.Game, char engine.Char) engine.Event {
-	return &dying{game, char}
+func Dying(char engine.Char) engine.Event {
+	return &dying{char}
 }
 
 func (ev *dying) Subject() interface{} {
@@ -21,7 +20,6 @@ func (ev *dying) Verb() engine.Verb {
 	return engine.Dying
 }
 
-func (ev *dying) Trigger() {
-	ev.game.Post(
-		Destroy(ev.game, ev.char), ev)
+func (ev *dying) Trigger(q engine.EventQueue) {
+	q.Post(Destroy(ev.char), ev)
 }

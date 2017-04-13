@@ -20,8 +20,8 @@ func (ev *combined) Verb() engine.Verb {
 	return engine.Combined
 }
 
-func (ev *combined) Trigger() {
+func (ev *combined) Trigger(q engine.EventQueue) {
 	for _, ev := range ev.events {
-		ev.Trigger()
+		ev.Trigger(q)
 	}
 }

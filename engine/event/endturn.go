@@ -20,6 +20,6 @@ func (ev *endTurn) Verb() engine.Verb {
 	return engine.EndTurn
 }
 
-func (ev *endTurn) Trigger() {
-	ev.game.Post(StartTurn(), ev)
+func (ev *endTurn) Trigger(q engine.EventQueue) {
+	q.Post(StartTurn(ev.game), ev)
 }

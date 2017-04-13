@@ -5,19 +5,20 @@ import (
 )
 
 type gameOver struct {
+	game engine.Game
 }
 
-func GameOver() engine.Event {
-	return &gameOver{}
+func GameOver(game engine.Game) engine.Event {
+	return &gameOver{game}
 }
 
 func (ev *gameOver) Subject() interface{} {
-	return nil
+	return ev.game
 }
 
 func (ev *gameOver) Verb() engine.Verb {
 	return engine.GameOver
 }
 
-func (ev *gameOver) Trigger() {
+func (ev *gameOver) Trigger(q engine.EventQueue) {
 }

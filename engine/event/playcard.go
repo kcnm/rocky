@@ -21,6 +21,6 @@ func (ev *playCard) Verb() engine.Verb {
 	return engine.PlayCard
 }
 
-func (ev *playCard) Trigger() {
+func (ev *playCard) Trigger(q engine.EventQueue) {
 	ev.player.Play(ev.cardIndex)
 }

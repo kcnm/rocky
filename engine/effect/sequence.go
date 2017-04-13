@@ -34,6 +34,5 @@ func (e sequence) Happen(
 	for i, effect := range e.effects {
 		events[i] = event.Impact(game, you, target, effect)
 	}
-	game.Post(
-		event.Sequence(game, events...), cause)
+	game.Post(event.Sequence(events...), cause)
 }

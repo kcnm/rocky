@@ -42,6 +42,5 @@ func Attack(
 	if ok, err := CanAttack(game, attacker, defender); !ok {
 		panic(err)
 	}
-	game.Fire(
-		event.Attack(game, attacker, defender))
+	game.Fire(event.Attack(attacker, defender))
 }

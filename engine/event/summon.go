@@ -27,6 +27,6 @@ func (ev *summon) Verb() engine.Verb {
 	return engine.Summon
 }
 
-func (ev *summon) Trigger() {
+func (ev *summon) Trigger(q engine.EventQueue) {
 	ev.game.Summon(ev.card, ev.player, ev.position)
 }

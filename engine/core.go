@@ -33,7 +33,7 @@ type Event interface {
 	Subject() interface{}
 	Verb() Verb
 
-	Trigger()
+	Trigger(EventQueue)
 }
 
 type ListenerID int
@@ -44,7 +44,7 @@ type Listener interface {
 
 type Handler func(Event)
 
-type EventBus interface {
+type EventQueue interface {
 	AddListener(listener Listener) ListenerID
 	RemoveListener(id ListenerID) bool
 	Fire(ev Event)
@@ -54,7 +54,7 @@ type EventBus interface {
 }
 
 type Game interface {
-	EventBus
+	EventQueue
 	Listener
 
 	RNG() *rand.Rand

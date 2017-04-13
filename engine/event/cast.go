@@ -27,7 +27,6 @@ func (ev *cast) Verb() engine.Verb {
 	return engine.Cast
 }
 
-func (ev *cast) Trigger() {
-	ev.game.Post(
-		Impact(ev.game, ev.player, ev.target, ev.card.Effect()), ev)
+func (ev *cast) Trigger(q engine.EventQueue) {
+	q.Post(Impact(ev.game, ev.player, ev.target, ev.card.Effect()), ev)
 }
