@@ -40,6 +40,7 @@ type Event interface {
 type Verb string
 
 const (
+	StartGame     Verb = "StartGame"
 	StartTurn     Verb = "StartTurn"
 	EndTurn       Verb = "EndTurn"
 	Draw          Verb = "Draw"

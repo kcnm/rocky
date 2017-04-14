@@ -14,6 +14,7 @@ type game struct {
 	engine.EventQueue
 	rng     *rand.Rand
 	players []engine.Player
+	current engine.Player
 	turn    int
 	over    bool
 	winner  engine.Player
@@ -43,6 +44,7 @@ func New(p1, p2 engine.Player, rng *rand.Rand) engine.Game {
 		event.NewQueue(),
 		rng,
 		[]engine.Player{p2, p1},
+		p1,    // current
 		0,     // turn
 		false, // over
 		nil,   // winner
@@ -51,7 +53,7 @@ func New(p1, p2 engine.Player, rng *rand.Rand) engine.Game {
 	// Assign player entity IDs.
 	p1.(*player).id = g.nextEntityID()
 	p2.(*player).id = g.nextEntityID()
-	// Register event listeners.
+	// Join base in-game entities.
 	g.AppendReactor(g.react)
 	p1.AppendReactor(p1.(*player).react)
 	p2.AppendReactor(p2.(*player).react)
@@ -70,7 +72,7 @@ func (g *game) Turn() int {
 }
 
 func (g *game) CurrentPlayer() engine.Player {
-	return g.players[g.turn%2]
+	return g.current
 }
 
 func (g *game) Opponent(player engine.Player) engine.Player {
@@ -85,14 +87,14 @@ func (g *game) Opponent(player engine.Player) engine.Player {
 
 func (g *game) AllChars() []engine.Char {
 	b1, b2 := g.players[1].Board().Minions(), g.players[0].Board().Minions()
-	chars := make([]engine.Char, 2+len(b1)+len(b2))
-	chars[0] = g.players[1]
-	chars[1] = g.players[0]
-	for i := 0; i < len(b1); i++ {
-		chars[2+i] = b1[i]
+	chars := make([]engine.Char, 0, 2+len(b1)+len(b2))
+	chars = append(chars, g.players[1])
+	chars = append(chars, g.players[0])
+	for _, m := range b1 {
+		chars = append(chars, m)
 	}
-	for i := 0; i < len(b2); i++ {
-		chars[2+i] = b2[i]
+	for _, m := range b2 {
+		chars = append(chars, m)
 	}
 	return chars
 }
@@ -102,19 +104,13 @@ func (g *game) IsOver() (over bool, winner engine.Player) {
 }
 
 func (g *game) Start() {
-	if g.turn != 0 {
-		panic(fmt.Errorf("non-zero start turn %d", g.turn))
-	}
-	g.Fire(event.StartTurn(g))
+	g.Fire(event.StartGame(g))
 }
 
 func (g *game) Summon(
 	card engine.MinionCard,
 	player engine.Player,
 	position int) engine.Minion {
-	if player.Board().IsFull() {
-		return nil
-	}
 	minion := newMinion(g.nextEntityID(), card)
 	g.Join(minion)
 	card.Buff().Apply(g, player, minion)
@@ -146,7 +142,8 @@ func (g *game) onStartTurn(ev engine.Event) {
 		return
 	}
 	g.turn++
-	player := g.CurrentPlayer()
+	player := ev.Subject().(engine.Player)
+	g.current = player
 	g.Post(event.Draw(player), ev)
 	if !player.HasMaxCrystal() {
 		player.GainCrystal(1)
@@ -158,16 +155,14 @@ func (g *game) onDestroy(ev engine.Event) {
 	if ev.Verb() != engine.Destroy {
 		return
 	}
-	for i := 0; i < 2; i++ {
-		if ev.Subject() == g.players[i] {
-			g.over = true
-			if g.winner == nil {
-				g.winner = g.players[(i+1)%2]
-			} else {
-				g.winner = nil
-			}
-			g.Post(event.GameOver(g), ev)
+	if player, ok := ev.Subject().(engine.Player); ok {
+		g.over = true
+		if g.winner == nil {
+			g.winner = g.Opponent(player)
+		} else {
+			g.winner = nil
 		}
+		g.Post(event.GameOver(g), ev)
 	}
 }
 

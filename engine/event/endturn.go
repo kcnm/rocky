@@ -5,15 +5,16 @@ import (
 )
 
 type endTurn struct {
-	game engine.Game
+	game   engine.Game
+	player engine.Player
 }
 
-func EndTurn(game engine.Game) engine.Event {
-	return &endTurn{game}
+func EndTurn(game engine.Game, player engine.Player) engine.Event {
+	return &endTurn{game, player}
 }
 
 func (ev *endTurn) Subject() interface{} {
-	return ev.game.CurrentPlayer()
+	return ev.player
 }
 
 func (ev *endTurn) Verb() engine.Verb {
@@ -25,5 +26,6 @@ func (ev *endTurn) Object() interface{} {
 }
 
 func (ev *endTurn) Trigger(q engine.EventQueue) {
-	q.Post(StartTurn(ev.game), ev)
+	next := ev.game.Opponent(ev.player)
+	q.Post(StartTurn(ev.game, next), ev)
 }
