@@ -6,6 +6,37 @@ import (
 	"math/rand"
 )
 
+type Game interface {
+	Entity
+	EventQueue
+
+	RNG() *rand.Rand
+	Turn() int
+	CurrentPlayer() Player
+	Opponent(player Player) Player
+	AllChars() []Char
+	IsOver() (over bool, winner Player)
+
+	Start()
+	Summon(card MinionCard, player Player, position int) Minion
+}
+
+type EventQueue interface {
+	Join(e Entity)
+	Exit(e Entity) bool
+	Fire(ev Event)
+	Post(ev Event, cause Event)
+	Cache(ev Event, cause Event)
+	Drain()
+}
+
+type Event interface {
+	Subject() interface{}
+	Verb() Verb
+	Object() interface{}
+	Trigger(q EventQueue)
+}
+
 type Verb string
 
 const (
@@ -28,42 +59,3 @@ const (
 	Combined      Verb = "Combined"
 	Sequence      Verb = "Sequence"
 )
-
-type Event interface {
-	Subject() interface{}
-	Verb() Verb
-	Object() interface{}
-	Trigger(EventQueue)
-}
-
-type ListenerID int
-
-type Listener interface {
-	Handle(ev Event)
-}
-
-type Handler func(Event)
-
-type EventQueue interface {
-	AddListener(listener Listener) ListenerID
-	RemoveListener(id ListenerID) bool
-	Fire(ev Event)
-	Post(ev Event, cause Event)
-	Cache(ev Event, cause Event)
-	Drain()
-}
-
-type Game interface {
-	EventQueue
-	Listener
-
-	RNG() *rand.Rand
-	Turn() int
-	CurrentPlayer() Player
-	Opponent(player Player) Player
-	AllChars() []Char
-	IsOver() (over bool, winner Player)
-
-	Start()
-	Summon(card MinionCard, player Player, position int) Minion
-}

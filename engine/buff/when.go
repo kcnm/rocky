@@ -18,7 +18,7 @@ func (b *when) Apply(
 	game engine.Game,
 	you engine.Player,
 	char engine.Char) {
-	char.AddHandler(func(ev engine.Event) {
+	char.AppendReactor(func(ev engine.Event) {
 		if b.evPred.BindIt(char).Eval(game, you, ev) {
 			b.effect.Happen(game, you, nil, ev)
 		}

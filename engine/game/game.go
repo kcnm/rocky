@@ -10,67 +10,55 @@ import (
 )
 
 type game struct {
+	*entity
 	engine.EventQueue
+	rng     *rand.Rand
 	players []engine.Player
 	turn    int
 	over    bool
 	winner  engine.Player
-	idGen   engine.CharID
-	rng     *rand.Rand
+	idGen   engine.EntityID
 }
 
-func New(player1, player2 engine.Player, rng *rand.Rand) engine.Game {
+func New(p1, p2 engine.Player, rng *rand.Rand) engine.Game {
 	// Initial checks.
-	if player1 == nil {
+	if p1 == nil {
 		panic("nil player1")
 	}
-	if player2 == nil {
+	if p2 == nil {
 		panic("nil player2")
 	}
-	if player1.Health() <= 0 {
-		panic(fmt.Errorf("non-positive player1 health %d", player1.Health()))
+	if p1.Health() <= 0 {
+		panic(fmt.Errorf("non-positive player1 health %d", p1.Health()))
 	}
-	if player2.Health() <= 0 {
-		panic(fmt.Errorf("non-positive player2 health %d", player2.Health()))
+	if p2.Health() <= 0 {
+		panic(fmt.Errorf("non-positive player2 health %d", p2.Health()))
 	}
 	if rng == nil {
 		rng = rand.New(rand.NewSource(time.Now().Unix()))
 	}
 	// Instantiate game.
 	g := &game{
+		newEntity(0).(*entity),
 		event.NewQueue(),
-		[]engine.Player{player2, player1},
+		rng,
+		[]engine.Player{p2, p1},
 		0,     // turn
 		false, // over
 		nil,   // winner
 		0,     // idGen
-		rng,
 	}
-	// Assign player character IDs.
-	player1.(*player).id = g.nextCharID()
-	player2.(*player).id = g.nextCharID()
+	// Assign player entity IDs.
+	p1.(*player).id = g.nextEntityID()
+	p2.(*player).id = g.nextEntityID()
 	// Register event listeners.
-	g.AddListener(g)
-	g.AddListener(player1)
-	g.AddListener(player2)
-	g.AddListener(player1.Board())
-	g.AddListener(player2.Board())
+	g.AppendReactor(g.react)
+	p1.AppendReactor(p1.(*player).react)
+	p2.AppendReactor(p2.(*player).react)
+	g.Join(g)
+	g.Join(p1)
+	g.Join(p2)
 	return g
-}
-
-func (g *game) Handle(ev engine.Event) {
-	switch ev.Verb() {
-	case engine.StartTurn:
-		g.handleStartTurn(ev)
-	case engine.Destroy:
-		g.handleDestroy(ev)
-	case engine.GameOver:
-		g.Drain()
-	case engine.Combined:
-		for _, e := range ev.Subject().([]engine.Event) {
-			g.Handle(e)
-		}
-	}
 }
 
 func (g *game) RNG() *rand.Rand {
@@ -127,18 +115,36 @@ func (g *game) Summon(
 	if player.Board().IsFull() {
 		return nil
 	}
-	minion := newMinion(g.nextCharID(), card)
-	g.AddListener(minion)
+	minion := newMinion(g.nextEntityID(), card)
+	g.Join(minion)
 	card.Buff().Apply(g, player, minion)
 	return player.Board().Put(minion, position)
 }
 
-func (g *game) nextCharID() engine.CharID {
+func (g *game) nextEntityID() engine.EntityID {
 	g.idGen++
 	return g.idGen
 }
 
-func (g *game) handleStartTurn(ev engine.Event) {
+func (g *game) react(ev engine.Event) {
+	switch ev.Verb() {
+	case engine.StartTurn:
+		g.onStartTurn(ev)
+	case engine.Destroy:
+		g.onDestroy(ev)
+	case engine.GameOver:
+		g.Drain()
+	case engine.Combined:
+		for _, ev := range ev.Subject().([]engine.Event) {
+			g.react(ev)
+		}
+	}
+}
+
+func (g *game) onStartTurn(ev engine.Event) {
+	if ev.Verb() != engine.StartTurn {
+		return
+	}
 	g.turn++
 	player := g.CurrentPlayer()
 	g.Post(event.Draw(player), ev)
@@ -148,7 +154,10 @@ func (g *game) handleStartTurn(ev engine.Event) {
 	player.Refresh()
 }
 
-func (g *game) handleDestroy(ev engine.Event) {
+func (g *game) onDestroy(ev engine.Event) {
+	if ev.Verb() != engine.Destroy {
+		return
+	}
 	for i := 0; i < 2; i++ {
 		if ev.Subject() == g.players[i] {
 			g.over = true

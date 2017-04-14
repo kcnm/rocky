@@ -10,40 +10,39 @@ type event struct {
 }
 
 type queue struct {
-	events      []*event
-	cached      []*event
-	listeners   []engine.Listener
-	listenerIDs map[engine.ListenerID]int
-	idGen       engine.ListenerID
+	events    []*event
+	cached    []*event
+	entities  []engine.Entity
+	entityIDs map[engine.EntityID]int
 }
 
 func NewQueue() engine.EventQueue {
 	return &queue{
 		make([]*event, 0),
 		make([]*event, 0),
-		make([]engine.Listener, 0),
-		make(map[engine.ListenerID]int),
-		0, // idGen
+		make([]engine.Entity, 0),
+		make(map[engine.EntityID]int),
 	}
 }
 
-func (q *queue) AddListener(listener engine.Listener) engine.ListenerID {
-	id := q.nextListenerID()
-	q.listenerIDs[id] = len(q.listeners)
-	q.listeners = append(q.listeners, listener)
-	return id
+func (q *queue) Join(e engine.Entity) {
+	q.entityIDs[e.ID()] = len(q.entities)
+	q.entities = append(q.entities, e)
 }
 
-func (q *queue) RemoveListener(id engine.ListenerID) bool {
-	idx, present := q.listenerIDs[id]
-	q.listeners = append(q.listeners[:idx], q.listeners[idx+1:]...)
-	delete(q.listenerIDs, id)
-	for id, i := range q.listenerIDs {
-		if i > idx {
-			q.listenerIDs[id]--
+func (q *queue) Exit(e engine.Entity) bool {
+	i, present := q.entityIDs[e.ID()]
+	if !present {
+		return false
+	}
+	q.entities = append(q.entities[:i], q.entities[i+1:]...)
+	delete(q.entityIDs, e.ID())
+	for id, j := range q.entityIDs {
+		if j > i {
+			q.entityIDs[id]--
 		}
 	}
-	return present
+	return true
 }
 
 func (q *queue) Fire(ev engine.Event) {
@@ -70,8 +69,8 @@ func (q *queue) Cache(ev engine.Event, cause engine.Event) {
 func (q *queue) Drain() {
 	q.events = make([]*event, 0)
 	q.cached = make([]*event, 0)
-	q.listeners = make([]engine.Listener, 0)
-	q.listenerIDs = make(map[engine.ListenerID]int)
+	q.entities = make([]engine.Entity, 0)
+	q.entityIDs = make(map[engine.EntityID]int)
 }
 
 func (q *queue) settle() {
@@ -88,37 +87,23 @@ func (q *queue) settle() {
 			}
 			q.events = append(q.events[:mark], &event{comb, ev})
 		}
-		// Notifies registered listeners.
-		for _, listener := range q.listeners {
-			listener.Handle(ev)
+		// Notifies joined entities.
+		for _, entity := range q.entities {
+			entity.React(ev)
 		}
-		// Removes listeners if destroyed.
+		// Removes entities if destroyed.
 		if ev.Verb() == engine.Combined {
 			for _, ev := range ev.Subject().([]engine.Event) {
-				q.maybeDestroyListener(ev)
+				q.maybeDestroyEntity(ev)
 			}
 		} else {
-			q.maybeDestroyListener(ev)
+			q.maybeDestroyEntity(ev)
 		}
 	}
 }
 
-func (q *queue) maybeDestroyListener(ev engine.Event) {
-	if ev.Verb() != engine.Destroy {
-		return
+func (q *queue) maybeDestroyEntity(ev engine.Event) {
+	if e, ok := ev.Subject().(engine.Entity); ok && ev.Verb() == engine.Destroy {
+		q.Exit(e)
 	}
-	listener, ok := ev.Subject().(engine.Listener)
-	if !ok {
-		return
-	}
-	for i, l := range q.listeners {
-		if l == listener {
-			q.listeners = append(q.listeners[:i], q.listeners[i+1:]...)
-		}
-	}
-}
-
-func (q *queue) nextListenerID() engine.ListenerID {
-	q.idGen++
-	return q.idGen
 }

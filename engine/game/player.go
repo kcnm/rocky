@@ -204,6 +204,17 @@ func (p *player) DestroyWeapon() {
 	p.weapon = nil
 }
 
+func (p *player) react(ev engine.Event) {
+	switch ev.Verb() {
+	case engine.Destroy:
+		p.board.(*board).remove(ev.Subject())
+	case engine.Combined:
+		for _, ev := range ev.Subject().([]engine.Event) {
+			p.react(ev)
+		}
+	}
+}
+
 func (p *player) String() string {
 	armor := ""
 	if p.armor > 0 {

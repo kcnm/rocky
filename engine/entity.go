@@ -4,12 +4,20 @@ import (
 	"math/rand"
 )
 
-type CharID int
+type EntityID int
+
+type Entity interface {
+	ID() EntityID
+	React(ev Event)
+	AppendReactor(r Reactor)
+	Reset()
+}
+
+type Reactor func(Event)
 
 type Char interface {
-	Listener
+	Entity
 
-	ID() CharID
 	Attack() int
 	Health() int
 	MaxHealth() int
@@ -17,7 +25,6 @@ type Char interface {
 	Active() bool
 
 	Refresh()
-	AddHandler(handler Handler)
 	TakeDamage(damage int) (actual int, fatal bool)
 	LoseStamina()
 }
@@ -49,8 +56,6 @@ type Player interface {
 }
 
 type Board interface {
-	Listener
-
 	Minions() []Minion
 	IsFull() bool
 	Find(minion Minion) (index int)
