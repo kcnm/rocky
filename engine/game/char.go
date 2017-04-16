@@ -11,21 +11,22 @@ type char struct {
 	attack    int
 	health    int
 	maxHealth int
-	stamina   int
+	swings    int
+	maxSwings int
 }
 
 func newChar(
 	id engine.EntityID,
 	attack int,
 	health int,
-	maxHealth int,
-	stamina int) engine.Char {
+	maxHealth int) engine.Char {
 	return &char{
 		newEntity(id).(*entity),
 		attack,
 		health,
 		maxHealth,
-		stamina,
+		0, // swings
+		0, // maxSwings
 	}
 }
 
@@ -41,16 +42,17 @@ func (ch *char) MaxHealth() int {
 	return ch.maxHealth
 }
 
-func (ch *char) Stamina() int {
-	return ch.stamina
+func (ch *char) Swings() int {
+	return ch.swings
 }
 
 func (ch *char) Active() bool {
-	return ch.Attack() > 0 && ch.Stamina() > 0
+	return ch.Attack() > 0 && ch.Swings() < ch.maxSwings
 }
 
 func (ch *char) Refresh() {
-	ch.stamina = 1
+	ch.swings = 0
+	ch.maxSwings = 1
 }
 
 func (ch *char) TakeDamage(damage int) (actual int, fatal bool) {
@@ -61,9 +63,6 @@ func (ch *char) TakeDamage(damage int) (actual int, fatal bool) {
 	return damage, ch.health <= 0
 }
 
-func (ch *char) LoseStamina() {
-	if ch.stamina <= 0 {
-		panic(fmt.Errorf("non-positive stamina %d", ch.stamina))
-	}
-	ch.stamina--
+func (ch *char) Swing() {
+	ch.swings++
 }

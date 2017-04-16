@@ -28,7 +28,7 @@ func (ev *attack) Object() interface{} {
 }
 
 func (ev *attack) Trigger(q engine.EventQueue) {
-	ev.attacker.LoseStamina()
+	ev.attacker.Swing()
 	active := Damage(ev.attacker, ev.defender, ev.attacker.Attack())
 	passive := Damage(ev.defender, ev.attacker, ev.defender.Attack())
 	_, isPlayer := ev.defender.(engine.Player)

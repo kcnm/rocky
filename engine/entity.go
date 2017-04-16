@@ -21,12 +21,12 @@ type Char interface {
 	Attack() int
 	Health() int
 	MaxHealth() int
-	Stamina() int
+	Swings() int
 	Active() bool
 
 	Refresh()
 	TakeDamage(damage int) (actual int, fatal bool)
-	LoseStamina()
+	Swing()
 }
 
 type Player interface {

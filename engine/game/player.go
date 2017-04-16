@@ -38,7 +38,6 @@ func NewPlayer(
 			0,         // attack
 			maxHealth, // health
 			maxHealth, // maxHealth
-			0,         // stamina
 		).(*char),
 		0,     // armor
 		0,     // mana
@@ -61,7 +60,7 @@ func (p *player) Attack() int {
 }
 
 func (p *player) Active() bool {
-	return p.Attack() > 0 && p.Stamina() > 0
+	return p.Attack() > 0 && p.Swings() < p.char.maxSwings
 }
 
 func (p *player) Refresh() {
