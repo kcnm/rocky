@@ -47,7 +47,7 @@ func (ch *char) Swings() int {
 }
 
 func (ch *char) Active() bool {
-	return ch.Attack() > 0 && ch.Swings() < ch.maxSwings
+	return ch.Attack() > 0 && ch.swings < ch.maxSwings
 }
 
 func (ch *char) Refresh() {
@@ -64,5 +64,8 @@ func (ch *char) TakeDamage(damage int) (actual int, fatal bool) {
 }
 
 func (ch *char) Swing() {
+	if ch.swings >= ch.maxSwings {
+		panic(fmt.Errorf("cannot swing: %d/%d", ch.swings, ch.maxSwings))
+	}
 	ch.swings++
 }

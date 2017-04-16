@@ -37,7 +37,7 @@ type Player interface {
 	Crystal() int
 	HasMaxCrystal() bool
 	Power() Power
-	Powered() bool
+	CanHeroPower() bool
 	Weapon() Weapon
 	Board() Board
 	Deck() Deck
