@@ -45,14 +45,13 @@ type Player interface {
 	HandIsFull() bool
 	IsControlling(char Char) bool
 
+	GainArmor(armor int)
 	GainMana(mana int)
 	GainCrystal(crystal int)
-	GainArmor(armor int)
 	Take(card Card) bool
 	Play(cardIndex int) Card
 	HeroPower() Effect
-	Equip(card WeaponCard)
-	DestroyWeapon()
+	Equip(weapon Weapon)
 }
 
 type Board interface {
@@ -73,11 +72,13 @@ type Deck interface {
 }
 
 type Weapon interface {
+	Entity
+
 	Card() WeaponCard
 	Attack() int
 	Durability() int
 
-	LoseDurability()
+	LoseDurability(d int) (remained int)
 }
 
 type Minion interface {

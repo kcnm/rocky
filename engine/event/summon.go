@@ -32,5 +32,5 @@ func (ev *summon) Object() interface{} {
 }
 
 func (ev *summon) Trigger(q engine.EventQueue) {
-	ev.game.Summon(ev.card, ev.player, ev.position)
+	ev.game.Summon(ev.player, ev.card, ev.position)
 }

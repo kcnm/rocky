@@ -67,10 +67,10 @@ func PlayCard(
 		game.Fire(event.Cast(game, player, card, target))
 	case engine.WeaponCard:
 		game.Fire(event.Impact(game, player, target, card.Battlecry()))
-		if player.Weapon() != nil {
-			game.Fire(event.DestroyWeapon(player))
+		if w := player.Weapon(); w != nil {
+			game.Fire(event.Destroy(w))
 		}
-		game.Fire(event.Equip(player, card))
+		game.Fire(event.Equip(game, player, card))
 	}
 }
 

@@ -140,6 +140,10 @@ func (p *player) IsControlling(char engine.Char) bool {
 	return false
 }
 
+func (p *player) GainArmor(armor int) {
+	p.armor += armor
+}
+
 func (p *player) GainMana(mana int) {
 	if p.mana+mana < 0 {
 		panic(fmt.Errorf("cannot lose mana %d from %d", -mana, p.mana))
@@ -161,10 +165,6 @@ func (p *player) GainCrystal(crystal int) {
 	if p.mana > p.crystal {
 		p.mana = p.crystal
 	}
-}
-
-func (p *player) GainArmor(armor int) {
-	p.armor += armor
 }
 
 func (p *player) Take(card engine.Card) bool {
@@ -194,21 +194,21 @@ func (p *player) HeroPower() engine.Effect {
 	return p.power.Effect()
 }
 
-func (p *player) Equip(card engine.WeaponCard) {
-	p.weapon = newWeapon(card)
-}
-
-func (p *player) DestroyWeapon() {
-	if p.weapon == nil {
-		panic("player does not have a weapon equiped")
+func (p *player) Equip(weapon engine.Weapon) {
+	if p.weapon != nil {
+		panic("player has weapon equiped already")
 	}
-	p.weapon = nil
+	p.weapon = weapon
 }
 
 func (p *player) react(ev engine.Event) {
 	switch ev.Verb() {
 	case engine.Destroy:
-		p.board.(*board).remove(ev.Subject())
+		if p.weapon == ev.Subject() {
+			p.weapon = nil
+		} else {
+			p.board.(*board).remove(ev.Subject())
+		}
 	case engine.Combined:
 		for _, ev := range ev.Subject().([]engine.Event) {
 			p.react(ev)

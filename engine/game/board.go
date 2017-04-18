@@ -18,17 +18,6 @@ func newBoard() engine.Board {
 	return &board{make([]engine.Minion, 0, *maxBoard)}
 }
 
-func (b *board) Handle(ev engine.Event) {
-	switch ev.Verb() {
-	case engine.Destroy:
-		b.remove(ev.Subject())
-	case engine.Combined:
-		for _, ev := range ev.Subject().([]engine.Event) {
-			b.Handle(ev)
-		}
-	}
-}
-
 func (b *board) Minions() []engine.Minion {
 	return b.minions
 }
@@ -55,7 +44,7 @@ func (b *board) Get(pos int) engine.Minion {
 
 func (b *board) Put(minion engine.Minion, position int) engine.Minion {
 	if b.IsFull() {
-		return nil
+		panic("board is full")
 	}
 	b.minions = append(
 		b.minions[:position],

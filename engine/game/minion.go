@@ -11,7 +11,9 @@ type minion struct {
 	card engine.MinionCard
 }
 
-func newMinion(id engine.EntityID, card engine.MinionCard) engine.Minion {
+func newMinion(
+	id engine.EntityID,
+	card engine.MinionCard) engine.Minion {
 	return &minion{
 		newChar(
 			id,

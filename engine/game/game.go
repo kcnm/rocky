@@ -108,13 +108,28 @@ func (g *game) Start() {
 }
 
 func (g *game) Summon(
-	card engine.MinionCard,
 	player engine.Player,
+	card engine.MinionCard,
 	position int) engine.Minion {
+	if player.Board().IsFull() {
+		panic("cannot summon: board is full")
+	}
 	minion := newMinion(g.nextEntityID(), card)
 	g.Join(minion)
 	card.Buff().Apply(g, player, minion)
 	return player.Board().Put(minion, position)
+}
+
+func (g *game) Equip(
+	player engine.Player,
+	card engine.WeaponCard) engine.Weapon {
+	if player.Weapon() != nil {
+		panic("cannot equip: player has weapon equiped already")
+	}
+	weapon := newWeapon(g.nextEntityID(), card)
+	g.Join(weapon)
+	player.Equip(weapon)
+	return weapon
 }
 
 func (g *game) nextEntityID() engine.EntityID {

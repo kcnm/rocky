@@ -7,13 +7,21 @@ import (
 )
 
 type weapon struct {
+	*entity
 	card       engine.WeaponCard
 	attack     int
 	durability int
 }
 
-func newWeapon(card engine.WeaponCard) engine.Weapon {
-	return &weapon{card, card.Attack(), card.Durability()}
+func newWeapon(
+	id engine.EntityID,
+	card engine.WeaponCard) engine.Weapon {
+	return &weapon{
+		newEntity(id).(*entity),
+		card,
+		card.Attack(),
+		card.Durability(),
+	}
 }
 
 func (w *weapon) Card() engine.WeaponCard {
@@ -28,8 +36,12 @@ func (w *weapon) Durability() int {
 	return w.durability
 }
 
-func (w *weapon) LoseDurability() {
-	w.durability--
+func (w *weapon) LoseDurability(d int) int {
+	if w.durability < d {
+		panic(fmt.Errorf("cannot lose durability: %d/%d", d, w.durability))
+	}
+	w.durability -= d
+	return w.durability
 }
 
 func (w *weapon) String() string {

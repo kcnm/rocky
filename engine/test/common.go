@@ -111,10 +111,10 @@ func newGame(rng *rand.Rand, status *GameStatus) engine.Game {
 	}
 	g := game.New(p1, p2, rng)
 	for i, m := range status.B1 {
-		g.Summon(m.Card, p1, i)
+		g.Summon(p1, m.Card, i)
 	}
 	for i, m := range status.B2 {
-		g.Summon(m.Card, p2, i)
+		g.Summon(p2, m.Card, i)
 	}
 	status.Current = p1
 	return g

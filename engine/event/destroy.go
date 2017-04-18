@@ -5,15 +5,15 @@ import (
 )
 
 type destroy struct {
-	char engine.Char
+	entity engine.Entity
 }
 
-func Destroy(char engine.Char) engine.Event {
-	return &destroy{char}
+func Destroy(entity engine.Entity) engine.Event {
+	return &destroy{entity}
 }
 
 func (ev *destroy) Subject() interface{} {
-	return ev.char
+	return ev.entity
 }
 
 func (ev *destroy) Verb() engine.Verb {

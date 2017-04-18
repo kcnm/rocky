@@ -38,9 +38,9 @@ func (ev *attack) Trigger(q engine.EventQueue) {
 		q.Post(active, ev)
 	}
 	if player, isPlayer := ev.attacker.(engine.Player); isPlayer {
-		player.Weapon().LoseDurability()
-		if player.Weapon().Durability() == 0 {
-			q.Post(DestroyWeapon(player), ev)
+		w := player.Weapon()
+		if w.LoseDurability(1) == 0 {
+			q.Post(Destroy(w), ev)
 		}
 	}
 }

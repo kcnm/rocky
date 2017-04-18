@@ -18,7 +18,8 @@ type Game interface {
 	IsOver() (over bool, winner Player)
 
 	Start()
-	Summon(card MinionCard, player Player, position int) Minion
+	Summon(player Player, card MinionCard, position int) Minion
+	Equip(player Player, card WeaponCard) Weapon
 }
 
 type EventQueue interface {
@@ -40,23 +41,22 @@ type Event interface {
 type Verb string
 
 const (
-	StartGame     Verb = "StartGame"
-	StartTurn     Verb = "StartTurn"
-	EndTurn       Verb = "EndTurn"
-	Draw          Verb = "Draw"
-	TakeCard      Verb = "TakeCard"
-	PlayCard      Verb = "PlayCard"
-	Summon        Verb = "Summon"
-	Cast          Verb = "Cast"
-	Equip         Verb = "Equip"
-	HeroPower     Verb = "HeroPower"
-	Attack        Verb = "Attack"
-	Damage        Verb = "Damage"
-	Dying         Verb = "Dying"
-	Destroy       Verb = "Destroy"
-	DestroyWeapon Verb = "DestroyWeapon"
-	Impact        Verb = "Impact"
-	GameOver      Verb = "GameOver"
-	Combined      Verb = "Combined"
-	Sequence      Verb = "Sequence"
+	StartGame Verb = "StartGame"
+	StartTurn Verb = "StartTurn"
+	EndTurn   Verb = "EndTurn"
+	Draw      Verb = "Draw"
+	TakeCard  Verb = "TakeCard"
+	PlayCard  Verb = "PlayCard"
+	Summon    Verb = "Summon"
+	Cast      Verb = "Cast"
+	Equip     Verb = "Equip"
+	HeroPower Verb = "HeroPower"
+	Attack    Verb = "Attack"
+	Damage    Verb = "Damage"
+	Dying     Verb = "Dying"
+	Destroy   Verb = "Destroy"
+	Impact    Verb = "Impact"
+	GameOver  Verb = "GameOver"
+	Combined  Verb = "Combined"
+	Sequence  Verb = "Sequence"
 )

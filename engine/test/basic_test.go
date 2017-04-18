@@ -317,14 +317,14 @@ func TestMinionAttack(t *testing.T) {
 	p1 := game.NewPlayer(30, Pw2, game.NewDeck())
 	p1.GainCrystal(10)
 	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
-	p2.Equip(W32)
 	g := game.New(p1, p2, nil /* rng */)
-	g.Summon(M11, p1, 0)
-	g.Summon(M11, p1, 1)
-	g.Summon(M45, p1, 2)
-	g.Summon(M45, p1, 3)
-	g.Summon(M11, p2, 0)
-	g.Summon(M45, p2, 1)
+	g.Equip(p2, W32)
+	g.Summon(p1, M11, 0)
+	g.Summon(p1, M11, 1)
+	g.Summon(p1, M45, 2)
+	g.Summon(p1, M45, 3)
+	g.Summon(p2, M11, 0)
+	g.Summon(p2, M45, 1)
 	p1status := PlayerStatus{30, 30, 0, 0, false, 10, 10, 0, 0}
 	p2status := PlayerStatus{30, 30, 0, 3, false, 0, 0, 0, 0}
 
@@ -382,13 +382,13 @@ func TestMinionAttack(t *testing.T) {
 func TestPlayerAttack(t *testing.T) {
 	p1 := game.NewPlayer(30, Pw2, game.NewDeck())
 	p1.GainCrystal(10)
-	p1.Equip(W33)
 	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
 	p2.GainCrystal(10)
-	p2.Equip(W32)
 	g := game.New(p1, p2, nil /* rng */)
-	g.Summon(M11, p2, 0)
-	g.Summon(M45, p2, 1)
+	g.Equip(p1, W33)
+	g.Equip(p2, W32)
+	g.Summon(p2, M11, 0)
+	g.Summon(p2, M45, 1)
 	p1status := PlayerStatus{30, 30, 0, 3, true, 10, 10, 0, 0}
 	p2status := PlayerStatus{30, 30, 0, 3, false, 0, 10, 0, 0}
 	w1status := WeaponStatus{W33, 3, 3}
