@@ -50,11 +50,11 @@ func (q *queue) Fire(ev engine.Event) {
 		panic("event queue is not empty")
 	}
 	q.Post(ev, nil)
-	q.settle()
+	q.resolve()
 	for len(q.cached) > 0 {
 		q.Post(q.cached[0].instance, q.cached[0].cause)
 		q.cached = q.cached[1:]
-		q.settle()
+		q.resolve()
 	}
 }
 
@@ -73,7 +73,7 @@ func (q *queue) Drain() {
 	q.entityIDs = make(map[engine.EntityID]int)
 }
 
-func (q *queue) settle() {
+func (q *queue) resolve() {
 	for len(q.events) > 0 {
 		ev := q.events[0].instance
 		q.events = q.events[1:]

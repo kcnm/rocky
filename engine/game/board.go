@@ -36,9 +36,6 @@ func (b *board) Find(minion engine.Minion) int {
 }
 
 func (b *board) Get(pos int) engine.Minion {
-	if pos < 0 || len(b.minions) <= pos {
-		return nil
-	}
 	return b.minions[pos]
 }
 
@@ -52,14 +49,12 @@ func (b *board) Put(minion engine.Minion, position int) engine.Minion {
 	return minion
 }
 
-func (b *board) remove(subject interface{}) int {
-	if minion, ok := subject.(engine.Minion); ok {
-		if i := b.Find(minion); i >= 0 {
-			b.minions = append(b.minions[:i], b.minions[i+1:]...)
-			return 1
-		}
+func (b *board) Remove(minion engine.Minion) engine.Minion {
+	if i := b.Find(minion); i >= 0 {
+		b.minions = append(b.minions[:i], b.minions[i+1:]...)
+		return minion
 	}
-	return 0
+	return nil
 }
 
 func (b *board) String() string {

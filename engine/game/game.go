@@ -128,8 +128,7 @@ func (g *game) Equip(
 	}
 	weapon := newWeapon(g.nextEntityID(), card)
 	g.Join(weapon)
-	player.Equip(weapon)
-	return weapon
+	return player.Equip(weapon)
 }
 
 func (g *game) nextEntityID() engine.EntityID {
@@ -160,9 +159,7 @@ func (g *game) onStartTurn(ev engine.Event) {
 	player := ev.Subject().(engine.Player)
 	g.current = player
 	g.Post(event.Draw(player), ev)
-	if !player.HasMaxCrystal() {
-		player.GainCrystal(1)
-	}
+	player.GainCrystal(1)
 	player.Refresh()
 }
 

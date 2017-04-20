@@ -63,9 +63,10 @@ func (ch *char) TakeDamage(damage int) (actual int, fatal bool) {
 	return damage, ch.health <= 0
 }
 
-func (ch *char) Swing() {
+func (ch *char) Swing() int {
 	if ch.swings >= ch.maxSwings {
 		panic(fmt.Errorf("cannot swing: %d/%d", ch.swings, ch.maxSwings))
 	}
 	ch.swings++
+	return ch.swings
 }

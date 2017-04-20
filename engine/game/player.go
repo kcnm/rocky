@@ -140,11 +140,12 @@ func (p *player) IsControlling(char engine.Char) bool {
 	return false
 }
 
-func (p *player) GainArmor(armor int) {
+func (p *player) GainArmor(armor int) int {
 	p.armor += armor
+	return p.armor
 }
 
-func (p *player) GainMana(mana int) {
+func (p *player) GainMana(mana int) int {
 	if p.mana+mana < 0 {
 		panic(fmt.Errorf("cannot lose mana %d from %d", -mana, p.mana))
 	}
@@ -152,9 +153,10 @@ func (p *player) GainMana(mana int) {
 	if p.mana > p.crystal {
 		p.mana = p.crystal
 	}
+	return p.mana
 }
 
-func (p *player) GainCrystal(crystal int) {
+func (p *player) GainCrystal(crystal int) int {
 	if p.crystal+crystal < 0 {
 		panic(fmt.Errorf("cannot lose crystal %d from %d", -crystal, p.crystal))
 	}
@@ -165,6 +167,7 @@ func (p *player) GainCrystal(crystal int) {
 	if p.mana > p.crystal {
 		p.mana = p.crystal
 	}
+	return p.crystal
 }
 
 func (p *player) Take(card engine.Card) bool {
@@ -186,19 +189,17 @@ func (p *player) HeroPower() engine.Effect {
 	if p.powers >= p.maxPowers {
 		panic(fmt.Errorf("cannot use hero power: %d/%d", p.powers, p.maxPowers))
 	}
-	if p.mana < p.power.Mana() {
-		panic("player does not have enough mana to hero power")
-	}
+	p.GainMana(-p.power.Mana())
 	p.powers++
-	p.mana -= p.power.Mana()
 	return p.power.Effect()
 }
 
-func (p *player) Equip(weapon engine.Weapon) {
+func (p *player) Equip(weapon engine.Weapon) engine.Weapon {
 	if p.weapon != nil {
 		panic("player has weapon equiped already")
 	}
 	p.weapon = weapon
+	return p.weapon
 }
 
 func (p *player) react(ev engine.Event) {
@@ -206,8 +207,8 @@ func (p *player) react(ev engine.Event) {
 	case engine.Destroy:
 		if p.weapon == ev.Subject() {
 			p.weapon = nil
-		} else {
-			p.board.(*board).remove(ev.Subject())
+		} else if minion, ok := ev.Subject().(engine.Minion); ok {
+			p.board.Remove(minion)
 		}
 	case engine.Combined:
 		for _, ev := range ev.Subject().([]engine.Event) {
