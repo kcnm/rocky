@@ -13,21 +13,21 @@ var maxHand = flag.Int("max_hand", 10, "maximum number of cards in hand")
 
 type player struct {
 	*char
-	armor     int
-	mana      int
-	crystal   int
-	power     engine.Power
-	powers    int
-	maxPowers int
-	weapon    engine.Weapon
-	hand      []engine.Card
-	deck      engine.Deck
-	board     engine.Board
+	armor         int
+	mana          int
+	crystal       int
+	ability       engine.Ability
+	heroPowers    int
+	maxHeroPowers int
+	weapon        engine.Weapon
+	hand          []engine.Card
+	deck          engine.Deck
+	board         engine.Board
 }
 
 func NewPlayer(
 	maxHealth int,
-	power engine.Power,
+	ability engine.Ability,
 	deck engine.Deck,
 	hand ...engine.Card) engine.Player {
 	if len(hand) > *maxHand {
@@ -40,13 +40,13 @@ func NewPlayer(
 			maxHealth, // health
 			maxHealth, // maxHealth
 		).(*char),
-		0,     // armor
-		0,     // mana
-		0,     // crystal
-		power, // power
-		0,     // powers
-		1,     // maxPowers
-		nil,   // weapon
+		0,       // armor
+		0,       // mana
+		0,       // crystal
+		ability, // ability
+		0,       // heroPowers
+		1,       // maxHeroPowers
+		nil,     // weapon
 		hand,
 		deck,
 		newBoard(),
@@ -68,22 +68,22 @@ func (p *player) Active() bool {
 func (p *player) Refresh() {
 	p.char.Refresh()
 	p.mana = p.crystal
-	p.powers = 0
+	p.heroPowers = 0
 	for _, minion := range p.board.Minions() {
 		minion.Refresh()
 	}
 }
 
-func (p *player) TakeDamage(damage int) (actual int, fatal bool) {
-	if damage <= 0 {
-		panic(fmt.Errorf("non-positive damage %d", damage))
+func (p *player) TakeDamage(dmg int) (actual int, fatal bool) {
+	if dmg <= 0 {
+		panic(fmt.Errorf("non-positive damage %d", dmg))
 	}
-	p.armor -= damage
+	p.armor -= dmg
 	if p.armor < 0 {
 		p.health += p.armor
 		p.armor = 0
 	}
-	return damage, p.health <= 0
+	return dmg, p.health <= 0
 }
 
 func (p *player) Armor() int {
@@ -102,12 +102,12 @@ func (p *player) HasMaxCrystal() bool {
 	return p.crystal >= *maxCrystal
 }
 
-func (p *player) Power() engine.Power {
-	return p.power
+func (p *player) Ability() engine.Ability {
+	return p.ability
 }
 
 func (p *player) CanHeroPower() bool {
-	return p.powers < p.maxPowers
+	return p.heroPowers < p.maxHeroPowers
 }
 
 func (p *player) Weapon() engine.Weapon {
@@ -186,12 +186,12 @@ func (p *player) Play(cardIndex int) engine.Card {
 }
 
 func (p *player) HeroPower() engine.Effect {
-	if p.powers >= p.maxPowers {
-		panic(fmt.Errorf("cannot use hero power: %d/%d", p.powers, p.maxPowers))
+	if p.heroPowers >= p.maxHeroPowers {
+		panic(fmt.Errorf("cannot hero power: %d/%d", p.heroPowers, p.maxHeroPowers))
 	}
-	p.GainMana(-p.power.Mana())
-	p.powers++
-	return p.power.Effect()
+	p.GainMana(-p.ability.Mana())
+	p.heroPowers++
+	return p.ability.Effect()
 }
 
 func (p *player) Equip(weapon engine.Weapon) engine.Weapon {

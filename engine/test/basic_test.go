@@ -8,8 +8,8 @@ import (
 )
 
 func TestBasicGame(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck(M11, M11, M11, M11))
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck(M11, M11, M11, M11))
+	p1 := game.NewPlayer(30, A2, game.NewDeck(M11, M11, M11, M11))
+	p2 := game.NewPlayer(30, A2, game.NewDeck(M11, M11, M11, M11))
 	g := game.New(p1, p2, nil /* rng */)
 	g.Start()
 
@@ -226,9 +226,9 @@ func TestBasicGame(t *testing.T) {
 }
 
 func TestPlayMinion(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck(), M45, M11, M45)
+	p1 := game.NewPlayer(30, A2, game.NewDeck(), M45, M11, M45)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p2 := game.NewPlayer(30, A2, game.NewDeck())
 	g := game.New(p1, p2, nil /* rng */)
 	p1status := PlayerStatus{30, 30, 0, 0, false, 10, 10, 3, 0}
 
@@ -273,9 +273,9 @@ func TestPlayMinion(t *testing.T) {
 }
 
 func TestCastSpell(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck(), S4)
+	p1 := game.NewPlayer(30, A2, game.NewDeck(), S4)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p2 := game.NewPlayer(30, A2, game.NewDeck())
 	g := game.New(p1, p2, nil /* rng */)
 	p1status := PlayerStatus{30, 30, 0, 0, false, 10, 10, 1, 0}
 
@@ -292,9 +292,9 @@ func TestCastSpell(t *testing.T) {
 }
 
 func TestEquipWeapon(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck(), W32)
+	p1 := game.NewPlayer(30, A2, game.NewDeck(), W32)
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p2 := game.NewPlayer(30, A2, game.NewDeck())
 	g := game.New(p1, p2, nil /* rng */)
 	p1status := PlayerStatus{30, 30, 0, 0, false, 10, 10, 1, 0}
 
@@ -314,9 +314,9 @@ func TestEquipWeapon(t *testing.T) {
 }
 
 func TestMinionAttack(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p1 := game.NewPlayer(30, A2, game.NewDeck())
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p2 := game.NewPlayer(30, A2, game.NewDeck())
 	g := game.New(p1, p2, nil /* rng */)
 	g.Equip(p2, W32)
 	g.Summon(p1, M11, 0)
@@ -380,9 +380,9 @@ func TestMinionAttack(t *testing.T) {
 }
 
 func TestPlayerAttack(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p1 := game.NewPlayer(30, A2, game.NewDeck())
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p2 := game.NewPlayer(30, A2, game.NewDeck())
 	p2.GainCrystal(10)
 	g := game.New(p1, p2, nil /* rng */)
 	g.Equip(p1, W33)
@@ -482,9 +482,9 @@ func TestPlayerAttack(t *testing.T) {
 }
 
 func TestHeroPower(t *testing.T) {
-	p1 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p1 := game.NewPlayer(30, A2, game.NewDeck())
 	p1.GainCrystal(10)
-	p2 := game.NewPlayer(30, Pw2, game.NewDeck())
+	p2 := game.NewPlayer(30, A2, game.NewDeck())
 	g := game.New(p1, p2, nil /* rng */)
 	p1status := PlayerStatus{30, 30, 0, 0, false, 10, 10, 0, 0}
 

@@ -20,7 +20,7 @@ var (
 	S4  = NewSpellCard(engine.Neutral, 4, effect.None)
 	W32 = NewWeaponCard(engine.Neutral, 2, 3, 2, effect.None)
 	W33 = NewWeaponCard(engine.Neutral, 4, 3, 3, effect.None)
-	Pw2 = NewPower(engine.Neutral, 2, effect.None)
+	A2  = NewAbility(engine.Neutral, 2, effect.None)
 )
 
 func NewMinionCard(

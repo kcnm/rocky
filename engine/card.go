@@ -52,7 +52,7 @@ type Buff interface {
 	Apply(game Game, you Player, char Char)
 }
 
-type Power interface {
+type Ability interface {
 	Class() Class
 	Mana() int
 	Effect() Effect

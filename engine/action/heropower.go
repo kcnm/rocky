@@ -23,7 +23,7 @@ func CanHeroPower(
 	if game.CurrentPlayer() != player {
 		return false, fmt.Errorf("it is not player%v's turn", player.ID())
 	}
-	if player.Mana() < player.Power().Mana() {
+	if player.Mana() < player.Ability().Mana() {
 		return false, fmt.Errorf("player does not have enough mana to hero power")
 	}
 	if !player.CanHeroPower() {

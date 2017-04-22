@@ -55,12 +55,12 @@ func (ch *char) Refresh() {
 	ch.maxSwings = 1
 }
 
-func (ch *char) TakeDamage(damage int) (actual int, fatal bool) {
-	if damage <= 0 {
-		panic(fmt.Errorf("non-positive damage %d", damage))
+func (ch *char) TakeDamage(dmg int) (actual int, fatal bool) {
+	if dmg <= 0 {
+		panic(fmt.Errorf("non-positive damage %d", dmg))
 	}
-	ch.health -= damage
-	return damage, ch.health <= 0
+	ch.health -= dmg
+	return dmg, ch.health <= 0
 }
 
 func (ch *char) Swing() int {
