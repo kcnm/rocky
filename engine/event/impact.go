@@ -4,6 +4,7 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// impact is an implementation of Impact Event.
 type impact struct {
 	game   engine.Game
 	you    engine.Player
@@ -11,6 +12,7 @@ type impact struct {
 	effect engine.Effect
 }
 
+// Impact returns a new Event, where an effect impacts.
 func Impact(
 	game engine.Game,
 	you engine.Player,

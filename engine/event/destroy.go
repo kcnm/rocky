@@ -4,10 +4,12 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// destroy is an implementation of Destroy Event.
 type destroy struct {
 	entity engine.Entity
 }
 
+// Destroy returns a new Event, where an entity is destroyed.
 func Destroy(entity engine.Entity) engine.Event {
 	return &destroy{entity}
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// cast is an implementation of Cast Event.
 type cast struct {
 	game   engine.Game
 	player engine.Player
@@ -11,6 +12,7 @@ type cast struct {
 	target engine.Char
 }
 
+// Cast returns a new Event, where a player casts a spell.
 func Cast(
 	game engine.Game,
 	player engine.Player,

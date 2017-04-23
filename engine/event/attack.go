@@ -4,11 +4,14 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// attack is an implementation of Attack Event.
 type attack struct {
 	attacker engine.Char
 	defender engine.Char
 }
 
+// Attack returns a new Event, where one character, attacker, attacks another
+// one, defender.
 func Attack(
 	attacker engine.Char,
 	defender engine.Char) engine.Event {

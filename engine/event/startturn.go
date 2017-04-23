@@ -4,11 +4,13 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// startTurn is an implementation of StartTurn Event.
 type startTurn struct {
 	game   engine.Game
 	player engine.Player
 }
 
+// StartTurn returns a new Event, where a player starts his turn.
 func StartTurn(game engine.Game, player engine.Player) engine.Event {
 	return &startTurn{game, player}
 }

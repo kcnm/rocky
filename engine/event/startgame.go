@@ -1,15 +1,15 @@
 package event
 
 import (
-	"fmt"
-
 	"github.com/kcnm/rocky/engine"
 )
 
+// startGame is an implementation of StartGame Event.
 type startGame struct {
 	game engine.Game
 }
 
+// StartGame returns a new Event, where the game starts.
 func StartGame(game engine.Game) engine.Event {
 	return &startGame{game}
 }
@@ -27,8 +27,5 @@ func (ev *startGame) Object() interface{} {
 }
 
 func (ev *startGame) Trigger(q engine.EventQueue) {
-	if t := ev.game.Turn(); t != 0 {
-		panic(fmt.Errorf("non-zero start turn %d", t))
-	}
 	q.Post(StartTurn(ev.game, ev.game.CurrentPlayer()), ev)
 }

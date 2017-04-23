@@ -73,7 +73,8 @@ type Event interface {
 	Object() interface{}
 
 	// Trigger makes the event actually happen, possibly enqueueing more events as
-	// its direct consequence.
+	// its direct consequence. It is required that new events enqueued through
+	// this process are validated before.
 	Trigger(q EventQueue)
 }
 

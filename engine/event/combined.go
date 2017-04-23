@@ -4,10 +4,13 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// combined is an implementation of Combined Event.
 type combined struct {
 	events []engine.Event
 }
 
+// Combined returns a new Event, which is a combination of several child events
+// logically happening at the same time.
 func Combined(events ...engine.Event) engine.Event {
 	return &combined{events}
 }

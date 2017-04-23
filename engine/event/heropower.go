@@ -4,12 +4,14 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// heroPower is an implementation of HeroPower Event.
 type heroPower struct {
 	game   engine.Game
 	player engine.Player
 	target engine.Char
 }
 
+// HeroPower returns a new Event, where a player uses his ability/hero power.
 func HeroPower(
 	game engine.Game,
 	player engine.Player,

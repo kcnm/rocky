@@ -4,16 +4,18 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// dying is an implementation of Dying Event.
 type dying struct {
-	char engine.Char
+	entity engine.Entity
 }
 
-func Dying(char engine.Char) engine.Event {
-	return &dying{char}
+// Dying returns a new Event, where an entity is about to be destroyed.
+func Dying(entity engine.Entity) engine.Event {
+	return &dying{entity}
 }
 
 func (ev *dying) Subject() interface{} {
-	return ev.char
+	return ev.entity
 }
 
 func (ev *dying) Verb() engine.Verb {
@@ -25,5 +27,5 @@ func (ev *dying) Object() interface{} {
 }
 
 func (ev *dying) Trigger(q engine.EventQueue) {
-	q.Post(Destroy(ev.char), ev)
+	q.Post(Destroy(ev.entity), ev)
 }

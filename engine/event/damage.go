@@ -4,12 +4,15 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// damage is an implementation of Damage Event.
 type damage struct {
 	src engine.Char
 	dst engine.Char
 	dmg int
 }
 
+// Damage returns a new Event, where one character takes some amount of damage,
+// possibly from another source character.
 func Damage(
 	src, dst engine.Char,
 	dmg int) engine.Event {

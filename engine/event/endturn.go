@@ -4,11 +4,13 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// endTurn is an implementation of EndTurn Event.
 type endTurn struct {
 	game   engine.Game
 	player engine.Player
 }
 
+// EndTurn returns a new Event, where a player ends his turn.
 func EndTurn(game engine.Game, player engine.Player) engine.Event {
 	return &endTurn{game, player}
 }

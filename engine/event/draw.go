@@ -4,10 +4,12 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// draw is an implementation of Draw Event.
 type draw struct {
 	player engine.Player
 }
 
+// Draw returns a new Event, where a player draws one card from his deck.
 func Draw(player engine.Player) engine.Event {
 	return &draw{player}
 }

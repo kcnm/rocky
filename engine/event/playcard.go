@@ -4,11 +4,13 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// playCard is an implementation of PlayCard Event.
 type playCard struct {
 	player    engine.Player
 	cardIndex int
 }
 
+// PlayCard returns a new Event, where a player plays one card from his hand.
 func PlayCard(player engine.Player, cardIndex int) engine.Event {
 	return &playCard{player, cardIndex}
 }

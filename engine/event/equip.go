@@ -4,12 +4,14 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// equip is an implementation of Equip Event.
 type equip struct {
 	game   engine.Game
 	player engine.Player
 	card   engine.WeaponCard
 }
 
+// Equip returns a new Event, where a player equips a weapon.
 func Equip(
 	game engine.Game,
 	player engine.Player,

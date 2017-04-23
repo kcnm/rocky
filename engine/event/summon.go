@@ -4,6 +4,7 @@ import (
 	"github.com/kcnm/rocky/engine"
 )
 
+// summon is an implementation of Summon Event.
 type summon struct {
 	game     engine.Game
 	player   engine.Player
@@ -11,6 +12,7 @@ type summon struct {
 	position int
 }
 
+// Summon returns a new Event, where a minion is summoned for a player.
 func Summon(
 	game engine.Game,
 	player engine.Player,
